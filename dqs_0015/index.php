@@ -399,14 +399,17 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
                             <?php endif; ?>
                         </div>
                         <h2>
+
+                            <?php echo $evento['titulo']; ?>
+                            <br>
                             <?php if ($evento['fecha'] != 'Fecha no disponible'): ?>
                                 <?php echo $evento['fecha']; ?>
                             <?php endif; ?>
-                            <?php echo $evento['titulo']; ?>
+                            
                         </h2>
-                        <?php if (!empty($evento['descripcion'])): ?>
-                            <p><?php echo $evento['descripcion']; ?></p>
-                        <?php endif; ?>
+<?php if (!empty($evento['descripcion'])): ?>
+    <p><?php echo nl2br(htmlspecialchars($evento['descripcion'])); ?></p>
+<?php endif; ?>
                         <?php if (!empty($evento['direccion'])): ?>
                             <p><?php echo $evento['direccion']; ?></p>
                         <?php endif; ?>
