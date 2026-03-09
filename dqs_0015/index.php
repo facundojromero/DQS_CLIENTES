@@ -180,26 +180,8 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
     <link rel="stylesheet" href="css/custom.css">
 
     <style>
-        .event-img { display: flex; justify-content: center; align-items: center; height: 100%; }
         .icon-container { display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; }
         .msg_error { color: #d8000c; background-color: #ffbaba; padding: 10px; border-radius: 5px; margin-bottom: 15px; }
-        
-        /* Estilos botón nuevo RSVP */
-        .btn-rsvp-open {
-            background-color: #d4a373; /* Color dorado/beige ajusta a tu tema */
-            color: white;
-            padding: 15px 40px;
-            font-size: 1.2rem;
-            border-radius: 50px;
-            border: none;
-            transition: all 0.3s ease;
-            margin-top: 20px;
-        }
-        .btn-rsvp-open:hover {
-            background-color: #bc8a5f;
-            cursor: pointer;
-            transform: scale(1.05);
-        }
     </style>
 </head>
 <body id="home" data-spy="scroll" data-target="#navbar-wd" data-offset="98">
