@@ -429,7 +429,7 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
     </div>
     <?php endif; ?>
 
-    <?php if (in_array('wedding', $secciones)): ?>
+<?php if (in_array('wedding', $secciones)): ?>
     <div id="wedding" class="wedding-box">
         <div class="container">
             <div class="row">
@@ -440,25 +440,66 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <?php foreach ($info_otra as $evento): ?>
-                <div class="col-md-4 col-sm-6">
-                    <div class="serviceBox">
-                        <div class="service-icon"><i class="<?php echo $evento['icono']; ?>"></i></div>
-                        <h3 class="title"><?php echo $evento['titulo']; ?></h3>
-                        <?php if (!empty($evento['descripcion'])): ?>
-                            <p class="description"><?php echo $evento['descripcion']; ?></p>
+
+<div class="row">
+    <?php foreach ($info_otra as $evento): ?>
+    <div class="col-md-4 col-sm-6">
+        <div class="serviceBox">
+            <div class="service-icon"><i class="<?php echo $evento['icono']; ?>"></i></div>
+            <h3 class="title"><?php echo $evento['titulo']; ?></h3>
+            
+            <div class="bank-details-container">
+                <?php 
+                    $text = $evento['descripcion'];
+                    
+                    // Separamos el texto cuando detecta la palabra "CUENTA"
+                    // Esto crea un array con cada cuenta por separado
+                    $parts = preg_split('/(?=CUENTA)/i', $text, -1, PREG_SPLIT_NO_EMPTY);
+
+                    foreach ($parts as $part): 
+                        // Limpiamos un poco el texto de la parte
+                        $part = trim($part);
+                        if (empty($part)) continue;
+
+                        // Buscamos CBU y Alias para extraerlos
+                        preg_match('/CBU:?\s*(\d+)/i', $part, $cbu_match);
+                        preg_match('/Alias:?\s*([\w\.]+)/i', $part, $alias_match);
+                        
+                        // El título es lo que está antes del CBU
+                        $titulo_cuenta = trim(explode('CBU', $part)[0]);
+                ?>
+                    <div class="bank-block">
+                        <span class="bank-label"><?php echo strtoupper($titulo_cuenta); ?></span>
+                        
+                        <?php if (isset($cbu_match[1])): ?>
+                            <div class="data-row">
+                                <span class="data-text">CBU: <strong><?php echo $cbu_match[1]; ?></strong></span>
+                                <i class="far fa-copy copy-icon" onclick="copyToClipboard('<?php echo $cbu_match[1]; ?>', this)"></i>
+                            </div>
                         <?php endif; ?>
-                        <?php if (!empty($evento['direccion'])): ?>
-                            <h4><?php echo $evento['direccion']; ?></h4>
-                        <?php endif; ?>
-                        <?php if (!empty($evento['url'])): ?>
-                            <a href="<?php echo $evento['url']; ?>" target="_blank">Link ></a>
+
+                        <?php if (isset($alias_match[1])): ?>
+                            <div class="data-row">
+                                <span class="data-text">Alias: <strong><?php echo $alias_match[1]; ?></strong></span>
+                                <i class="far fa-copy copy-icon" onclick="copyToClipboard('<?php echo $alias_match[1]; ?>', this)"></i>
+                            </div>
                         <?php endif; ?>
                     </div>
-                </div>
                 <?php endforeach; ?>
             </div>
+
+            <?php if (!empty($evento['direccion'])): ?>
+                <h4 class="location-text"><?php echo $evento['direccion']; ?></h4>
+            <?php endif; ?>
+            
+                        <?php if (!empty($evento['url'])): ?>
+                <a href="<?php echo $evento['url']; ?>" class="read-more" target="_blank">Link ></a>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php endforeach; ?>
+</div>
+
         </div>
     </div>
     <?php endif; ?>
@@ -643,6 +684,28 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
 
     });
     </script>
+
+
+<script>
+function copyToClipboard(text, element) {
+    const input = document.createElement("input");
+    input.setAttribute("value", text);
+    document.body.appendChild(input);
+    input.select();
+    document.execCommand("copy");
+    document.body.removeChild(input);
+
+    // Feedback visual en el icono
+    element.classList.remove('fa-copy');
+    element.classList.add('fa-check', 'success');
+    
+    setTimeout(() => {
+        element.classList.remove('fa-check', 'success');
+        element.classList.add('fa-copy');
+    }, 2000);
+}
+</script>
+
 
 </body>
 </html>
