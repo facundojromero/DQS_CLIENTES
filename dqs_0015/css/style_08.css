@@ -22,6 +22,7 @@ body {
     font-size: 15px;
     font-family: 'Poppins', sans-serif;
     line-height: 1.80857;
+    background-color: #ffffff;
 }
 
 
@@ -168,7 +169,7 @@ button:focus{
     right: 0;
     bottom: 0;
     left: 0;
-    background: #880e4f;
+    background: #8ea7c2;
     z-index: 11000;
     position: fixed;
     display: block;
@@ -297,12 +298,12 @@ button:focus{
 }
 
 .top-header .navbar .navbar-collapse ul li a.active{
-	background: #880e4f;
+	background: #8ea7c2;
 	color: #ffffff;
 }
 
 .top-header .navbar .navbar-collapse ul li a:hover{
-	background: #880e4f;
+	background: #8ea7c2;
 	color: #ffffff;
 }
 
@@ -322,7 +323,7 @@ button:focus{
 }
 
 .navbar-toggler{
-	border: 1px solid #880e4f;
+	border: 1px solid #8ea7c2;
 	border-radius: 0;
 	margin: 16px 15px;
 	padding: 10px 10px;
@@ -332,7 +333,7 @@ button:focus{
 	transition: all 0.2s linear;
 }
 .navbar-toggler span{
-	background: #880e4f;
+	background: #8ea7c2;
 	display: block;
 	width: 25px;
 	height: 2px;
@@ -351,11 +352,11 @@ button:focus{
 }
 
 .navbar-toggler:hover{
-	border: 1px solid #880e4f;
+	border: 1px solid #8ea7c2;
 }
 
 .navbar-toggler:hover span{
-	background: #880e4f;
+	background: #8ea7c2;
 }
 
 
@@ -416,12 +417,12 @@ button:focus{
 	z-index: 3;
 }
 .lbox-details p strong{
-	color: #880e4f;
+	color: #8ea7c2;
 	font-size: 40px;
 	font-family: 'Roboto Slab', cursive;
 }
 .lbox-details a.btn{
-	background: #880e4f;
+	background: #8ea7c2;
 	padding: 10px 20px;
 	font-size: 20px;
 	text-transform: uppercase;
@@ -431,7 +432,7 @@ button:focus{
 	z-index: 3;
 }
 .lbox-details a.btn:hover{
-	background: #880e4f;
+	background: #8ea7c2;
 }
 
 /*------------------------------------------------------------------
@@ -471,7 +472,7 @@ button:focus{
 	color: #000000;
 }
 .title-box h2 span{
-	color: #880e4f;
+	color: #8ea7c2;
 	text-decoration: underline;
 }
 .about-main-info h2{
@@ -479,7 +480,7 @@ button:focus{
 	font-family: 'Roboto Slab', cursive;
 }
 .about-main-info h2 span{
-	color: #880e4f;
+	color: #8ea7c2;
 	text-decoration: underline;
 }
 
@@ -575,11 +576,11 @@ button:focus{
 }
 
 .main-timeline-box .time-line-date-content .mbr-timeline-date{
-	background: #880e4f;
+	background: #8ea7c2;
 	color: #ffffff;
 }
 .main-timeline-box .reverse .time-line-date-content .mbr-timeline-date{
-	background: #880e4f;
+	background: #8ea7c2;
 	color: #ffffff;
 }
 
@@ -612,7 +613,7 @@ button:focus{
     -webkit-transition: .3s;
     transition: .3s;
     opacity: 0;
-    background-color: #880e4f;
+    background-color: #8ea7c2;
 }
 .family-info{
 	padding: 25px 30px;
@@ -665,7 +666,7 @@ button:focus{
 	-moz-transition: all 0.3s ease-in-out;
 }
 .gallery-box ul li a .overlay{
-	background: #880e4f;
+	background: #8ea7c2;
 	color: #ffffff;
 	font-size: 22px;
 	text-align: center;
@@ -732,10 +733,10 @@ button:focus{
     width: 100px;
     height: 100px;
     line-height: 100px;
-    border: 2px solid #880e4f; /* Cambiar color del borde */
+    border: 2px solid #8ea7c2; /* Cambiar color del borde */
     background: #ffffff;
     font-size: 60px;
-    color: #880e4f; /* Cambiar color del icono */
+    color: #8ea7c2; /* Cambiar color del icono */
     margin-bottom: 20px;
     position: relative;
 }
@@ -743,7 +744,7 @@ button:focus{
 .serviceBox .title {
     font-size: 20px;
     font-weight: 700;
-    color: #880e4f; /* Cambiar color del título */
+    color: #8ea7c2; /* Cambiar color del título */
     letter-spacing: 1px;
     margin: 0 0 12px 0;
     text-transform: uppercase;
@@ -788,7 +789,7 @@ button:focus{
 }
 
 .event-inner a{
-	background: #880e4f;
+	background: #8ea7c2;
 	color: #ffffff;
 	padding: 5px 10px;
 	display: inline-block;
@@ -796,7 +797,7 @@ button:focus{
 	font-weight: 500;
 }
 .event-inner a:hover{
-	background: #880e4f;
+	background: #8ea7c2;
 }
 
 
@@ -841,7 +842,7 @@ button:focus{
 }
 
 .submit-button .btn-common{
-	background-color: #880e4f;
+	background-color: #8ea7c2;
 	height: 45px;
 	line-height: 45px;
 	font-size: 16px;
@@ -863,7 +864,7 @@ button:focus{
 	transition: all 0.3s;
 }
 .submit-button .btn-common:hover{
-	background-color: #880e4f;
+	background-color: #8ea7c2;
 }
 
 .custom-select{
@@ -891,10 +892,10 @@ select.form-control:not([size]):not([multiple]){
 }
 
 .footer-box .footer-company-name a{
-	color: #880e4f;
+	color: #8ea7c2;
 }
 .footer-box .footer-company-name a:hover{
-	color: #880e4f;
+	color: #8ea7c2;
 }
 
 
@@ -909,7 +910,7 @@ select.form-control:not([size]):not([multiple]){
   display: inline-block;
   width: 100px;
   height: 100px;
-  background: #880e4f;
+  background: #8ea7c2;
   margin: 0 4px;
   -webkit-border-radius: 50%;
   -moz-border-radius: 50%;
@@ -1024,14 +1025,14 @@ select.form-control:not([size]):not([multiple]){
 	z-index: 3;
 }
 .lbox-details2 p strong{
-	color: #880e4f;
+	color: #8ea7c2;
 	font-size: 40px;
 	font-family: 'Roboto Slab', cursive;
 }
 
 /*COLOR DE LOS VOTONES -DONDE RSV REGALAR- EN EL MENU DE ABAJO. SIN PASAR EL MOUSE*/
 .lbox-details2 a.btn{
-	background: #880e4f;
+	background: #8ea7c2;
 	padding: 10px 20px;
 	font-size: 20px;
 	text-transform: uppercase;
@@ -1043,7 +1044,7 @@ select.form-control:not([size]):not([multiple]){
 
 /*COLOR DE LOS VOTONES -DONDE RSV REGALAR- EN EL MENU DE ABAJO. Y CUANDO SE APOLLA EL MOUSE*/
 .lbox-details2 a.btn:hover{
-	background: #880e4f;
+	background: #8ea7c2;
 }
 
 /*formado de tienda*/
@@ -1071,7 +1072,7 @@ select.form-control:not([size]):not([multiple]){
 
 .evento-icono {
     font-size: 60px;
-    color: #880e4f;
+    color: #8ea7c2;
 }
 
 
@@ -1160,7 +1161,7 @@ producto h2 {
 }
 /*COLOR DEL PRECIO*/
 .producto .precio {
-    background: #880e4f;
+    background: #8ea7c2;
     color: #ffffff;
     padding: 5px 10px;
     display: inline-block;
@@ -1215,7 +1216,7 @@ producto h2 {
 }
 /* Agregar estilos para el botón "Agregar al carrito" */
 .add-to-cart {
-    background-color: #880e4f;
+    background-color: #8ea7c2;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -1225,7 +1226,7 @@ producto h2 {
     margin-top: 10px;
 }
 .add-to-cart:hover {
-    background-color: #880e4f;
+    background-color: #8ea7c2;
 }
 /* Estilos para el encabezado y el ícono de carrito */
 .header {
@@ -1244,7 +1245,7 @@ producto h2 {
     padding: 30px 0px 0px 0px;    
 }
 .ver-carrito:hover {
-    color: #880e4f;
+    color: #8ea7c2;
 }
 .modal {
     display: none;
@@ -1280,7 +1281,7 @@ producto h2 {
 }
 /*FORMATO DEL CARRITO*/
 .button {
-    background-color: #880e4f; /* Verde */
+    background-color: #8ea7c2; /* Verde */
     border: none;
     color: white;
     padding: 10px 20px;
@@ -1295,7 +1296,7 @@ producto h2 {
     box-sizing: border-box; /* Incluye el padding y el borde en el ancho total */
 }
 .button:hover {
-    background-color: #880e4f;
+    background-color: #8ea7c2;
 }
 .button i {
     margin-right: 8px;
@@ -1365,7 +1366,7 @@ producto h2 {
     font-weight: bold; /* Peso de la fuente */
     text-align: center; /* Alineación del texto */
     padding: 10px; /* Espaciado interno */
-    background-color: #880e4f; /* Color de fondo */
+    background-color: #8ea7c2; /* Color de fondo */
     border-radius: 5px; /* Bordes redondeados */
 }
 /* Estilos responsivos para dispositivos móviles */
@@ -1430,7 +1431,7 @@ producto h2 {
     border-radius: 4px;
 }
 .checkout-container .button {
-    background-color: #880e4f;
+    background-color: #8ea7c2;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -1440,7 +1441,7 @@ producto h2 {
     margin-top: 10px;
 }
 .checkout-container .button:hover {
-    background-color: #880e4f;
+    background-color: #8ea7c2;
 }
 /* Estilos para el campo de texto textarea */
 .checkout-container .form-group textarea {
@@ -1456,7 +1457,7 @@ producto h2 {
     transition: border-color 0.3s, box-shadow 0.3s;
 }
 .checkout-container .form-group textarea:focus {
-    border-color: #880e4f;
+    border-color: #8ea7c2;
     box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
 }
 /*estilo de paginacion*/
@@ -1476,13 +1477,13 @@ producto h2 {
 }
 /*COLOR BOTONES*/
 .pagination-link:hover {
-    background-color: #880e4f;
+    background-color: #8ea7c2;
     color: white;
 }
 .pagination-link.active {
-    background-color: #880e4f;
+    background-color: #8ea7c2;
     color: white;
-    border-color: #880e4f;
+    border-color: #8ea7c2;
 }
 /* Estilos para el formulario de teléfono */
 .telefono-inputs {
