@@ -15,8 +15,8 @@ $paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 // Obtener el criterio de ordenación desde la solicitud GET
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'default';
 
-// Obtener la moneda desde la URL, si no está, por defecto es 1 (Pesos)
-$currency = isset($_GET['currency']) ? (int)$_GET['currency'] : 1;
+// Obtener la moneda desde la URL, si no está, por defecto es 2 (Dólares)
+$currency = isset($_GET['currency']) ? (int)$_GET['currency'] : 2;
 
 // Generar los botones de paginación
 echo '<div class="pagination">';

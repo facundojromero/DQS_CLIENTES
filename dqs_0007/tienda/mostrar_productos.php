@@ -10,7 +10,7 @@ $paginaActual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $productosPorPagina = 24;
 $offset = ($paginaActual - 1) * $productosPorPagina;
 $sort = isset($_GET['sort']) ? $_GET['sort'] : 'default';
-$currency = isset($_GET['currency']) ? (int)$_GET['currency'] : 1;
+$currency = isset($_GET['currency']) ? (int)$_GET['currency'] : 2;
 
 $query_dolar = "SELECT cotizacion_dolar FROM cliente WHERE user_id=1";
 $result_dolar = $conn->query($query_dolar);
@@ -46,12 +46,12 @@ if ($result && $result->num_rows > 0) {
         echo "<div class='producto'>";
         echo "<h2>" . htmlspecialchars($row['titulo']) . "</h2>";
 
-        $precio_a_mostrar = $row['precio'];
-        $simbolo_moneda = "$";
+        $precio_a_mostrar = (float)$row['precio'];
+        $simbolo_moneda = "u\$s";
 
-        if ($currency == 2) {
-            $precio_a_mostrar = $row['precio'] / $cotizacion_dolar;
-            $simbolo_moneda = "u\$s";
+        if ($currency == 1 && $cotizacion_dolar > 0) {
+            $precio_a_mostrar = $precio_a_mostrar * $cotizacion_dolar;
+            $simbolo_moneda = "$";
         }
 
         echo "<p class='precio'>" . htmlspecialchars($simbolo_moneda) . " " . htmlspecialchars(number_format($precio_a_mostrar, 0, '', '.')) . "</p>";

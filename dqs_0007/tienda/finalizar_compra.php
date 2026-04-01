@@ -20,7 +20,7 @@ if ($result_cliente && $result_cliente->num_rows > 0) {
 }
 
 // Obtener la moneda seleccionada desde la URL
-$currency = isset($_GET['currency']) ? (int)$_GET['currency'] : 1;
+$currency = isset($_GET['currency']) ? (int)$_GET['currency'] : 2;
 
 // Obtener la cotización del dólar
 $query_dolar = "SELECT cotizacion_dolar FROM cliente WHERE user_id=1";
@@ -46,16 +46,16 @@ if ($result && $result->num_rows > 0) {
 
         if ($esRegaloLibre) {
             $precio_producto_a_mostrar = (float)$row['monto_libre'];
-            if ($currency == 2 && $cotizacion_dolar > 0) {
-                $precio_producto_a_mostrar = $precio_producto_a_mostrar / $cotizacion_dolar;
+            if ($currency == 1 && $cotizacion_dolar > 0) {
+                $precio_producto_a_mostrar = $precio_producto_a_mostrar * $cotizacion_dolar;
             }
             $subtotal = $precio_producto_a_mostrar;
             $productos[] = "Gift Card: " . ($currency == 2 ? "u\$s " : "$ ") . number_format($subtotal, 0, '', '.');
         } else {
             $precio_producto_base = (float)$row['precio'];
             $precio_producto_a_mostrar = $precio_producto_base;
-            if ($currency == 2) {
-                $precio_producto_a_mostrar = $precio_producto_base / $cotizacion_dolar;
+            if ($currency == 1 && $cotizacion_dolar > 0) {
+                $precio_producto_a_mostrar = $precio_producto_base * $cotizacion_dolar;
             }
             $subtotal = $precio_producto_a_mostrar * $cantidad;
             $productos[] = $row['titulo'] . " (Cantidad: " . $cantidad . ", Subtotal: " . ($currency == 2 ? "u\$s " : "$ ") . number_format($subtotal, 0, '', '.') . ")";
@@ -316,7 +316,7 @@ $seconds = $datetime->format('s');
     function loadCartItems() {
         // CORRECCIÓN: Obtener la moneda desde el parámetro 'currency' de la URL.
         const urlParams = new URLSearchParams(window.location.search);
-        const selectedCurrency = urlParams.get('currency') || '1'; // Si no está en URL, usa '1' (Pesos)
+        const selectedCurrency = urlParams.get('currency') || '2'; // Si no está en URL, usa '2' (Dólares)
         
         fetch('ver_carrito.php?currency=' + selectedCurrency)
         .then(response => response.text())

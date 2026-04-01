@@ -8,7 +8,7 @@ include_once 'regalo_libre_helper.php';
 asegurarEstructuraRegaloLibre($conn);
 $regaloLibreId = obtenerOCrearProductoRegaloLibre($conn);
 
-$currency = isset($_GET['currency']) ? (int)$_GET['currency'] : 1;
+$currency = isset($_GET['currency']) ? (int)$_GET['currency'] : 2;
 
 $query_dolar = "SELECT cotizacion_dolar FROM cliente WHERE user_id=1";
 $result_dolar = $conn->query($query_dolar);
@@ -52,13 +52,13 @@ if ($result && $result->num_rows > 0) {
 
         if ($esRegaloLibre) {
             $precio_producto_a_mostrar = (float)$row['monto_libre'];
-            if ($currency == 2 && $cotizacion_dolar > 0) {
-                $precio_producto_a_mostrar = $precio_producto_a_mostrar / $cotizacion_dolar;
+            if ($currency == 1 && $cotizacion_dolar > 0) {
+                $precio_producto_a_mostrar = $precio_producto_a_mostrar * $cotizacion_dolar;
             }
         } else {
             $precio_producto_a_mostrar = (float)$row['precio'];
-            if ($currency == 2) {
-                $precio_producto_a_mostrar = $precio_producto_a_mostrar / $cotizacion_dolar;
+            if ($currency == 1 && $cotizacion_dolar > 0) {
+                $precio_producto_a_mostrar = $precio_producto_a_mostrar * $cotizacion_dolar;
             }
         }
 

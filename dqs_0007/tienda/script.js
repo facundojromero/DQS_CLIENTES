@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function addItemToCart(productoId, montoLibre) {
         const params = new URLSearchParams();
         const urlParams = new URLSearchParams(window.location.search);
-        const selectedCurrency = urlParams.get('currency') || '1';
+        const selectedCurrency = urlParams.get('currency') || '2';
 
         params.append('producto_id', productoId);
         params.append('currency', selectedCurrency);
@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function loadCartItems() {
         const urlParams = new URLSearchParams(window.location.search);
-        const selectedCurrency = urlParams.get('currency') || '1';
+        const selectedCurrency = urlParams.get('currency') || '2';
 
         fetch(`ver_carrito.php?currency=${selectedCurrency}`)
             .then(response => response.text())
