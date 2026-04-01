@@ -34,9 +34,9 @@ foreach ($compartido_array as $persona) {
 $compartido = implode(', ', $compartido_limpio);
 $mensaje = trim($_POST['mensaje'] ?? '');
 $activo = 1;
-$moneda = isset($_POST['currency']) ? (int)$_POST['currency'] : 1;
+$moneda = isset($_POST['currency']) ? (int)$_POST['currency'] : 2;
 if ($moneda !== 1 && $moneda !== 2) {
-    $moneda = 1;
+    $moneda = 2;
 }
 
 if ($nombre === '' || $apellido === '' || $email === '' || $telefono === '' || $forma_pago === '') {
@@ -78,15 +78,15 @@ while ($row = $resultCarrito->fetch_assoc()) {
         }
 
         $precio = $montoLibre;
-        if ($moneda === 2 && $cotizacion_dolar > 0) {
-            $precio = $precio / $cotizacion_dolar;
+        if ($moneda === 1 && $cotizacion_dolar > 0) {
+            $precio = $precio * $cotizacion_dolar;
         }
         $subtotal = $precio;
         $productos[] = 'Gift Card: ' . ($moneda === 2 ? 'u$s ' : '$ ') . number_format($subtotal, 0, '', '.');
     } else {
         $precio = (float)$row['precio'];
-        if ($moneda === 2 && $cotizacion_dolar > 0) {
-            $precio = $precio / $cotizacion_dolar;
+        if ($moneda === 1 && $cotizacion_dolar > 0) {
+            $precio = $precio * $cotizacion_dolar;
         }
         $subtotal = $precio * $cantidad;
         $productos[] = $row['titulo'] . ' (Cantidad: ' . $cantidad . ', Subtotal: ' . ($moneda === 2 ? 'u$s ' : '$ ') . number_format($subtotal, 0, '', '.') . ')';

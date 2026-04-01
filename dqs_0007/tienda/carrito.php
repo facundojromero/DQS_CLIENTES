@@ -13,11 +13,11 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $producto_id = isset($_POST['producto_id']) ? (int)$_POST['producto_id'] : 0;
-$currency = isset($_POST['currency']) ? (int)$_POST['currency'] : 1;
+$currency = isset($_POST['currency']) ? (int)$_POST['currency'] : 2;
 $session_id = session_id();
 
 if ($currency !== 1 && $currency !== 2) {
-    $currency = 1;
+    $currency = 2;
 }
 
 if ($producto_id <= 0) {
@@ -48,9 +48,9 @@ if ($producto_id === $regaloLibreId && $montoLibre === null) {
 }
 
 if ($producto_id === $regaloLibreId) {
-    $montoLibreEnPesos = $montoLibre;
-    if ($currency === 2 && $cotizacion_dolar > 0) {
-        $montoLibreEnPesos = $montoLibre * $cotizacion_dolar;
+    $montoLibreEnUsd = $montoLibre;
+    if ($currency === 1 && $cotizacion_dolar > 0) {
+        $montoLibreEnUsd = $montoLibre / $cotizacion_dolar;
     }
 
     $sql = 'SELECT id FROM carrito WHERE session_id = ? AND producto_id = ? LIMIT 1';
@@ -62,14 +62,14 @@ if ($producto_id === $regaloLibreId) {
     if ($result && $result->num_rows > 0) {
         $sqlUpdate = 'UPDATE carrito SET cantidad = 1, monto_libre = ? WHERE session_id = ? AND producto_id = ?';
         $stmtUpdate = $conn->prepare($sqlUpdate);
-        $stmtUpdate->bind_param('dsi', $montoLibreEnPesos, $session_id, $producto_id);
+        $stmtUpdate->bind_param('dsi', $montoLibreEnUsd, $session_id, $producto_id);
         $ok = $stmtUpdate->execute();
         $stmtUpdate->close();
     } else {
         $cantidad = 1;
         $sqlInsert = 'INSERT INTO carrito (session_id, producto_id, cantidad, monto_libre) VALUES (?, ?, ?, ?)';
         $stmtInsert = $conn->prepare($sqlInsert);
-        $stmtInsert->bind_param('siid', $session_id, $producto_id, $cantidad, $montoLibreEnPesos);
+        $stmtInsert->bind_param('siid', $session_id, $producto_id, $cantidad, $montoLibreEnUsd);
         $ok = $stmtInsert->execute();
         $stmtInsert->close();
     }

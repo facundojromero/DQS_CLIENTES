@@ -198,7 +198,7 @@ if ($result_cliente && mysqli_num_rows($result_cliente) > 0) {
             <label for="currencySelect">Moneda:</label>
             <select id="currencySelect" name="currency" onchange="this.form.submit()">
                 <option value="1" <?php if(isset($_GET['currency']) && $_GET['currency'] == '1') echo 'selected'; ?>>Pesos</option>
-                <option value="2" <?php if(isset($_GET['currency']) && $_GET['currency'] == '2') echo 'selected'; ?>>Dólares</option>
+                <option value="2" <?php if(!isset($_GET['currency']) || $_GET['currency'] == '2') echo 'selected'; ?>>Dólares</option>
             </select>
             <input type="hidden" name="sort" value="<?php echo htmlspecialchars(isset($_GET['sort']) ? $_GET['sort'] : 'default'); ?>">
         </form>
@@ -213,7 +213,7 @@ if ($result_cliente && mysqli_num_rows($result_cliente) > 0) {
                 <option value="price" <?php if(isset($_GET['sort']) && $_GET['sort'] == 'price') echo 'selected'; ?>>Precio</option>
                 <option value="alphabetical" <?php if(isset($_GET['sort']) && $_GET['sort'] == 'alphabetical') echo 'selected'; ?>>Alfabéticamente</option>
             </select>
-            <input type="hidden" name="currency" value="<?php echo htmlspecialchars(isset($_GET['currency']) ? $_GET['currency'] : '1'); ?>">
+            <input type="hidden" name="currency" value="<?php echo htmlspecialchars(isset($_GET['currency']) ? $_GET['currency'] : '2'); ?>">
         </form>
     </div>
     
