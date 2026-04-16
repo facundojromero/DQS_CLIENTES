@@ -1044,6 +1044,23 @@ $frase_final = $frases[array_rand($frases)];
       body {
         margin: 0;
       }
+      .ticket {
+        width: 45mm;
+        margin: 0 auto;
+        box-sizing: border-box;
+        padding-bottom: 10mm;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      .print-separador-final {
+        display: block;
+        margin-top: 10mm;
+        min-height: 20mm;
+        text-align: center;
+        color: #000;
+        font-size: 11px;
+        line-height: 1.4;
+      }
     }
     body {
       font-family: monospace;
@@ -1078,16 +1095,9 @@ $frase_final = $frases[array_rand($frases)];
       font-size: 11px;
       margin-top: 10px;
     }
-	
-	
-	@media print {
-  .espacio-final-impresion {
-    height: 100px;  /* Ajustá según el espacio que quieras */
-    display: block;
-  }
-}
-
-	
+    .print-separador-final {
+      display: none;
+    }
   </style>
   <script>
     window.onload = function () {
@@ -1119,9 +1129,13 @@ $frase_final = $frases[array_rand($frases)];
   
   <div class="linea"></div>
   <p class="centrado frase-final">"<?php echo $frase_final; ?>"</p>
-  
-
-
+  <div class="print-separador-final">
+    ---------------------------------<br>
+    <br>
+    ---------------------------------<br>
+    <br>
+    ---------------------------------
+  </div>
 </div>
 </body>
 </html>
