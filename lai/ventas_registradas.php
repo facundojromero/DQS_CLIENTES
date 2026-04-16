@@ -138,7 +138,7 @@ echo "</td>";
                             <input type='hidden' name='venta_id' value='{$id}'>
                             <button type='submit' name='anular' class='action-button cancel-button' onclick=\"return confirm('¿Estás seguro que deseas anular esta venta?');\">Anular</button>
                         </form>
-                        <button class='action-button' onclick=\"window.open('factura_tkt.php?producto={$producto}&precio={$precio}', '_blank');\">Imprimir</button>
+                        <button class='action-button' onclick=\"window.laiPrintTickets([{producto: " . json_encode($producto) . ", precio: " . json_encode($precio) . "}]);\">Imprimir</button>
                     </td>
                   </tr>";
         }
