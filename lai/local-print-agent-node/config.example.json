@@ -1,8 +1,11 @@
 {
   "server": {
     "host": "127.0.0.1",
-    "port": 5399,
+    "port": 3000,
     "apiKey": "CAMBIAR_ESTA_CLAVE_LOCAL"
+  },
+  "integration": {
+    "baseUrl": ""
   },
   "printDefaults": {
     "printerName": "",

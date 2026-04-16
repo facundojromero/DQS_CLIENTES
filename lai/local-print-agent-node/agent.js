@@ -167,11 +167,12 @@ function runPrintJob(payload) {
 function startServer() {
   const config = loadConfig();
   const host = config.server?.host || '127.0.0.1';
-  const port = Number(config.server?.port || 5399);
+  const port = Number(config.server?.port || 3000);
   const apiKey = String(config.server?.apiKey || '');
 
   const server = http.createServer(async (req, res) => {
-    const url = new URL(req.url, `http://${req.headers.host}`);
+    const reqHost = req.headers.host || `${host}:${port}`;
+    const url = new URL(req.url, `http://${reqHost}`);
 
     if (req.method === 'GET' && url.pathname === '/health') {
       return jsonResponse(res, 200, { status: 'ok', host, port });
@@ -200,6 +201,11 @@ function startServer() {
         }
 
         const finalConfig = normalizePrintConfig(config, body.printConfig || {});
+        writeLog('INFO', 'Solicitud de impresión recibida', {
+          printerName: finalConfig.printerName || 'default',
+          copies: finalConfig.copies,
+          ticketWidthMm: finalConfig.ticketWidthMm,
+        });
         const normalizedText = normalizeText(rawText, finalConfig.charsPerLine);
 
         const printPayload = {
@@ -229,7 +235,7 @@ function startServer() {
   });
 
   server.listen(port, host, () => {
-    writeLog('INFO', 'Agente iniciado', { host, port });
+    writeLog('INFO', 'Agente iniciado', { host, port, configPath: CONFIG_PATH, printScript: PRINT_SCRIPT_PATH });
     // eslint-disable-next-line no-console
     console.log(`LAI Local Print Agent escuchando en http://${host}:${port}`);
   });
