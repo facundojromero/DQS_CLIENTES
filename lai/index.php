@@ -1,5 +1,6 @@
 <?php
 include 'conexion.php';
+include 'print_agent_config.php';
 
 
 session_start();
@@ -82,22 +83,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto'])) {
     // Imprimir tickets
     echo '<script>
         const tickets = ' . json_encode($tickets) . ';
-        function imprimirTickets(tickets, index = 0) {
-            if (index >= tickets.length) return;
-            const ticket = tickets[index];
-            const ventana = window.open(
-                "factura_tkt.php?producto=" + encodeURIComponent(ticket.producto) + "&precio=" + ticket.precio,
-                "_blank",
-                "width=200,height=100,top=1000,left=2000"
-            );
-            const checkClosed = setInterval(() => {
-                if (ventana.closed) {
-                    clearInterval(checkClosed);
-                    setTimeout(() => imprimirTickets(tickets, index + 1), 500);
-                }
-            }, 300);
+        window.__laiPendingPrintJobs = window.__laiPendingPrintJobs || [];
+        window.__laiPendingPrintJobs.push(tickets);
+        if (window.laiPrintTickets) {
+            window.laiPrintTickets(tickets);
         }
-        imprimirTickets(tickets);
     </script>';
 }
 
@@ -208,26 +198,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registrar_venta'])) {
         // Imprimir tickets uno por uno
         echo '<script>
             var tickets = ' . json_encode($tickets) . ';
-            function imprimirTickets(tickets, index) {
-                if (index === undefined) index = 0;
-                if (index >= tickets.length) return;
-                var ticket = tickets[index];
-                var ventana = window.open(
-                    "factura_tkt.php?producto=" + encodeURIComponent(ticket.producto) + "&precio=" + ticket.precio,
-                    "_blank",
-                    "width=200,height=100,top=1000,left=2000"
-                );
-
-                var checkClosed = setInterval(function() {
-                    if (ventana.closed) {
-                        clearInterval(checkClosed);
-                        setTimeout(function() {
-                            imprimirTickets(tickets, index + 1);
-                        }, 500);
-                    }
-                }, 300);
+            window.__laiPendingPrintJobs = window.__laiPendingPrintJobs || [];
+            window.__laiPendingPrintJobs.push(tickets);
+            if (window.laiPrintTickets) {
+                window.laiPrintTickets(tickets);
             }
-            imprimirTickets(tickets);
         </script>';
 
     } else {
@@ -357,9 +332,103 @@ if ($result_usuario && $result_usuario->num_rows > 0) {
 
 		
         </div>
-		
-		
+
+
     </div>
+<script>
+  (function () {
+    const AGENT_ENABLED = <?php echo $PRINT_AGENT_ENABLED ? 'true' : 'false'; ?>;
+    const AGENT_URL = <?php echo json_encode($PRINT_AGENT_URL); ?>;
+    const AGENT_API_KEY = <?php echo json_encode($PRINT_AGENT_API_KEY); ?>;
+    const AGENT_DEFAULTS = <?php echo json_encode($PRINT_AGENT_DEFAULTS); ?>;
+    const USUARIO = <?php echo json_encode($usuario_nombre); ?>;
+    const HORA = <?php echo json_encode(date('d/m/Y H:i:s', strtotime('+21 hours'))); ?>;
+
+    function formatPrecio(precio) {
+      const numero = Number(precio || 0);
+      if (Number.isNaN(numero)) {
+        return '0';
+      }
+      return Math.round(numero).toLocaleString('es-AR');
+    }
+
+    function construirTicketTexto(ticket) {
+      const producto = String(ticket.producto || 'Producto');
+      const precio = formatPrecio(ticket.precio);
+      const lineas = [
+        '- JINETEADA LAI -',
+        'PARA RETIRAR',
+        '------------------------------',
+        HORA,
+        'Atendido por: ' + USUARIO,
+        '------------------------------',
+        'Producto:',
+        producto,
+        '------------------------------',
+        'Precio: $ ' + precio,
+        '------------------------------',
+        'Gracias por su compra'
+      ];
+      return lineas.join('\n');
+    }
+
+    async function enviarAlAgente(ticket) {
+      const payload = {
+        ticketText: construirTicketTexto(ticket),
+        printConfig: AGENT_DEFAULTS
+      };
+
+      const response = await fetch(AGENT_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-lai-api-key': AGENT_API_KEY
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        const detalle = await response.text();
+        throw new Error('Agente respondió ' + response.status + ' - ' + detalle);
+      }
+    }
+
+    function printFallback(ticket) {
+      window.open(
+        'factura_tkt.php?producto=' + encodeURIComponent(ticket.producto) + '&precio=' + ticket.precio,
+        '_blank',
+        'width=200,height=100,top=1000,left=2000'
+      );
+    }
+
+    window.laiPrintTicketsFallback = function (tickets) {
+      (tickets || []).forEach(printFallback);
+    };
+
+    window.laiPrintTickets = async function (tickets) {
+      const lista = tickets || [];
+      for (const ticket of lista) {
+        try {
+          if (AGENT_ENABLED) {
+            await enviarAlAgente(ticket);
+            continue;
+          }
+        } catch (error) {
+          console.warn('Error en agente local, se usa fallback', error);
+        }
+        printFallback(ticket);
+      }
+    };
+
+    const pendientes = window.__laiPendingPrintJobs || [];
+    if (pendientes.length > 0) {
+      window.__laiPendingPrintJobs = [];
+      pendientes.forEach(function (tickets) {
+        window.laiPrintTickets(tickets);
+      });
+    }
+  })();
+</script>
 </body>
 </html>
 
