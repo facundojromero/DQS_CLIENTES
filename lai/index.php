@@ -144,8 +144,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto'])) {
                         });
 
                         if (!response.ok) {
+                            let errorMessage = "Error al imprimir con agente local.";
                             const errorText = await response.text();
-                            throw new Error(errorText || "Error al imprimir con agente local.");
+                            if (errorText) {
+                                try {
+                                    const errorPayload = JSON.parse(errorText);
+                                    if (errorPayload && errorPayload.error) {
+                                        errorMessage = errorPayload.error;
+                                    } else {
+                                        errorMessage = errorText;
+                                    }
+                                } catch (parseError) {
+                                    errorMessage = errorText;
+                                }
+                            }
+                            throw new Error(errorMessage);
                         }
                     },
                     printWithFallback: function (ticket) {
@@ -174,7 +187,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto'])) {
                         if (this.strictLocalPrint) {
                             if (!this.agentErrorShown) {
                                 this.agentErrorShown = true;
-                                alert("No se pudo imprimir con el agente local. Verificá que el servicio local esté iniciado en esta PC.");
+                                alert("No se pudo imprimir con el agente local. Verificá que el servicio local esté iniciado en esta PC.\nDetalle: " + (error && error.message ? error.message : "Sin detalle."));
                             }
                             return;
                         }
@@ -371,8 +384,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registrar_venta'])) {
                             });
 
                             if (!response.ok) {
+                                let errorMessage = "Error al imprimir con agente local.";
                                 const errorText = await response.text();
-                                throw new Error(errorText || "Error al imprimir con agente local.");
+                                if (errorText) {
+                                    try {
+                                        const errorPayload = JSON.parse(errorText);
+                                        if (errorPayload && errorPayload.error) {
+                                            errorMessage = errorPayload.error;
+                                        } else {
+                                            errorMessage = errorText;
+                                        }
+                                    } catch (parseError) {
+                                        errorMessage = errorText;
+                                    }
+                                }
+                                throw new Error(errorMessage);
                             }
                         },
                         printWithFallback: function (ticket) {
@@ -401,7 +427,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registrar_venta'])) {
                             if (this.strictLocalPrint) {
                                 if (!this.agentErrorShown) {
                                     this.agentErrorShown = true;
-                                    alert("No se pudo imprimir con el agente local. Verificá que el servicio local esté iniciado en esta PC.");
+                                    alert("No se pudo imprimir con el agente local. Verificá que el servicio local esté iniciado en esta PC.\nDetalle: " + (error && error.message ? error.message : "Sin detalle."));
                                 }
                                 return;
                             }

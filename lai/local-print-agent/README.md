@@ -64,6 +64,7 @@ Si falla el agente local (apagado/error/time-out), usa fallback al mecanismo pre
 
 > **Modo actual en `lai/index.php`:** `strictLocalPrint: true`.  
 > Esto evita popup/fallback de navegador y muestra aviso si el agente local no está disponible.
+> El aviso ahora muestra `Detalle: ...` con el error técnico devuelto por el agente.
 
 ## Diagnóstico cuando sigue apareciendo la ventana del navegador
 
@@ -94,6 +95,19 @@ Arquitectura correcta:
 3. El agente imprime en la impresora configurada en esa misma PC.
 
 Sin agente local no existe forma segura de imprimir directo desde una web pública sin diálogo del navegador.
+
+## Puesta en marcha local (Windows recomendado)
+
+1. Instalar Node.js LTS.
+2. Abrir `cmd` en `C:\clientes\lai\local-print-agent` (o ruta equivalente).
+3. Ejecutar `start-agent.bat` (incluido en esta carpeta).
+4. Validar salud:
+   ```bash
+   curl http://127.0.0.1:3000/health
+   ```
+5. Hacer venta desde la web online en esa misma PC.
+
+Si falla, usar el `Detalle:` del aviso y revisar consola/log del agente.
 
 ## Prueba manual rápida
 
