@@ -88,6 +88,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto'])) {
                 window.__laiPrintAgentPoC = {
                     agentBaseUrl: "http://127.0.0.1:3000",
                     agentReachable: null,
+                    strictLocalPrint: true,
+                    agentErrorShown: false,
                     formatCurrency: function (value) {
                         return new Intl.NumberFormat("es-AR", {
                             minimumFractionDigits: 0,
@@ -167,6 +169,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto'])) {
                             }, 300);
                         });
                     },
+                    onAgentFailure: async function (ticket, error) {
+                        console.error("No se pudo imprimir con agente local:", error);
+                        if (this.strictLocalPrint) {
+                            if (!this.agentErrorShown) {
+                                this.agentErrorShown = true;
+                                alert("No se pudo imprimir con el agente local. Verificá que el servicio local esté iniciado en esta PC.");
+                            }
+                            return;
+                        }
+                        await this.printWithFallback(ticket);
+                    },
                     delay: function (ms) {
                         return new Promise(function (resolve) { setTimeout(resolve, ms); });
                     },
@@ -176,8 +189,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto'])) {
                             try {
                                 await this.printWithAgent(ticket);
                             } catch (error) {
-                                console.warn("Fallo agente local, uso fallback de navegador:", error);
-                                await this.printWithFallback(ticket);
+                                await this.onAgentFailure(ticket, error);
                             }
                             await this.delay(500);
                         }
@@ -303,6 +315,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registrar_venta'])) {
                     window.__laiPrintAgentPoC = {
                         agentBaseUrl: "http://127.0.0.1:3000",
                         agentReachable: null,
+                        strictLocalPrint: true,
+                        agentErrorShown: false,
                         formatCurrency: function (value) {
                             return new Intl.NumberFormat("es-AR", {
                                 minimumFractionDigits: 0,
@@ -382,6 +396,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registrar_venta'])) {
                                 }, 300);
                             });
                         },
+                        onAgentFailure: async function (ticket, error) {
+                            console.error("No se pudo imprimir con agente local:", error);
+                            if (this.strictLocalPrint) {
+                                if (!this.agentErrorShown) {
+                                    this.agentErrorShown = true;
+                                    alert("No se pudo imprimir con el agente local. Verificá que el servicio local esté iniciado en esta PC.");
+                                }
+                                return;
+                            }
+                            await this.printWithFallback(ticket);
+                        },
                         delay: function (ms) {
                             return new Promise(function (resolve) { setTimeout(resolve, ms); });
                         },
@@ -391,8 +416,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registrar_venta'])) {
                                 try {
                                     await this.printWithAgent(ticket);
                                 } catch (error) {
-                                    console.warn("Fallo agente local, uso fallback de navegador:", error);
-                                    await this.printWithFallback(ticket);
+                                    await this.onAgentFailure(ticket, error);
                                 }
                                 await this.delay(500);
                             }

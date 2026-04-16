@@ -62,6 +62,9 @@ Si falla el agente local (apagado/error/time-out), usa fallback al mecanismo pre
 - `window.open('factura_tkt.php...')`
 - `window.print()` desde `factura_tkt.php`
 
+> **Modo actual en `lai/index.php`:** `strictLocalPrint: true`.  
+> Esto evita popup/fallback de navegador y muestra aviso si el agente local no está disponible.
+
 ## Diagnóstico cuando sigue apareciendo la ventana del navegador
 
 Si aparece la ventana de impresión, significa que se activó el fallback.
@@ -79,6 +82,18 @@ Validar en este orden:
    Debe existir una predeterminada accesible por el usuario que corre el agente.
 
 Revisar logs del agente: cada error se registra en JSON con detalle.
+
+## Importante para sitio online
+
+Si la web está publicada en internet, **igual necesitás un programa local en cada PC de caja**.
+
+Arquitectura correcta:
+
+1. Usuario abre la web online.
+2. El navegador de esa PC llama a `127.0.0.1:3000` (agente local).
+3. El agente imprime en la impresora configurada en esa misma PC.
+
+Sin agente local no existe forma segura de imprimir directo desde una web pública sin diálogo del navegador.
 
 ## Prueba manual rápida
 
