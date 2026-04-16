@@ -1040,9 +1040,25 @@ $frase_final = $frases[array_rand($frases)];
   <meta charset="UTF-8">
   <title>Ticket</title>
   <style>
+    @page {
+      margin: 0;
+    }
     @media print {
       body {
         margin: 0;
+      }
+      .ticket {
+        width: 45mm;
+        margin: 0 auto;
+        box-sizing: border-box;
+        padding-bottom: 22mm;
+        page-break-inside: avoid;
+        break-inside: avoid;
+      }
+      .ticket::after {
+        content: "";
+        display: block;
+        height: 22mm;
       }
     }
     body {
@@ -1078,16 +1094,6 @@ $frase_final = $frases[array_rand($frases)];
       font-size: 11px;
       margin-top: 10px;
     }
-	
-	
-	@media print {
-  .espacio-final-impresion {
-    height: 100px;  /* Ajustá según el espacio que quieras */
-    display: block;
-  }
-}
-
-	
   </style>
   <script>
     window.onload = function () {
