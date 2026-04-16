@@ -27,6 +27,41 @@ function Resolve-IsccPath([string]$PreferredPath) {
     }
   }
 
+  $registryUninstallPaths = @(
+    'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*',
+    'HKLM:\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*',
+    'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*'
+  )
+
+  foreach ($regPath in $registryUninstallPaths) {
+    $items = Get-ItemProperty -Path $regPath -ErrorAction SilentlyContinue |
+      Where-Object { $_.DisplayName -like 'Inno Setup*' }
+
+    foreach ($item in $items) {
+      if ($item.InstallLocation) {
+        $regCandidate = Join-Path $item.InstallLocation 'ISCC.exe'
+        if (Test-Path -Path $regCandidate) {
+          return $regCandidate
+        }
+      }
+    }
+  }
+
+  $wingetRoots = @(
+    (Join-Path $env:LOCALAPPDATA 'Microsoft\WinGet\Packages'),
+    (Join-Path $env:ProgramFiles 'WindowsApps')
+  )
+
+  foreach ($root in $wingetRoots) {
+    if (Test-Path -Path $root) {
+      $wingetIscc = Get-ChildItem -Path $root -Filter ISCC.exe -Recurse -ErrorAction SilentlyContinue |
+        Select-Object -First 1 -ExpandProperty FullName
+      if ($wingetIscc) {
+        return $wingetIscc
+      }
+    }
+  }
+
   return $null
 }
 

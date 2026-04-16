@@ -32,6 +32,12 @@ Si `ISCC.exe` no está en ruta estándar, indicar path manual:
 powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\build_installer.ps1" -InnoSetupCompiler "C:\Ruta\A\ISCC.exe"
 ```
 
+Si instalaste con `winget` y no sabés la ruta, buscá `ISCC.exe` así:
+
+```powershell
+Get-ChildItem "$env:LOCALAPPDATA\Microsoft\WinGet\Packages" -Filter ISCC.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 5 -ExpandProperty FullName
+```
+
 Salida esperada:
 
 - `lai\local-print-agent-node\installer\LAI-Print-Agent-Setup.exe`
