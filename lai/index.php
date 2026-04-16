@@ -79,25 +79,90 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto'])) {
         }
     }
 
-    // Imprimir tickets
+    // Imprimir tickets (PoC: agente local + fallback a impresión actual)
     echo '<script>
-        const tickets = ' . json_encode($tickets) . ';
-        function imprimirTickets(tickets, index = 0) {
-            if (index >= tickets.length) return;
-            const ticket = tickets[index];
-            const ventana = window.open(
-                "factura_tkt.php?producto=" + encodeURIComponent(ticket.producto) + "&precio=" + ticket.precio,
-                "_blank",
-                "width=200,height=100,top=1000,left=2000"
-            );
-            const checkClosed = setInterval(() => {
-                if (ventana.closed) {
-                    clearInterval(checkClosed);
-                    setTimeout(() => imprimirTickets(tickets, index + 1), 500);
-                }
-            }, 300);
-        }
-        imprimirTickets(tickets);
+        (function () {
+            const tickets = ' . json_encode($tickets) . ';
+
+            if (!window.__laiPrintAgentPoC) {
+                window.__laiPrintAgentPoC = {
+                    formatCurrency: function (value) {
+                        return new Intl.NumberFormat("es-AR", {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0
+                        }).format(Number(value || 0));
+                    },
+                    buildTicketContent: function (ticket) {
+                        const now = new Date();
+                        const fecha = now.toLocaleDateString("es-AR");
+                        const hora = now.toLocaleTimeString("es-AR");
+                        return [
+                            "LAI",
+                            "Fecha: " + fecha + " " + hora,
+                            "Producto: " + ticket.producto,
+                            "Precio: $" + this.formatCurrency(ticket.precio),
+                            "------------------------------"
+                        ].join("\\n");
+                    },
+                    printWithAgent: async function (ticket) {
+                        const payload = {
+                            type: "ticket",
+                            content: this.buildTicketContent(ticket),
+                            copies: 1
+                        };
+
+                        const response = await fetch("http://localhost:3000/print", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify(payload)
+                        });
+
+                        if (!response.ok) {
+                            const errorText = await response.text();
+                            throw new Error(errorText || "Error al imprimir con agente local.");
+                        }
+                    },
+                    printWithFallback: function (ticket) {
+                        return new Promise(function (resolve) {
+                            const ventana = window.open(
+                                "factura_tkt.php?producto=" + encodeURIComponent(ticket.producto) + "&precio=" + ticket.precio,
+                                "_blank",
+                                "width=200,height=100,top=1000,left=2000"
+                            );
+
+                            if (!ventana) {
+                                resolve();
+                                return;
+                            }
+
+                            const checkClosed = setInterval(function () {
+                                if (ventana.closed) {
+                                    clearInterval(checkClosed);
+                                    resolve();
+                                }
+                            }, 300);
+                        });
+                    },
+                    delay: function (ms) {
+                        return new Promise(function (resolve) { setTimeout(resolve, ms); });
+                    },
+                    printTickets: async function (tickets) {
+                        for (let i = 0; i < tickets.length; i++) {
+                            const ticket = tickets[i];
+                            try {
+                                await this.printWithAgent(ticket);
+                            } catch (error) {
+                                console.warn("Fallo agente local, uso fallback de navegador:", error);
+                                await this.printWithFallback(ticket);
+                            }
+                            await this.delay(500);
+                        }
+                    }
+                };
+            }
+
+            window.__laiPrintAgentPoC.printTickets(tickets);
+        })();
     </script>';
 }
 
@@ -205,29 +270,90 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registrar_venta'])) {
         // Limpiar el carrito
         $conn->query("DELETE FROM carrito");
 
-        // Imprimir tickets uno por uno
+        // Imprimir tickets (PoC: agente local + fallback a impresión actual)
         echo '<script>
-            var tickets = ' . json_encode($tickets) . ';
-            function imprimirTickets(tickets, index) {
-                if (index === undefined) index = 0;
-                if (index >= tickets.length) return;
-                var ticket = tickets[index];
-                var ventana = window.open(
-                    "factura_tkt.php?producto=" + encodeURIComponent(ticket.producto) + "&precio=" + ticket.precio,
-                    "_blank",
-                    "width=200,height=100,top=1000,left=2000"
-                );
+            (function () {
+                const tickets = ' . json_encode($tickets) . ';
 
-                var checkClosed = setInterval(function() {
-                    if (ventana.closed) {
-                        clearInterval(checkClosed);
-                        setTimeout(function() {
-                            imprimirTickets(tickets, index + 1);
-                        }, 500);
-                    }
-                }, 300);
-            }
-            imprimirTickets(tickets);
+                if (!window.__laiPrintAgentPoC) {
+                    window.__laiPrintAgentPoC = {
+                        formatCurrency: function (value) {
+                            return new Intl.NumberFormat("es-AR", {
+                                minimumFractionDigits: 0,
+                                maximumFractionDigits: 0
+                            }).format(Number(value || 0));
+                        },
+                        buildTicketContent: function (ticket) {
+                            const now = new Date();
+                            const fecha = now.toLocaleDateString("es-AR");
+                            const hora = now.toLocaleTimeString("es-AR");
+                            return [
+                                "LAI",
+                                "Fecha: " + fecha + " " + hora,
+                                "Producto: " + ticket.producto,
+                                "Precio: $" + this.formatCurrency(ticket.precio),
+                                "------------------------------"
+                            ].join("\\n");
+                        },
+                        printWithAgent: async function (ticket) {
+                            const payload = {
+                                type: "ticket",
+                                content: this.buildTicketContent(ticket),
+                                copies: 1
+                            };
+
+                            const response = await fetch("http://localhost:3000/print", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify(payload)
+                            });
+
+                            if (!response.ok) {
+                                const errorText = await response.text();
+                                throw new Error(errorText || "Error al imprimir con agente local.");
+                            }
+                        },
+                        printWithFallback: function (ticket) {
+                            return new Promise(function (resolve) {
+                                const ventana = window.open(
+                                    "factura_tkt.php?producto=" + encodeURIComponent(ticket.producto) + "&precio=" + ticket.precio,
+                                    "_blank",
+                                    "width=200,height=100,top=1000,left=2000"
+                                );
+
+                                if (!ventana) {
+                                    resolve();
+                                    return;
+                                }
+
+                                const checkClosed = setInterval(function () {
+                                    if (ventana.closed) {
+                                        clearInterval(checkClosed);
+                                        resolve();
+                                    }
+                                }, 300);
+                            });
+                        },
+                        delay: function (ms) {
+                            return new Promise(function (resolve) { setTimeout(resolve, ms); });
+                        },
+                        printTickets: async function (tickets) {
+                            for (let i = 0; i < tickets.length; i++) {
+                                const ticket = tickets[i];
+                                try {
+                                    await this.printWithAgent(ticket);
+                                } catch (error) {
+                                    console.warn("Fallo agente local, uso fallback de navegador:", error);
+                                    await this.printWithFallback(ticket);
+                                }
+                                await this.delay(500);
+                            }
+                        }
+                    };
+                }
+
+                window.__laiPrintAgentPoC.printTickets(tickets);
+            })();
         </script>';
 
     } else {
