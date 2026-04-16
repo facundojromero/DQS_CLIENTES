@@ -38,6 +38,12 @@ Si instalaste con `winget` y no sabés la ruta, buscá `ISCC.exe` así:
 Get-ChildItem "$env:LOCALAPPDATA\Microsoft\WinGet\Packages" -Filter ISCC.exe -Recurse -ErrorAction SilentlyContinue | Select-Object -First 5 -ExpandProperty FullName
 ```
 
+También verificá instalación por usuario:
+
+```powershell
+Test-Path "$env:LOCALAPPDATA\Programs\Inno Setup 6\ISCC.exe"
+```
+
 Salida esperada:
 
 - `lai\local-print-agent-node\installer\LAI-Print-Agent-Setup.exe`
