@@ -5,7 +5,9 @@
   "description": "Agente local de impresión para LAI (Windows)",
   "main": "agent.js",
   "scripts": {
-    "start": "node agent.js"
+    "start": "node agent.js",
+    "start:windows": "run-agent.cmd",
+    "install:windows": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/install_agent.ps1 -InstallDir ."
   },
   "engines": {
     "node": ">=18"
