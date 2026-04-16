@@ -36,18 +36,25 @@ Source: "..\scripts\uninstall_agent.ps1"; DestDir: "{app}\scripts"; Flags: ignor
 Source: "..\scripts\start_agent.ps1"; DestDir: "{app}\scripts"; Flags: ignoreversion
 Source: "..\scripts\stop_agent.ps1"; DestDir: "{app}\scripts"; Flags: ignoreversion
 Source: "..\scripts\validate_agent.ps1"; DestDir: "{app}\scripts"; Flags: ignoreversion
+Source: "..\scripts\set_base_url.ps1"; DestDir: "{app}\scripts"; Flags: ignoreversion
 Source: "..\runtime\*"; DestDir: "{app}\runtime"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Run]
-Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\scripts\install_agent.ps1"" -InstallDir ""{app}"" -ServerHost ""127.0.0.1"" -ServerPort 3000 -ApiKey ""{code:GetApiKey}"" -PrinterName ""{code:GetPrinterName}"" -TicketWidthMm {code:GetTicketWidth} {code:GetAutoStartFlag}"; Flags: runhidden waituntilterminated
+Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\scripts\install_agent.ps1"" -InstallDir ""{app}"" -ServerHost ""127.0.0.1"" -ServerPort 3000 -ApiKey ""{code:GetApiKey}"" -BaseUrl ""{code:GetBaseUrl}"" -PrinterName ""{code:GetPrinterName}"" -TicketWidthMm {code:GetTicketWidth} {code:GetAutoStartFlag}"; Flags: runhidden waituntilterminated
 
 [UninstallRun]
 Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\scripts\uninstall_agent.ps1"" -InstallDir ""{app}"""; Flags: runhidden
 
 [Code]
 var
+  ServerPage: TInputQueryWizardPage;
   ApiKeyPage: TInputQueryWizardPage;
   PrintPage: TInputQueryWizardPage;
+
+function GetBaseUrl(Value: string): string;
+begin
+  Result := ServerPage.Values[0];
+end;
 
 function GetApiKey(Value: string): string;
 begin
@@ -74,8 +81,17 @@ end;
 
 procedure InitializeWizard;
 begin
-  ApiKeyPage := CreateInputQueryPage(
+  ServerPage := CreateInputQueryPage(
     wpSelectTasks,
+    'Integración con servidor web',
+    'Definí la URL de tu sistema web (puede cambiar luego)',
+    'Este valor se guarda en config.json y es editable en cualquier momento.'
+  );
+  ServerPage.Add('URL base del sistema web (https://...):', False);
+  ServerPage.Values[0] := '';
+
+  ApiKeyPage := CreateInputQueryPage(
+    ServerPage.ID,
     'Configuración local del agente',
     'Definí credenciales y parámetros base',
     'Estos valores se guardan en config.json para esta PC.'

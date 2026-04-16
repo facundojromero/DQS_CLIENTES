@@ -3,6 +3,7 @@ param(
   [string]$ServerHost = '127.0.0.1',
   [int]$ServerPort = 3000,
   [string]$ApiKey = 'CAMBIAR_ESTA_CLAVE_LOCAL',
+  [string]$BaseUrl = '',
   [string]$PrinterName = '',
   [int]$TicketWidthMm = 58,
   [switch]$AutoStart
@@ -35,10 +36,14 @@ if ($null -eq $config.server) {
 if ($null -eq $config.printDefaults) {
   $config | Add-Member -MemberType NoteProperty -Name printDefaults -Value ([PSCustomObject]@{})
 }
+if ($null -eq $config.integration) {
+  $config | Add-Member -MemberType NoteProperty -Name integration -Value ([PSCustomObject]@{})
+}
 
 $config.server.host = $ServerHost
 $config.server.port = $ServerPort
 $config.server.apiKey = $ApiKey
+$config.integration.baseUrl = $BaseUrl
 $config.printDefaults.printerName = $PrinterName
 $config.printDefaults.ticketWidthMm = $TicketWidthMm
 
