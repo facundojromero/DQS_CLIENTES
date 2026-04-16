@@ -26,6 +26,12 @@ En Windows con Inno Setup 6 instalado:
 powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\build_installer.ps1"
 ```
 
+Si `ISCC.exe` no está en ruta estándar, indicar path manual:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File ".\scripts\build_installer.ps1" -InnoSetupCompiler "C:\Ruta\A\ISCC.exe"
+```
+
 Salida esperada:
 
 - `lai\local-print-agent-node\installer\LAI-Print-Agent-Setup.exe`
