@@ -55,12 +55,30 @@ Respuesta OK:
 
 ## Integración con LAI
 
-`lai/index.php` ahora intenta imprimir por `fetch('http://localhost:3000/print')`.
+`lai/index.php` ahora intenta imprimir por `fetch('http://127.0.0.1:3000/print')`.
 
 Si falla el agente local (apagado/error/time-out), usa fallback al mecanismo previo:
 
 - `window.open('factura_tkt.php...')`
 - `window.print()` desde `factura_tkt.php`
+
+## Diagnóstico cuando sigue apareciendo la ventana del navegador
+
+Si aparece la ventana de impresión, significa que se activó el fallback.
+
+Validar en este orden:
+
+1. **Agente encendido**  
+   `curl http://127.0.0.1:3000/health`
+2. **Permisos CORS/PNA**  
+   Esta versión ya responde `Access-Control-Allow-Private-Network: true` para navegadores modernos.
+3. **Motor de impresión del SO**  
+   - Linux/macOS necesita `lp` (CUPS).
+   - Windows usa `powershell` + `Out-Printer`.
+4. **Impresora predeterminada del equipo**  
+   Debe existir una predeterminada accesible por el usuario que corre el agente.
+
+Revisar logs del agente: cada error se registra en JSON con detalle.
 
 ## Prueba manual rápida
 

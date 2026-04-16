@@ -86,6 +86,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto'])) {
 
             if (!window.__laiPrintAgentPoC) {
                 window.__laiPrintAgentPoC = {
+                    agentBaseUrl: "http://127.0.0.1:3000",
+                    agentReachable: null,
                     formatCurrency: function (value) {
                         return new Intl.NumberFormat("es-AR", {
                             minimumFractionDigits: 0,
@@ -104,14 +106,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto'])) {
                             "------------------------------"
                         ].join("\\n");
                     },
+                    checkAgent: async function () {
+                        if (this.agentReachable !== null) {
+                            return this.agentReachable;
+                        }
+
+                        try {
+                            const response = await fetch(this.agentBaseUrl + "/health", {
+                                method: "GET",
+                                mode: "cors"
+                            });
+                            this.agentReachable = response.ok;
+                        } catch (error) {
+                            this.agentReachable = false;
+                        }
+
+                        return this.agentReachable;
+                    },
                     printWithAgent: async function (ticket) {
+                        const available = await this.checkAgent();
+                        if (!available) {
+                            throw new Error("Agente local no disponible.");
+                        }
+
                         const payload = {
                             type: "ticket",
                             content: this.buildTicketContent(ticket),
                             copies: 1
                         };
 
-                        const response = await fetch("http://localhost:3000/print", {
+                        const response = await fetch(this.agentBaseUrl + "/print", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify(payload)
@@ -277,6 +301,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registrar_venta'])) {
 
                 if (!window.__laiPrintAgentPoC) {
                     window.__laiPrintAgentPoC = {
+                        agentBaseUrl: "http://127.0.0.1:3000",
+                        agentReachable: null,
                         formatCurrency: function (value) {
                             return new Intl.NumberFormat("es-AR", {
                                 minimumFractionDigits: 0,
@@ -295,14 +321,36 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registrar_venta'])) {
                                 "------------------------------"
                             ].join("\\n");
                         },
+                        checkAgent: async function () {
+                            if (this.agentReachable !== null) {
+                                return this.agentReachable;
+                            }
+
+                            try {
+                                const response = await fetch(this.agentBaseUrl + "/health", {
+                                    method: "GET",
+                                    mode: "cors"
+                                });
+                                this.agentReachable = response.ok;
+                            } catch (error) {
+                                this.agentReachable = false;
+                            }
+
+                            return this.agentReachable;
+                        },
                         printWithAgent: async function (ticket) {
+                            const available = await this.checkAgent();
+                            if (!available) {
+                                throw new Error("Agente local no disponible.");
+                            }
+
                             const payload = {
                                 type: "ticket",
                                 content: this.buildTicketContent(ticket),
                                 copies: 1
                             };
 
-                            const response = await fetch("http://localhost:3000/print", {
+                            const response = await fetch(this.agentBaseUrl + "/print", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify(payload)
