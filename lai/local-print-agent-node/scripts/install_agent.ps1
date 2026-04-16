@@ -1,7 +1,7 @@
 param(
   [string]$InstallDir = 'C:\Program Files\LAI Print Agent',
   [string]$ServerHost = '127.0.0.1',
-  [int]$ServerPort = 5399,
+  [int]$ServerPort = 3000,
   [string]$ApiKey = 'CAMBIAR_ESTA_CLAVE_LOCAL',
   [string]$PrinterName = '',
   [int]$TicketWidthMm = 58,
@@ -29,6 +29,12 @@ if (-not (Test-Path -Path $configPath)) {
 }
 
 $config = Get-Content -Path $configPath -Raw | ConvertFrom-Json
+if ($null -eq $config.server) {
+  $config | Add-Member -MemberType NoteProperty -Name server -Value ([PSCustomObject]@{})
+}
+if ($null -eq $config.printDefaults) {
+  $config | Add-Member -MemberType NoteProperty -Name printDefaults -Value ([PSCustomObject]@{})
+}
 
 $config.server.host = $ServerHost
 $config.server.port = $ServerPort
@@ -39,17 +45,18 @@ $config.printDefaults.ticketWidthMm = $TicketWidthMm
 $config | ConvertTo-Json -Depth 8 | Set-Content -Path $configPath -Encoding UTF8
 Write-Info "Config actualizada en $configPath"
 
+$startScriptPath = Join-Path $InstallDir 'scripts\start_agent.ps1'
+if (-not (Test-Path -Path $startScriptPath)) {
+  throw "No existe scripts\\start_agent.ps1 en $InstallDir"
+}
+
 if ($AutoStart) {
   $taskName = 'LAI-Print-Agent'
-  $runCmdPath = Join-Path $InstallDir 'run-agent.cmd'
-
-  if (-not (Test-Path -Path $runCmdPath)) {
-    throw "No existe run-agent.cmd en $InstallDir"
-  }
-
-  $action = New-ScheduledTaskAction -Execute $runCmdPath
+  $actionArgs = "-NoProfile -ExecutionPolicy Bypass -File `"$startScriptPath`" -InstallDir `"$InstallDir`""
+  $action = New-ScheduledTaskAction -Execute 'powershell.exe' -Argument $actionArgs
   $trigger = New-ScheduledTaskTrigger -AtLogOn
-  $principal = New-ScheduledTaskPrincipal -UserId $env:USERNAME -LogonType Interactive -RunLevel Limited
+  $currentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent().Name
+  $principal = New-ScheduledTaskPrincipal -UserId $currentUser -LogonType InteractiveToken -RunLevel Limited
   $settings = New-ScheduledTaskSettingsSet -AllowStartIfOnBatteries -DontStopIfGoingOnBatteries
 
   Register-ScheduledTask `
@@ -62,5 +69,7 @@ if ($AutoStart) {
 
   Write-Info "Tarea programada '$taskName' creada/actualizada"
 }
+
+& powershell.exe -NoProfile -ExecutionPolicy Bypass -File $startScriptPath -InstallDir $InstallDir
 
 Write-Info 'Instalación lógica finalizada'

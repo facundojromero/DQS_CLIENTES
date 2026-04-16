@@ -1,5 +1,5 @@
 #define MyAppName "LAI Local Print Agent"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "LAI"
 #define MyAppExeName "run-agent.cmd"
 
@@ -33,14 +33,16 @@ Source: "..\run-agent.cmd"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\scripts\print_ticket.ps1"; DestDir: "{app}\scripts"; Flags: ignoreversion
 Source: "..\scripts\install_agent.ps1"; DestDir: "{app}\scripts"; Flags: ignoreversion
 Source: "..\scripts\uninstall_agent.ps1"; DestDir: "{app}\scripts"; Flags: ignoreversion
+Source: "..\scripts\start_agent.ps1"; DestDir: "{app}\scripts"; Flags: ignoreversion
+Source: "..\scripts\stop_agent.ps1"; DestDir: "{app}\scripts"; Flags: ignoreversion
+Source: "..\scripts\validate_agent.ps1"; DestDir: "{app}\scripts"; Flags: ignoreversion
 Source: "..\runtime\*"; DestDir: "{app}\runtime"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Run]
-Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\scripts\install_agent.ps1"" -InstallDir ""{app}"" -ServerHost ""127.0.0.1"" -ServerPort 5399 -ApiKey ""{code:GetApiKey}"" -PrinterName ""{code:GetPrinterName}"" -TicketWidthMm {code:GetTicketWidth} {code:GetAutoStartFlag}"; Flags: runhidden waituntilterminated
-Filename: "{app}\run-agent.cmd"; Description: "Iniciar ahora el agente"; Flags: nowait postinstall skipifsilent
+Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\scripts\install_agent.ps1"" -InstallDir ""{app}"" -ServerHost ""127.0.0.1"" -ServerPort 3000 -ApiKey ""{code:GetApiKey}"" -PrinterName ""{code:GetPrinterName}"" -TicketWidthMm {code:GetTicketWidth} {code:GetAutoStartFlag}"; Flags: runhidden waituntilterminated
 
 [UninstallRun]
-Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\scripts\uninstall_agent.ps1"""; Flags: runhidden
+Filename: "powershell.exe"; Parameters: "-NoProfile -ExecutionPolicy Bypass -File ""{app}\scripts\uninstall_agent.ps1"" -InstallDir ""{app}"""; Flags: runhidden
 
 [Code]
 var
