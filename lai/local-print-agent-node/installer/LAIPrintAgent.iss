@@ -79,6 +79,44 @@ begin
     Result := '';
 end;
 
+function IsValidHttpUrl(const Value: string): Boolean;
+var
+  LowerValue: string;
+begin
+  LowerValue := LowerCase(Trim(Value));
+  Result := (LowerValue = '') or Pos('http://', LowerValue) = 1 or Pos('https://', LowerValue) = 1;
+end;
+
+function IsValidTicketWidth(const Value: string): Boolean;
+begin
+  Result := (Trim(Value) = '58') or (Trim(Value) = '80');
+end;
+
+function NextButtonClick(CurPageID: Integer): Boolean;
+begin
+  Result := True;
+
+  if CurPageID = ServerPage.ID then
+  begin
+    if not IsValidHttpUrl(ServerPage.Values[0]) then
+    begin
+      MsgBox('La URL base debe comenzar con http:// o https://, o quedar vacía.', mbError, MB_OK);
+      Result := False;
+      exit;
+    end;
+  end;
+
+  if CurPageID = PrintPage.ID then
+  begin
+    if not IsValidTicketWidth(PrintPage.Values[1]) then
+    begin
+      MsgBox('El ancho del ticket debe ser 58 o 80.', mbError, MB_OK);
+      Result := False;
+      exit;
+    end;
+  end;
+end;
+
 procedure InitializeWizard;
 begin
   ServerPage := CreateInputQueryPage(

@@ -34,9 +34,10 @@ Salida esperada:
 
 1. Ejecutar `LAI-Print-Agent-Setup.exe` como administrador.
 2. Completar asistente:
+   - URL base del sistema web (dominio online, opcional y editable).
    - API Key local.
    - Nombre de impresora (o vacío para predeterminada de Windows).
-   - Ancho ticket (58 u 80).
+   - Ancho ticket (solo 58 u 80).
    - (Opcional) activar “Iniciar automáticamente al iniciar sesión”.
 3. Finalizar instalación.
 4. El instalador ejecuta `install_agent.ps1`, que:
@@ -106,3 +107,13 @@ Si cambia el dominio, no hace falta reinstalar. Actualizalo así:
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File "C:\Program Files\LAI Print Agent\scripts\set_base_url.ps1" -BaseUrl "https://nuevo-dominio.com/lai/"
 ```
+
+## Resumen del `.exe` (lo que pediste)
+
+El `LAI-Print-Agent-Setup.exe` permite configurar en el asistente:
+
+- dominio/URL base del sistema web,
+- impresora cuponera,
+- ancho de ticket (58/80),
+- API key local,
+- auto inicio del agente.

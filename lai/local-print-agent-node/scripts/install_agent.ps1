@@ -45,6 +45,9 @@ $config.server.port = $ServerPort
 $config.server.apiKey = $ApiKey
 $config.integration.baseUrl = $BaseUrl
 $config.printDefaults.printerName = $PrinterName
+if ($TicketWidthMm -ne 58 -and $TicketWidthMm -ne 80) {
+  $TicketWidthMm = 58
+}
 $config.printDefaults.ticketWidthMm = $TicketWidthMm
 
 $config | ConvertTo-Json -Depth 8 | Set-Content -Path $configPath -Encoding UTF8
