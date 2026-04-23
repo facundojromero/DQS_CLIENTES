@@ -7,7 +7,6 @@
 
 	
 	      <link rel="stylesheet" href="formato.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 		  
 </head>
 <body>
@@ -134,9 +133,9 @@ if ($result->num_rows > 0) {
         echo "<td>" . $row['orden'] . "</td>";
 		echo "<td>
 			<a href='#' onclick='toggleActivo(" . $row['id'] . ", " . $row['activo'] . ")'>
-				" . ($row['activo'] == 1 
-				? '<i class="fa-solid fa-circle-check" style="color:green;"></i> ' 
-				: '<i class="fa-solid fa-circle-xmark" style="color:red;"></i> ') . "
+				" . ($row['activo'] == 1
+				? '<strong style="color:green;">✓</strong> '
+				: '<strong style="color:red;">✕</strong> ') . "
 			</a>
 		</td>";
 

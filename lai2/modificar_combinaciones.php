@@ -108,7 +108,6 @@ while ($row = $res->fetch_assoc()) {
     <meta charset="UTF-8">
     <title>Modificar Combinaciones</title>
     <link rel="stylesheet" href="formato.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 
@@ -142,9 +141,9 @@ while ($row = $res->fetch_assoc()) {
                 <td>$<?php echo number_format($c['precio_mercadopago'], 0, '', '.'); ?></td>
                 <td>
                     <a href="#" onclick="toggleActivo(<?php echo $c['id']; ?>, <?php echo $c['activo']; ?>)">
-                        <?php echo $c['activo'] == 1 
-                            ? '<i class="fa-solid fa-circle-check" style="color:green;"></i>' 
-                            : '<i class="fa-solid fa-circle-xmark" style="color:red;"></i>'; ?>
+                        <?php echo $c['activo'] == 1
+                            ? '<strong style="color:green;">✓</strong>'
+                            : '<strong style="color:red;">✕</strong>'; ?>
                     </a>
                 </td>
                 <td>
@@ -156,7 +155,7 @@ while ($row = $res->fetch_assoc()) {
                         <?php echo $c['activo']; ?>
                     )">Modificar</button>
                     <a href="?eliminar=<?php echo $c['id']; ?>" onclick="return confirm('¿Estás seguro de eliminar esta combinación?');">
-                        <i class="fa-solid fa-trash" style="color:#c00;"></i>
+                        <strong style="color:#c00;">✕</strong>
                     </a>
                 </td>
             </tr>
