@@ -105,11 +105,7 @@ if ($result_combinaciones->num_rows > 0) {
             const button = document.getElementById(`producto-${producto.id}`);
             let nuevoPrecio = producto.precio;
             if (formaPago === "Mercado Pago") {
-                nuevoPrecio *= 1.10;
-            } else if (formaPago === "Efectivo") {
-                nuevoPrecio *= 1; // Por ejemplo, un descuento del 10%
-            } else if (formaPago === "Gratis") {
-                nuevoPrecio *= 1; // Por ejemplo, un descuento del 10%
+                nuevoPrecio = parseFloat(producto.precio_mercadopago || producto.precio);
             }
             button.textContent = `${producto.orden !== null ? producto.orden + ' --> ' : ''}${producto.nombre} - $${nuevoPrecio.toFixed(0)}`;
         });
@@ -118,11 +114,7 @@ if ($result_combinaciones->num_rows > 0) {
             const button = document.getElementById(`combinacion-${combinacion.id}`);
             let nuevoPrecio = combinacion.precio;
             if (formaPago === "Mercado Pago") {
-                nuevoPrecio *= 1.10;
-            } else if (formaPago === "Efectivo") {
-                nuevoPrecio *= 1; // Por ejemplo, un descuento del 10%
-            } else if (formaPago === "Gratis") {
-                nuevoPrecio *= 1; // Por ejemplo, un descuento del 10%
+                nuevoPrecio = parseFloat(combinacion.precio_mercadopago || combinacion.precio);
             }
             button.textContent = `Combo: ${combinacion.nombre} - $${nuevoPrecio.toFixed(0)}`;
         });
@@ -130,6 +122,11 @@ if ($result_combinaciones->num_rows > 0) {
 
     // Llamar a la función al cargar la página para establecer los precios iniciales
     document.addEventListener('DOMContentLoaded', updatePrices);
+
+    function obtenerPrecioPorForma(precio, precioMercadoPago) {
+        const formaPago = document.querySelector('input[name="forma_pago"]:checked')?.value;
+        return formaPago === "Mercado Pago" ? precioMercadoPago : precio;
+    }
 
     // Función para manejar las teclas numéricas
     document.addEventListener('keydown', function(event) {
@@ -180,13 +177,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto'])) {
 
 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
     <?php foreach ($productos as $producto): ?>
-        <button type="submit" name="producto" value="<?php echo htmlspecialchars($producto['nombre']); ?>" class="product" id="producto-<?php echo htmlspecialchars($producto['id']); ?>" onclick="document.querySelector('input[name=precio]').value=<?php echo htmlspecialchars($producto['precio']); ?>">
+        <button type="submit" name="producto" value="<?php echo htmlspecialchars($producto['nombre']); ?>" class="product" id="producto-<?php echo htmlspecialchars($producto['id']); ?>" onclick="document.querySelector('input[name=precio]').value=obtenerPrecioPorForma(<?php echo htmlspecialchars($producto['precio']); ?>, <?php echo htmlspecialchars($producto['precio_mercadopago']); ?>)">
             <?php echo $producto['orden'] !== null ? htmlspecialchars($producto['orden']) . ' --> ' : ''; ?><?php echo htmlspecialchars($producto['nombre']); ?> - $<?php echo floor($producto['precio']); ?>
         </button>
     <?php endforeach; ?>
 
     <?php foreach ($combinaciones as $combinacion): ?>
-        <button type="submit" name="producto" value="<?php echo htmlspecialchars($combinacion['nombre']); ?>" class="product" id="combinacion-<?php echo htmlspecialchars($combinacion['id']); ?>" onclick="document.querySelector('input[name=precio]').value=<?php echo htmlspecialchars($combinacion['precio']); ?>">
+        <button type="submit" name="producto" value="<?php echo htmlspecialchars($combinacion['nombre']); ?>" class="product" id="combinacion-<?php echo htmlspecialchars($combinacion['id']); ?>" onclick="document.querySelector('input[name=precio]').value=obtenerPrecioPorForma(<?php echo htmlspecialchars($combinacion['precio']); ?>, <?php echo htmlspecialchars($combinacion['precio_mercadopago']); ?>)">
             Combo: <?php echo htmlspecialchars($combinacion['nombre']); ?> - $<?php echo floor($combinacion['precio']); ?>
         </button>
     <?php endforeach; ?>

@@ -11,6 +11,7 @@ if (!isset($_SESSION['usuario_id'])) {
 $id_combinacion = "";
 $nombre = "";
 $precio = "";
+$precio_mercadopago = "";
 $activo = 0;
 $productos_seleccionados = array();
 
@@ -41,17 +42,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id_combinacion = $_POST['id_combinacion'];
     $nombre = $_POST['nombre'];
     $precio = $_POST['precio'];
+    $precio_mercadopago = $_POST['precio_mercadopago'];
     $activo = isset($_POST['activo']) ? 1 : 0;
     $productos = isset($_POST['productos']) ? $_POST['productos'] : array();
 
     if ($id_combinacion) {
-        $stmt = $conn->prepare("UPDATE combinaciones SET nombre=?, precio=?, activo=? WHERE id=?");
-        $stmt->bind_param("sdii", $nombre, $precio, $activo, $id_combinacion);
+        $stmt = $conn->prepare("UPDATE combinaciones SET nombre=?, precio=?, precio_mercadopago=?, activo=? WHERE id=?");
+        $stmt->bind_param("sddii", $nombre, $precio, $precio_mercadopago, $activo, $id_combinacion);
         $stmt->execute();
         $conn->query("DELETE FROM combinaciones_detalles WHERE id_combinacion = " . (int)$id_combinacion);
     } else {
-        $stmt = $conn->prepare("INSERT INTO combinaciones (nombre, precio, activo) VALUES (?, ?, ?)");
-        $stmt->bind_param("sdi", $nombre, $precio, $activo);
+        $stmt = $conn->prepare("INSERT INTO combinaciones (nombre, precio, precio_mercadopago, activo) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("sddi", $nombre, $precio, $precio_mercadopago, $activo);
         $stmt->execute();
         $id_combinacion = $conn->insert_id;
     }
@@ -77,6 +79,7 @@ if (isset($_GET['editar'])) {
     if ($fila) {
         $nombre = $fila['nombre'];
         $precio = $fila['precio'];
+        $precio_mercadopago = $fila['precio_mercadopago'];
         $activo = $fila['activo'];
         $res = $conn->query("SELECT id_producto FROM combinaciones_detalles WHERE id_combinacion = " . (int)$id_combinacion);
         $temp = array();
@@ -117,7 +120,7 @@ while ($row = $res->fetch_assoc()) {
 			
 <div class="menu-buttons">
     <a href="index.php" class="menu-button">Volver a Caja</a>
-<button class="action-button" onclick="openModal('', '', '', 1)">Agregar Promocion</button>
+<button class="action-button" onclick="openModal('', '', '', '', 1)">Agregar Promocion</button>
 
 </div>
 
@@ -127,7 +130,8 @@ while ($row = $res->fetch_assoc()) {
     <table>
         <tr>
             <th>Nombre</th>
-            <th>Precio</th>
+            <th>Precio Efectivo/Gratis</th>
+            <th>Precio Mercado Pago</th>
             <th>Activo</th>
             <th>Acciones</th>
         </tr>
@@ -135,6 +139,7 @@ while ($row = $res->fetch_assoc()) {
             <tr>
                 <td><?php echo $c['nombre']; ?></td>
                 <td>$<?php echo number_format($c['precio'], 0, '', '.'); ?></td>
+                <td>$<?php echo number_format($c['precio_mercadopago'], 0, '', '.'); ?></td>
                 <td>
                     <a href="#" onclick="toggleActivo(<?php echo $c['id']; ?>, <?php echo $c['activo']; ?>)">
                         <?php echo $c['activo'] == 1 
@@ -147,6 +152,7 @@ while ($row = $res->fetch_assoc()) {
                         <?php echo $c['id']; ?>,
                         '<?php echo addslashes($c['nombre']); ?>',
                         <?php echo $c['precio']; ?>,
+                        <?php echo $c['precio_mercadopago']; ?>,
                         <?php echo $c['activo']; ?>
                     )">Modificar</button>
                     <a href="?eliminar=<?php echo $c['id']; ?>" onclick="return confirm('¿Estás seguro de eliminar esta combinación?');">
@@ -176,8 +182,11 @@ while ($row = $res->fetch_assoc()) {
       <label for="modal-nombre">Nombre:</label>
       <input type="text" id="modal-nombre" name="nombre" required>
 
-      <label for="modal-precio">Precio:</label>
+      <label for="modal-precio">Precio Efectivo/Gratis:</label>
       <input type="number" step="0.01" id="modal-precio" name="precio" required>
+
+      <label for="modal-precio-mercadopago">Precio Mercado Pago:</label>
+      <input type="number" step="0.01" id="modal-precio-mercadopago" name="precio_mercadopago" required>
 
       <label for="modal-activo">Activo:</label>
       <select id="modal-activo" name="activo" required>
@@ -222,12 +231,13 @@ function eliminarProducto(boton) {
 
 
 <script>
-function openModal(id, nombre, precio, activo, productos = []) {
+function openModal(id, nombre, precio, precioMercadoPago, activo, productos = []) {
     document.getElementById('modal-title').textContent = id ? 'Editar Combinación' : 'Nueva Combinación';
 
     document.getElementById('modal-id').value = id || '';
     document.getElementById('modal-nombre').value = nombre || '';
     document.getElementById('modal-precio').value = precio || '';
+    document.getElementById('modal-precio-mercadopago').value = precioMercadoPago || '';
     document.getElementById('modal-activo').value = activo ?? 1;
 
     const contenedor = document.getElementById('productos-container-modal');
