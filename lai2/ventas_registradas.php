@@ -24,34 +24,65 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['anular'])) {
 }
 
 
+function obtenerPrecioVentaPorForma($conn, $venta_id, $forma_pago) {
+    $sql_detalles = "SELECT vd.tipo, vd.producto_id, vd.cantidad, p.precio, p.precio_mercadopago, c.precio AS combo_precio, c.precio_mercadopago AS combo_precio_mercadopago
+                    FROM venta_detalles vd
+                    LEFT JOIN productos p ON vd.tipo = 'producto' AND vd.producto_id = p.id
+                    LEFT JOIN combinaciones c ON vd.tipo = 'combinacion' AND vd.producto_id = c.id
+                    WHERE vd.venta_id = $venta_id";
+    $result_detalles = $conn->query($sql_detalles);
+
+    if ($result_detalles && $result_detalles->num_rows > 0) {
+        $total = 0;
+        while ($detalle = $result_detalles->fetch_assoc()) {
+            if ($detalle['tipo'] === 'producto') {
+                $precio_unitario = ($forma_pago === 'Mercado Pago') ? $detalle['precio_mercadopago'] : $detalle['precio'];
+            } else {
+                $precio_unitario = ($forma_pago === 'Mercado Pago') ? $detalle['combo_precio_mercadopago'] : $detalle['combo_precio'];
+            }
+            $total += ((float)$precio_unitario * (int)$detalle['cantidad']);
+        }
+        return $total;
+    }
+
+    $sql_venta = "SELECT producto, precio FROM ventas WHERE id = $venta_id LIMIT 1";
+    $result_venta = $conn->query($sql_venta);
+    if (!$result_venta || $result_venta->num_rows === 0) {
+        return 0;
+    }
+
+    $venta = $result_venta->fetch_assoc();
+    if ($venta['producto'] === 'Carrito') {
+        return $venta['precio'];
+    }
+
+    $producto = $conn->real_escape_string($venta['producto']);
+
+    $sql_producto = "SELECT precio, precio_mercadopago FROM productos WHERE nombre = '$producto' LIMIT 1";
+    $result_producto = $conn->query($sql_producto);
+    if ($result_producto && $result_producto->num_rows > 0) {
+        $fila_producto = $result_producto->fetch_assoc();
+        return ($forma_pago === 'Mercado Pago') ? $fila_producto['precio_mercadopago'] : $fila_producto['precio'];
+    }
+
+    $sql_combo = "SELECT precio, precio_mercadopago FROM combinaciones WHERE nombre = '$producto' LIMIT 1";
+    $result_combo = $conn->query($sql_combo);
+    if ($result_combo && $result_combo->num_rows > 0) {
+        $fila_combo = $result_combo->fetch_assoc();
+        return ($forma_pago === 'Mercado Pago') ? $fila_combo['precio_mercadopago'] : $fila_combo['precio'];
+    }
+
+    return $venta['precio'];
+}
+
 // Actualizar forma de pago si se envía el formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['actualizar_pago'])) {
     $venta_id = $_POST['venta_id'];
     $forma_pago = $_POST['forma_pago'];
+    $precio_actualizado = obtenerPrecioVentaPorForma($conn, (int)$venta_id, $forma_pago);
 
-    // Obtener el precio actual y la forma de pago actual de la venta
-    $sql_precio_actual = "SELECT precio, forma FROM ventas WHERE id = $venta_id";
-    $result_precio = $conn->query($sql_precio_actual);
-    $row_precio = $result_precio->fetch_assoc();
-    $precio_actual = $row_precio['precio'];
-    $forma_pago_actual = $row_precio['forma'];
-
-    // Si se cambia de "Efectivo" a "Mercado Pago", aplicar el 10% de recargo
-    if ($forma_pago_actual == "Efectivo" && $forma_pago == "Mercado Pago") {
-        $precio_actualizado = $precio_actual * 1.10;
-    }
-    // Si se cambia de "Mercado Pago" a "Efectivo", eliminar el recargo del 10%
-    elseif ($forma_pago_actual == "Mercado Pago" && $forma_pago == "Efectivo") {
-        $precio_actualizado = $precio_actual / 1.10; // Revertir el recargo
-    }
-    // Si no hay cambios en la forma de pago, el precio permanece igual
-    else {
-        $precio_actualizado = $precio_actual;
-    }
-
-    // Actualizar la forma de pago y el precio
     $sql_update_pago_precio = "UPDATE ventas SET forma = '$forma_pago', precio = '$precio_actualizado' WHERE id = $venta_id";
-    
+
     if ($conn->query($sql_update_pago_precio) === TRUE) {
         echo "<script>alert('Forma de pago y precio actualizados correctamente');</script>";
     } else {

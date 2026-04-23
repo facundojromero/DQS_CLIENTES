@@ -29,12 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto'])) {
     if ($result_combo->num_rows > 0) {
         $combo = $result_combo->fetch_assoc();
         $combo_id = $combo['id'];
-        $precio_combo = $combo['precio'];
-
-        // Ajustar el precio según forma de pago
-        if ($forma_pago == "Mercado Pago") {
-            $precio_combo *= 1.10;
-        }
+        $precio_combo = ($forma_pago == "Mercado Pago") ? $combo['precio_mercadopago'] : $combo['precio'];
 
         // Obtener los productos que componen la combinación
         $sql_detalles = "SELECT p.nombre, p.precio 
@@ -66,8 +61,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto'])) {
 
     } else {
         // Producto individual
-        if ($forma_pago == "Mercado Pago") {
-            $precio *= 1.10;
+        $sql_producto_precio = "SELECT precio, precio_mercadopago FROM productos WHERE nombre = '$producto' LIMIT 1";
+        $result_producto_precio = $conn->query($sql_producto_precio);
+        if ($result_producto_precio && $result_producto_precio->num_rows > 0) {
+            $producto_precio = $result_producto_precio->fetch_assoc();
+            $precio = ($forma_pago == "Mercado Pago") ? $producto_precio['precio_mercadopago'] : $producto_precio['precio'];
         }
 
         $sql = "INSERT INTO ventas (fecha_hora, producto, precio, forma, id_usuario) VALUES ('$fecha_hora', '$producto', '$precio', '$forma_pago', $usuario_id)";
@@ -133,11 +131,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registrar_venta'])) {
                 if ($result_combo && $result_combo->num_rows > 0) {
                     $combo = $result_combo->fetch_assoc();
                     $combo_id = $combo['id'];
-                    $precio_combo = $combo['precio'] * $cantidad;
-
-                    if ($forma_pago == "Mercado Pago") {
-                        $precio_combo *= 1.10;
-                    }
+                    $precio_combo_unitario = ($forma_pago == "Mercado Pago") ? $combo['precio_mercadopago'] : $combo['precio'];
+                    $precio_combo = $precio_combo_unitario * $cantidad;
 
                     $productos = array();
                     $sql_detalles = "SELECT id_producto FROM combinaciones_detalles WHERE id_combinacion = $combo_id";
@@ -176,14 +171,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['registrar_venta'])) {
                 }
 
             } else {
-                $sql_producto = "SELECT nombre, precio FROM productos WHERE id = $producto_id";
+                $sql_producto = "SELECT nombre, precio, precio_mercadopago FROM productos WHERE id = $producto_id";
                 $result_producto = $conn->query($sql_producto);
                 $producto = $result_producto->fetch_assoc();
 
-                $precio_unitario = $producto['precio'];
-                if ($forma_pago == "Mercado Pago") {
-                    $precio_unitario *= 1.10;
-                }
+                $precio_unitario = ($forma_pago == "Mercado Pago") ? $producto['precio_mercadopago'] : $producto['precio'];
 
                 $precio_total = round($precio_unitario * $cantidad, 2);
 

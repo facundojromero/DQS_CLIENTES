@@ -95,41 +95,29 @@ if ($result_combinaciones->num_rows > 0) {
 <script>
     // Obtener los productos y combinaciones desde PHP
     const productos = <?php echo json_encode($productos); ?>;
-    const combinaciones = <?php echo json_encode($combinaciones); ?>;
 
     // Función para actualizar los precios
     function updatePrices() {
-        const formaPago = document.querySelector('input[name="forma_pago"]:checked') ? document.querySelector('input[name="forma_pago"]:checked').value : null;
+        const formaPago = document.querySelector('input[name="forma_pago"]:checked')?.value || "Efectivo";
+        const botones = document.querySelectorAll('button.product[data-precio][data-precio-mercadopago]');
 
-        productos.forEach((producto, index) => {
-            const button = document.getElementById(`producto-${producto.id}`);
-            let nuevoPrecio = producto.precio;
-            if (formaPago === "Mercado Pago") {
-                nuevoPrecio *= 1.10;
-            } else if (formaPago === "Efectivo") {
-                nuevoPrecio *= 1; // Por ejemplo, un descuento del 10%
-            } else if (formaPago === "Gratis") {
-                nuevoPrecio *= 1; // Por ejemplo, un descuento del 10%
-            }
-            button.textContent = `${producto.orden !== null ? producto.orden + ' --> ' : ''}${producto.nombre} - $${nuevoPrecio.toFixed(0)}`;
-        });
+        botones.forEach((button) => {
+            const precio = parseFloat(button.dataset.precio || 0);
+            const precioMercadoPago = parseFloat(button.dataset.precioMercadopago || button.dataset.precio || 0);
+            const etiqueta = button.dataset.label || '';
 
-        combinaciones.forEach((combinacion, index) => {
-            const button = document.getElementById(`combinacion-${combinacion.id}`);
-            let nuevoPrecio = combinacion.precio;
-            if (formaPago === "Mercado Pago") {
-                nuevoPrecio *= 1.10;
-            } else if (formaPago === "Efectivo") {
-                nuevoPrecio *= 1; // Por ejemplo, un descuento del 10%
-            } else if (formaPago === "Gratis") {
-                nuevoPrecio *= 1; // Por ejemplo, un descuento del 10%
-            }
-            button.textContent = `Combo: ${combinacion.nombre} - $${nuevoPrecio.toFixed(0)}`;
+            const nuevoPrecio = formaPago === "Mercado Pago" ? precioMercadoPago : precio;
+            button.textContent = `${etiqueta} - $${nuevoPrecio.toFixed(0)}`;
         });
     }
 
     // Llamar a la función al cargar la página para establecer los precios iniciales
     document.addEventListener('DOMContentLoaded', updatePrices);
+
+    function obtenerPrecioPorForma(precio, precioMercadoPago) {
+        const formaPago = document.querySelector('input[name="forma_pago"]:checked')?.value;
+        return formaPago === "Mercado Pago" ? precioMercadoPago : precio;
+    }
 
     // Función para manejar las teclas numéricas
     document.addEventListener('keydown', function(event) {
@@ -180,13 +168,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['producto'])) {
 
 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
     <?php foreach ($productos as $producto): ?>
-        <button type="submit" name="producto" value="<?php echo htmlspecialchars($producto['nombre']); ?>" class="product" id="producto-<?php echo htmlspecialchars($producto['id']); ?>" onclick="document.querySelector('input[name=precio]').value=<?php echo htmlspecialchars($producto['precio']); ?>">
+        <button
+            type="submit"
+            name="producto"
+            value="<?php echo htmlspecialchars($producto['nombre']); ?>"
+            class="product"
+            id="producto-<?php echo htmlspecialchars($producto['id']); ?>"
+            data-precio="<?php echo htmlspecialchars($producto['precio']); ?>"
+            data-precio-mercadopago="<?php echo htmlspecialchars($producto['precio_mercadopago']); ?>"
+            data-label="<?php echo ($producto['orden'] !== null ? htmlspecialchars($producto['orden']) . ' --> ' : '') . htmlspecialchars($producto['nombre']); ?>"
+            onclick="document.querySelector('input[name=precio]').value=obtenerPrecioPorForma(<?php echo htmlspecialchars($producto['precio']); ?>, <?php echo htmlspecialchars($producto['precio_mercadopago']); ?>)">
             <?php echo $producto['orden'] !== null ? htmlspecialchars($producto['orden']) . ' --> ' : ''; ?><?php echo htmlspecialchars($producto['nombre']); ?> - $<?php echo floor($producto['precio']); ?>
         </button>
     <?php endforeach; ?>
 
     <?php foreach ($combinaciones as $combinacion): ?>
-        <button type="submit" name="producto" value="<?php echo htmlspecialchars($combinacion['nombre']); ?>" class="product" id="combinacion-<?php echo htmlspecialchars($combinacion['id']); ?>" onclick="document.querySelector('input[name=precio]').value=<?php echo htmlspecialchars($combinacion['precio']); ?>">
+        <button
+            type="submit"
+            name="producto"
+            value="<?php echo htmlspecialchars($combinacion['nombre']); ?>"
+            class="product"
+            id="combinacion-<?php echo htmlspecialchars($combinacion['id']); ?>"
+            data-precio="<?php echo htmlspecialchars($combinacion['precio']); ?>"
+            data-precio-mercadopago="<?php echo htmlspecialchars($combinacion['precio_mercadopago']); ?>"
+            data-label="Combo: <?php echo htmlspecialchars($combinacion['nombre']); ?>"
+            onclick="document.querySelector('input[name=precio]').value=obtenerPrecioPorForma(<?php echo htmlspecialchars($combinacion['precio']); ?>, <?php echo htmlspecialchars($combinacion['precio_mercadopago']); ?>)">
             Combo: <?php echo htmlspecialchars($combinacion['nombre']); ?> - $<?php echo floor($combinacion['precio']); ?>
         </button>
     <?php endforeach; ?>

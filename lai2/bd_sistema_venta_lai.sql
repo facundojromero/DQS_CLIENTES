@@ -45,6 +45,7 @@ CREATE TABLE `combinaciones` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(255) NOT NULL,
   `precio` decimal(10,2) NOT NULL,
+  `precio_mercadopago` decimal(10,2) NOT NULL,
   `activo` int(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -84,6 +85,7 @@ CREATE TABLE `productos` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(255) NOT NULL,
   `precio` decimal(10,2) NOT NULL,
+  `precio_mercadopago` decimal(10,2) NOT NULL,
   `orden` int(11) DEFAULT NULL,
   `activo` int(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
@@ -93,15 +95,15 @@ CREATE TABLE `productos` (
 
 LOCK TABLES `productos` WRITE;
 
-insert  into `productos`(`id`,`nombre`,`precio`,`orden`,`activo`) values 
-(1,'Trago Fernet',5000.00,2,1),
-(2,'Cerveza',3000.00,1,1),
-(3,'Chorizo',5000.00,3,1),
-(4,'Carne',6000.00,4,1),
-(5,'Agua',2000.00,5,1),
-(6,'Hielo',4000.00,6,1),
-(7,'Coca cola 2.25 l',5000.00,7,1),
-(8,'Fernet 750 ml',60000.00,8,1);
+insert  into `productos`(`id`,`nombre`,`precio`,`precio_mercadopago`,`orden`,`activo`) values 
+(1,'Trago Fernet',5000.00,5500.00,2,1),
+(2,'Cerveza',3000.00,3500.00,1,1),
+(3,'Chorizo',5000.00,5500.00,3,1),
+(4,'Carne',6000.00,6500.00,4,1),
+(5,'Agua',2000.00,2500.00,5,1),
+(6,'Hielo',4000.00,4500.00,6,1),
+(7,'Coca cola 2.25 l',5000.00,5500.00,7,1),
+(8,'Fernet 750 ml',60000.00,60500.00,8,1);
 
 UNLOCK TABLES;
 

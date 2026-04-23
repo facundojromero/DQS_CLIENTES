@@ -7,7 +7,6 @@
 
 	
 	      <link rel="stylesheet" href="formato.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 		  
 </head>
 <body>
@@ -50,13 +49,14 @@ if (isset($_POST['nuevo'])) {
     $nombre = $_POST['nombre'];
     $precio = $_POST['precio'];
     $activo = $_POST['activo'];
+    $precio_mercadopago = $_POST['precio_mercadopago'];
     $orden = isset($_POST['orden']) ? intval($_POST['orden']) : null;
     if ($orden < 1 || $orden > 9) {
         $orden = "NULL";
     }
 
-    $query_insert = "INSERT INTO productos (nombre, precio, orden, activo) 
-                     VALUES ('$nombre', '$precio', " . ($orden === "NULL" ? "NULL" : $orden) . ", '$activo')";
+    $query_insert = "INSERT INTO productos (nombre, precio, precio_mercadopago, orden, activo)
+                     VALUES ('$nombre', '$precio', '$precio_mercadopago', " . ($orden === "NULL" ? "NULL" : $orden) . ", '$activo')";
 
     if ($conn->query($query_insert) === TRUE) {
         echo "Producto agregado correctamente.";
@@ -72,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $nombre = $_POST['nombre'];
     $precio = $_POST['precio'];
     $activo = $_POST['activo'];
+    $precio_mercadopago = $_POST['precio_mercadopago'];
     $orden = isset($_POST['orden']) ? intval($_POST['orden']) : null;
 
     // Validar si orden está entre 1 y 9, si no -> NULL
@@ -105,6 +106,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $query_update = "UPDATE productos 
                      SET nombre = '$nombre', 
                          precio = '$precio', 
+                         precio_mercadopago = '$precio_mercadopago', 
                          orden = " . ($orden === "NULL" ? "NULL" : $orden) . ", 
                          activo = '$activo' 
                      WHERE id = '$id'";
@@ -122,23 +124,24 @@ $result = $conn->query($query);
 
 if ($result->num_rows > 0) {
     echo "<table>";
-    echo "<tr><th>Nombre</th><th>Precio</th><th>Orden</th><th>Activo</th><th>Acciones</th></tr>";
+    echo "<tr><th>Nombre</th><th>Precio Efectivo/Gratis</th><th>Precio Mercado Pago</th><th>Orden</th><th>Activo</th><th>Acciones</th></tr>";
     while ($row = $result->fetch_assoc()) {
         echo "<tr>";
         echo "<td>" . $row['nombre'] . "</td>";
 		echo "<td>$" . number_format($row['precio'], 0, '', '.') . "</td>";
+		echo "<td>$" . number_format($row['precio_mercadopago'], 0, '', '.') . "</td>";
         echo "<td>" . $row['orden'] . "</td>";
 		echo "<td>
 			<a href='#' onclick='toggleActivo(" . $row['id'] . ", " . $row['activo'] . ")'>
-				" . ($row['activo'] == 1 
-				? '<i class="fa-solid fa-circle-check" style="color:green;"></i> ' 
-				: '<i class="fa-solid fa-circle-xmark" style="color:red;"></i> ') . "
+				" . ($row['activo'] == 1
+				? '<strong style="color:green;">✓</strong> '
+				: '<strong style="color:red;">✕</strong> ') . "
 			</a>
 		</td>";
 
 
         echo "<td>
-            <button class='action-button' onclick='openModal(" . $row['id'] . ", \"" . $row['nombre'] . "\", " . $row['precio'] . ", " . ($row['orden'] === null ? 'null' : $row['orden']) . ", " . $row['activo'] . ")'>Modificar</button>
+            <button class='action-button' onclick='openModal(" . $row['id'] . ", \"" . $row['nombre'] . "\", " . $row['precio'] . ", " . $row['precio_mercadopago'] . ", " . ($row['orden'] === null ? 'null' : $row['orden']) . ", " . $row['activo'] . ")'>Modificar</button>
         </td>";
         echo "</tr>";
     }
@@ -163,8 +166,11 @@ $conn->close();
             <label for="modal-nombre">Nombre:</label>
             <input type="text" id="modal-nombre" name="nombre" required>
 
-            <label for="modal-precio">Precio:</label>
+            <label for="modal-precio">Precio Efectivo/Gratis:</label>
             <input type="number" step="0.01" id="modal-precio" name="precio" required>
+
+            <label for="modal-precio-mercadopago">Precio Mercado Pago:</label>
+            <input type="number" step="0.01" id="modal-precio-mercadopago" name="precio_mercadopago" required>
 
             <label for="modal-orden">Orden:</label>
             <input type="number" id="modal-orden" name="orden" min="0" max="9">
@@ -189,8 +195,11 @@ $conn->close();
       <label for="nuevo-nombre">Nombre:</label>
       <input type="text" id="nuevo-nombre" name="nombre" required>
 
-      <label for="nuevo-precio">Precio:</label>
+      <label for="nuevo-precio">Precio Efectivo/Gratis:</label>
       <input type="number" step="0.01" id="nuevo-precio" name="precio" required>
+
+      <label for="nuevo-precio-mercadopago">Precio Mercado Pago:</label>
+      <input type="number" step="0.01" id="nuevo-precio-mercadopago" name="precio_mercadopago" required>
 
       <label for="nuevo-orden">Orden:</label>
       <input type="number" id="nuevo-orden" name="orden" min="0" max="9">
@@ -209,10 +218,11 @@ $conn->close();
 
 	
 	<script>
-    function openModal(id, nombre, precio, orden, activo) {
+    function openModal(id, nombre, precio, precioMercadoPago, orden, activo) {
         document.getElementById('modal-id').value = id;
         document.getElementById('modal-nombre').value = nombre;
         document.getElementById('modal-precio').value = precio;
+        document.getElementById('modal-precio-mercadopago').value = precioMercadoPago;
         document.getElementById('modal-orden').value = orden;
         document.getElementById('modal-activo').value = activo;
         document.getElementById('myModal').style.display = 'block';

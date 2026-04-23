@@ -60,9 +60,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['eliminar_carrito'])) {
 
 // Calcular el total consumido actualizado SIEMPRE
 $usuario_id = $_SESSION['usuario_id'];
-$sql_total_consumidos = "SELECT SUM(CASE carrito.tipo 
-    WHEN 'producto' THEN productos.precio 
-    ELSE combinaciones.precio END ) AS total
+$sql_total_consumidos = "SELECT 
+    SUM(CASE carrito.tipo WHEN 'producto' THEN productos.precio * carrito.cantidad ELSE combinaciones.precio * carrito.cantidad END) AS total_efectivo,
+    SUM(CASE carrito.tipo WHEN 'producto' THEN COALESCE(productos.precio_mercadopago, productos.precio) * carrito.cantidad ELSE COALESCE(combinaciones.precio_mercadopago, combinaciones.precio) * carrito.cantidad END) AS total_mercadopago
 FROM carrito 
 LEFT JOIN productos ON carrito.producto_id = productos.id AND carrito.tipo = 'producto' 
 LEFT JOIN combinaciones ON carrito.producto_id = combinaciones.id AND carrito.tipo = 'combinacion'
@@ -100,14 +100,14 @@ if ($result_total_consumidos->num_rows > 0) {
                 <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
                     <?php if (!empty($productos)): ?>
                         <?php foreach ($productos as $producto): ?>
-                            <button type="button" class="product" id="producto-<?php echo htmlspecialchars($producto['id']); ?>" onclick="agregarCarrito(<?php echo htmlspecialchars($producto['id']); ?>, '<?php echo htmlspecialchars($producto['nombre']); ?>', <?php echo htmlspecialchars($producto['precio']); ?>, 'producto')">
+                            <button type="button" class="product" id="producto-<?php echo htmlspecialchars($producto['id']); ?>" onclick="agregarCarrito(<?php echo htmlspecialchars($producto['id']); ?>, '<?php echo htmlspecialchars($producto['nombre']); ?>', <?php echo htmlspecialchars($producto['precio']); ?>, <?php echo htmlspecialchars($producto['precio_mercadopago']); ?>, 'producto')">
                             <?php echo htmlspecialchars($producto['nombre']); ?>
                             </button>
                         <?php endforeach; ?>
                     <?php endif; ?>
                     <?php if (!empty($combinaciones)): ?>
                         <?php foreach ($combinaciones as $combinacion): ?>
-                            <button type="button" class="product" id="combinacion-<?php echo htmlspecialchars($combinacion['id']); ?>" onclick="agregarCarrito(<?php echo htmlspecialchars($combinacion['id']); ?>, '<?php echo htmlspecialchars($combinacion['nombre']); ?>', <?php echo htmlspecialchars($combinacion['precio']); ?>, 'combinacion')">
+                            <button type="button" class="product" id="combinacion-<?php echo htmlspecialchars($combinacion['id']); ?>" onclick="agregarCarrito(<?php echo htmlspecialchars($combinacion['id']); ?>, '<?php echo htmlspecialchars($combinacion['nombre']); ?>', <?php echo htmlspecialchars($combinacion['precio']); ?>, <?php echo htmlspecialchars($combinacion['precio_mercadopago']); ?>, 'combinacion')">
                                 Combo: <?php echo htmlspecialchars($combinacion['nombre']); ?>
                             </button>
                         <?php endforeach; ?>
@@ -193,7 +193,7 @@ $result_carrito = $conn->query($sql_carrito);
 
 
     <script>
-        function agregarCarrito(id, nombre, precio, tipo) {
+        function agregarCarrito(id, nombre, precio, precioMercadoPago, tipo) {
             const form = document.createElement('form');
             form.method = 'POST';
             form.style.display = 'none';
@@ -229,32 +229,13 @@ $result_carrito = $conn->query($sql_carrito);
 
 function updatePrices2() {
     const formaPago = document.querySelector('input[name="forma_pago2"]:checked').value;
-    const productos = <?php echo json_encode($productos); ?>;
-    const combinaciones = <?php echo json_encode($combinaciones); ?>;
     const total_consumidos = <?php echo json_encode($total_consumidos); ?>;
     let total_precio2 = 0;
 
-    productos.forEach((producto) => {
-        const button = document.getElementById(`carrito-producto-${producto.id}`);
-        if (button) {
-            let nuevoPrecio = producto.precio;
-            if (formaPago === "Mercado Pago") nuevoPrecio *= 1.10;
-            button.textContent = `${producto.orden !== null ? producto.orden + ' --> ' : ''}${producto.nombre} - $${nuevoPrecio.toFixed(0)}`;
-        }
-    });
-
-    combinaciones.forEach((combinacion) => {
-        const button = document.getElementById(`carrito-combinacion-${combinacion.id}`);
-        if (button) {
-            let nuevoPrecio = combinacion.precio;
-            if (formaPago === "Mercado Pago") nuevoPrecio *= 1.10;
-            button.textContent = `Combo: ${combinacion.nombre} - $${nuevoPrecio.toFixed(0)}`;
-        }
-    });
-
     total_consumidos.forEach((consumido) => {
-        let nuevoPrecio2 = parseFloat(consumido.total);
-        if (formaPago === "Mercado Pago") nuevoPrecio2 *= 1.1;
+        const totalEfectivo = parseFloat(consumido.total_efectivo || 0);
+        const totalMercadoPago = parseFloat(consumido.total_mercadopago || 0);
+        const nuevoPrecio2 = formaPago === "Mercado Pago" ? totalMercadoPago : totalEfectivo;
         total_precio2 += nuevoPrecio2;
     });
 
