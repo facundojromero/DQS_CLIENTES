@@ -385,7 +385,7 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row <?php echo count($info_eventos) == 1 ? 'justify-content-center' : ''; ?>">
                 <?php foreach ($info_eventos as $evento): ?>
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <div class="event-inner">

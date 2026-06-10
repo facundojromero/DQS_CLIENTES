@@ -1,2 +1,16 @@
 
 /** ADD YOUR AWESOME CODES HERE **/
+
+/* Ajustes visuales dqs_0016: hover/activo de navegación y contacto más suaves. */
+.top-header .navbar .navbar-collapse ul li a.active,
+.top-header .navbar .navbar-collapse ul li a:hover,
+.top-header .navbar .navbar-collapse ul li a:focus {
+	background: #f3eeee;
+	color: #7f6f6b;
+}
+
+.submit-button .btn-common:hover,
+.submit-button .btn-common:focus {
+	background-color: #f3eeee;
+	color: #7f6f6b;
+}
