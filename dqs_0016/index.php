@@ -257,7 +257,7 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
             	<div class="row">
                         <div class="lbox-caption2">
                             <div class="lbox-details2">
-                                <a href="#" class="btn open-rsvp-modal">RSVP</a>
+                                <a href="#" class="btn open-rsvp-modal">Confirmar asistencia</a>
                                 <a href="tienda/" class="btn">Regalar</a>
                                 <?php if (in_array('cronometro', $secciones)): ?>
                                    <p><div class="simply-countdown simply-countdown-one"></div></p>
