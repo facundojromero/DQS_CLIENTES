@@ -1,0 +1,497 @@
+/*------------------------------------------------------------------
+ IMPORT FONTS
+-------------------------------------------------------------------*/
+@import url('https://fonts.googleapis.com/css?family=Barlow:100,200,300,400,500,600,700');
+@import url('https://fonts.googleapis.com/css?family=Marck+Script');
+/*------------------------------------------------------------------
+ IMPORT FILES
+-------------------------------------------------------------------*/
+@import url(animate.css);
+@import url(font-awesome.min.css);
+@import url(magnific-popup.css);
+/*------------------------------------------------------------------
+ SKELETON
+-------------------------------------------------------------------*/
+body {
+    color: #767676666;
+    font-size: 15px;
+    font-family: 'Barlow', sans-serif;
+    line-height: 1.80857;
+}
+a {
+    color: #1f1f1f;
+    text-decoration: none !important;
+    outline: none !important;
+    -webkit-transition: all .3s ease-in-out;
+    -moz-transition: all .3s ease-in-out;
+    -ms-transition: all .3s ease-in-out;
+    -o-transition: all .3s ease-in-out;
+    transition: all .3s ease-in-out;
+}
+.container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 16px;
+    padding: 0px;
+    max-width: 1200px;
+    margin: auto;
+}
+.sort-options {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 16px;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #ddd;
+}
+.sort-options label {
+    margin-right: 8px;
+    font-weight: bold;
+}
+.sort-options select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+.producto {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+    transition: transform 0.2s;
+}
+.producto:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.producto img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    cursor: pointer;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    letter-spacing: 0;
+    font-weight: normal;
+    position: relative;
+    padding: 0 0 10px 0;
+    font-weight: normal;
+    line-height: 120% !important;
+    color: #1f1f1f;
+    margin: 0
+}
+h1 {
+    font-size: 24px
+}
+h2 {
+    font-size: 22px
+}
+h3 {
+    font-size: 18px
+}
+h4 {
+    font-size: 16px
+}
+h5 {
+    font-size: 14px
+}
+h6 {
+    font-size: 13px
+}
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a,
+h6 a {
+    color: #222222;
+    text-decoration: none!important;
+    opacity: 1
+}
+h1 a:hover,
+h2 a:hover,
+h3 a:hover,
+h4 a:hover,
+h5 a:hover,
+h6 a:hover {
+    opacity: .8
+}
+
+
+.producto h2 {
+    font-size: 1.5em;
+    margin: 0 0 10px;
+    color: #222222;
+}
+
+/* Para pantallas más pequeñas */
+@media (max-width: 600px) {
+    .producto h2 {
+        font-size: 1.2em; /* Ajusta el tamaño de la letra para pantallas pequeñas */
+    }
+}
+
+/* Para pantallas medianas */
+@media (max-width: 900px) {
+    .producto h2 {
+        font-size: 1.3em; /* Ajusta el tamaño de la letra para pantallas medianas */
+    }
+}
+
+
+.producto p {
+    margin: 0 0 10px;
+    color: #767676;
+}
+/*COLOR DEL PRECIO*/
+.producto .precio {
+    background: #dd666c;
+    color: #ffffff;
+    padding: 5px 10px;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: bold;
+    font-weight: 500;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 99999999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    color: #fff;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.carousel-buttons {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
+.carousel-button {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+@media (max-width: 600px) {
+    .container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .producto img {
+        height: 150px; /* Ajusta la altura de las imágenes */
+    }
+}
+/* Agregar estilos para el botón "Agregar al carrito" */
+.add-to-cart {
+    background-color: #dd666c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+.add-to-cart:hover {
+    background-color: #63c7bd;
+}
+/* Estilos para el encabezado y el ícono de carrito */
+.header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px;
+    background-color: #f1f1f1;
+    border-bottom: 1px solid #ddd;
+}
+.ver-carrito {
+    color: #222222;
+    font-size: 1.5em;
+    text-decoration: none;
+    position: relative;
+}
+.ver-carrito:hover {
+    color: #dd666c;
+}
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 99999999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+.modal-content {
+    background-color: #fefefe;
+    position: relative;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 700px; /* Ajuste para el ancho máximo */
+}
+.close {
+    color: #222222;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+/*FORMATO DEL CARRITO*/
+.button {
+    background-color: #dd666c; /* Verde */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 100%; /* Asegura que ambos elementos tengan el mismo ancho */
+    box-sizing: border-box; /* Incluye el padding y el borde en el ancho total */
+}
+.button:hover {
+    background-color: #63c7bd;
+}
+.button i {
+    margin-right: 8px;
+}
+.button i.fa-trash-alt {
+    color: #ffffff;
+}
+/* Estilo específico para el botón dentro del contenedor #compartido-container */
+#compartido-container .button {
+    width: auto; /* Ajusta el ancho automáticamente */
+    padding: 5px 10px; /* Ajusta el padding según sea necesario */
+    display: inline-block; /* Asegura que el botón no ocupe el 100% del ancho */
+}
+/*FORMATO DEL DETALLE DEL CARRITO*/
+.cart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 16px;
+}
+.cart-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+    transition: transform 0.2s;
+}
+.cart-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+.cart-item-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+.cart-item-details h2 {
+    font-size: 1.2em;
+    margin: 0 0 10px;
+    color: #222222;
+}
+.cart-item-details p {
+    margin: 0 0 10px;
+    color: #767676;
+}
+.cart-item-details .precio {
+    font-weight: bold;
+}
+.cart-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+}
+.cart-total {
+    text-align: right;
+    margin-top: 20px;
+}
+/*FORMATO TOTAL DEL CARRITO*/
+.cart-total h3 {
+    margin: 0;
+    font-size: 24px; /* Tamaño de fuente */
+    color: #fff; /* Color del texto */
+    font-weight: bold; /* Peso de la fuente */
+    text-align: center; /* Alineación del texto */
+    padding: 10px; /* Espaciado interno */
+    background-color: #dd666c; /* Color de fondo */
+    border-radius: 5px; /* Bordes redondeados */
+}
+/* Estilos responsivos para dispositivos móviles */
+@media (max-width: 600px) {
+    .cart-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 8px;
+        padding: 8px;
+    }
+    .cart-item {
+        padding: 8px;
+    }
+    .cart-item-image {
+        height: 100px;
+        margin-bottom: 8px;
+    }
+    .cart-item-details h2 {
+        font-size: 1em;
+        margin: 0 0 5px;
+    }
+    .cart-item-details p {
+        margin: 0 0 5px;
+        font-size: 0.9em;
+    }
+    .cart-item-details .precio {
+        font-size: 1em;
+    }
+    .cart-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    .cart-actions .button {
+        margin-bottom: 8px;
+        width: 100%;
+    }
+    .cart-total {
+        text-align: center;
+    }
+}
+/* Estilos específicos para el formulario de finalización de compra */
+.checkout-container {
+    max-width: 600px;
+    margin: auto;
+    padding: 16px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+}
+.checkout-container .form-group {
+    margin-bottom: 16px;
+}
+.checkout-container .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+.checkout-container .form-group input,
+.checkout-container .form-group select {
+    width: 90%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.checkout-container .button {
+    background-color: #dd666c;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+.checkout-container .button:hover {
+    background-color: #63c7bd;
+}
+/* Estilos para el campo de texto textarea */
+.checkout-container .form-group textarea {
+    width: 90%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    resize: vertical; /* Permitir solo el redimensionamiento vertical */
+    min-height: 100px; /* Altura mínima */
+    font-family: 'Barlow', sans-serif;
+    font-size: 1em;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.checkout-container .form-group textarea:focus {
+    border-color: #dd666c;
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.2);
+}
+/*estilo de paginacion*/
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+.pagination-link {
+    margin: 0 5px;
+    padding: 10px 15px;
+    text-decoration: none;
+    color: #222222;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    transition: background-color 0.3s, color 0.3s;
+}
+/*COLOR BOTONES*/
+.pagination-link:hover {
+    background-color: #63c7bd;
+    color: white;
+}
+.pagination-link.active {
+    background-color: #dd666c;
+    color: white;
+    border-color: #dd666c;
+}
+/* Estilos para el formulario de teléfono */
+.telefono-inputs {
+    display: flex;
+    align-items: center;
+}
+.telefono-inputs input[type="tel"] {
+    width: auto;
+    padding: 8px;
+    margin: 0 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1em;
+}
+.telefono-inputs input[type="tel"]#codigo_area {
+    width: 60px; /* Ajusta el ancho del campo del código de área */
+}
+.telefono-inputs input[type="tel"]#numero {
+    width: 100px; /* Ajusta el ancho del campo del número de teléfono */
+}

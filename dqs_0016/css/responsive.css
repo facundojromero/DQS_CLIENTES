@@ -1,0 +1,169 @@
+/* only small desktops */
+/* tablets */
+/* only small tablets */
+@media (min-width: 768px) and (max-width: 991px) {
+	.top-header .navbar .navbar-collapse ul li a{
+		padding: 5px 15px;
+	}
+	.about-img{
+		margin-bottom: 30px;
+		margin-top: 30px;
+	}
+	.gallery-box ul li{
+		width: 33.33%;
+	}
+	
+	
+    .cronometro-box {
+        padding: 30px 0px 10px 0px;
+    }
+
+    .cronometro-box.activo {
+        padding: 30px 0px 100px 0px;
+    }  
+}
+
+/* mobile or only mobile */
+@media (max-width: 767px) {
+	.navbar-brand{
+		margin-left: 15px;
+	}
+	.top-header .navbar .navbar-collapse ul li a{
+		padding: 5px 15px;
+	}
+	.lbox-details h1{
+		font-size: 24px;
+	}
+	.lbox-details h2{
+		font-size: 18px;
+	}
+	.lbox-details p strong{
+		font-size: 20px;
+	}
+	.lbox-details a.btn{
+		display: none;
+	}
+	.title-box h2{
+		font-size: 28px;
+	}
+	.about-main-info h2{
+		font-size: 24px;
+	}
+	.about-img{
+		margin-bottom: 30px;
+	}
+	.main-timeline-box .separline::before{
+		left: 15px !important;
+	}
+	.main-timeline-box .iconBackground{
+		left: 15px !important;
+	}
+	.main-timeline-box .timeline-text-content{
+		margin-left: 0px;
+	}
+	.main-timeline-box .reverse .timeline-text-content{
+		margin-right: 0px;
+	}
+	.main-timeline-box .time-line-date-content{
+		margin-right: 0px;
+	}
+	.main-timeline-box .time-line-date-content p{
+		float: left;
+	}
+	.main-timeline-box .timeline-element{
+		padding: 0px 15px;
+	}
+	.gallery-box ul li{
+		width: 50%;
+	}
+	
+	
+    .cronometro-box {
+        padding: 30px 0px 10px 0px;
+    }
+
+    .cronometro-box.activo {
+        padding: 30px 0px 100px 0px;
+    }
+
+/*------------------------------------------------------------------
+    MENU 2
+-------------------------------------------------------------------*/	
+	.lbox-details2 h1{
+		font-size: 24px;
+	}
+	.lbox-details2 h2{
+		font-size: 18px;
+	}
+	.lbox-details2 p strong{
+		font-size: 20px;
+	}
+	.lbox-details2 a.btn{
+	/*	background: #dd666c;*/
+		padding: 5px 10px;
+		font-size: 18px;
+		text-transform: uppercase;
+		color: #ffffff;
+		border-radius: 0px;
+		position: relative;
+		z-index: 3;
+	}
+
+
+	.simply-countdown {
+	  /* The countdown */
+	  margin-bottom: 2em;
+	}
+	
+	.simply-countdown > .simply-section {
+	  /* coutndown blocks */
+	  display: inline-block;
+	  width: 60px;
+	  height: 60px;
+	  margin: 0 4px;
+	  -webkit-border-radius: 50%;
+	  -moz-border-radius: 50%;
+	  -ms-border-radius: 50%;
+	  border-radius: 50%;
+	  position: relative;
+	  animation: pulse_countdown 1s ease infinite;
+	}
+	
+	@keyframes pulse_countdown {
+	  0% {
+		transform: scale(1);
+	  }
+	  50% {
+		transform: scale(1.05);
+	  }
+	  100% {
+		transform: scale(1);
+	  }
+	}
+	.simply-countdown > .simply-section > div {
+	  /* countdown block inner div */
+	  display: table-cell;
+	  vertical-align: middle;
+	  height: 60px;
+	  width: 60px;
+	}
+	
+	.simply-countdown > .simply-section .simply-amount,
+	.simply-countdown > .simply-section .simply-word {
+	  display: block;
+	  color: white;
+	  /* amounts and words */
+	}
+	
+	.simply-countdown > .simply-section .simply-amount {
+	  font-size: 20px;
+	  /* amounts */
+	}
+	
+	.simply-countdown > .simply-section .simply-word {
+	  color: rgba(255, 255, 255, 0.7);
+	  text-transform: uppercase;
+	  font-size: 8px;
+	  /* words */
+	}
+}
