@@ -73,7 +73,7 @@ $es_tienda =
 						<li><a class="nav-link" href="<?= $es_tienda ? '../#contact' : '#contact' ?>">Contactar</a></li>
 					<?php endif; ?>
 					
-<li><a class="nav-link open-rsvp-modal" href="#">RSVP</a></li>
+<li><a class="nav-link open-rsvp-modal" href="#"><span class="d-none d-xl-inline">Confirmar asistencia</span><span class="d-inline d-xl-none">Confirmar</span></a></li>
 				</ul>						
 
 			</div>

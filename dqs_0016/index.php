@@ -257,7 +257,7 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
             	<div class="row">
                         <div class="lbox-caption2">
                             <div class="lbox-details2">
-                                <a href="#" class="btn open-rsvp-modal">RSVP</a>
+                                <a href="#" class="btn open-rsvp-modal">Confirmar asistencia</a>
                                 <a href="tienda/" class="btn">Regalar</a>
                                 <?php if (in_array('cronometro', $secciones)): ?>
                                    <p><div class="simply-countdown simply-countdown-one"></div></p>
@@ -385,7 +385,7 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
                     </div>
                 </div>
             </div>
-            <div class="row">
+            <div class="row <?php echo count($info_eventos) == 1 ? 'justify-content-center' : ''; ?>">
                 <?php foreach ($info_eventos as $evento): ?>
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <div class="event-inner">
