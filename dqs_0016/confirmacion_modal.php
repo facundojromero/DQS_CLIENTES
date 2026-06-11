@@ -60,6 +60,11 @@
 
             <div id="lista-acompanantes" class="mt-2 mb-3"></div>
 
+            <div class="form-group form-check mt-3 mb-3">
+                <input type="checkbox" class="form-check-input" id="necesita_transporte" name="necesita_transporte" value="1">
+                <label class="form-check-label" for="necesita_transporte">Voy a necesitar transporte</label>
+            </div>
+
             <div class="form-group mt-3">
                 <label for="alimento">Restricción Alimentaria (General)</label>
                 <select class="form-control" name="alimento" id="alimento">
@@ -96,6 +101,7 @@
             } else {
                 $('#campos-asistencia').slideUp();
                 $('#cantidad_mayores').prop('required', false);
+                $('#necesita_transporte').prop('checked', false);
                 $('#lista-acompanantes').empty(); 
             }
         });

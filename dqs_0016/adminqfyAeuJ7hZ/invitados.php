@@ -50,6 +50,9 @@ if (isset($_POST['borrar'])) {
         if (isset($_GET['invitacion']) && $_GET['invitacion'] !== '') {
             $redirect_url .= "&invitacion=" . urlencode($_GET['invitacion']);
         }
+        if (isset($_GET['transporte']) && $_GET['transporte'] !== '') {
+            $redirect_url .= "&transporte=" . urlencode($_GET['transporte']);
+        }
         if (isset($_GET['discrepancia']) && $_GET['discrepancia'] !== '') {
             $redirect_url .= "&discrepancia=" . urlencode($_GET['discrepancia']);
         }
@@ -86,7 +89,8 @@ if (isset($_POST['confirmar'])) {
                         confirmacion_comentario = NULL,
                         confirmacion_mayores = NULL,
                         confirmacion_menores = NULL,
-                        alimento = NULL
+                        alimento = NULL,
+                        necesita_transporte = 0
                     WHERE id = ?";
         $mensaje = "La desconfirmación ha sido registrada exitosamente.";
     } else {
@@ -97,7 +101,8 @@ if (isset($_POST['confirmar'])) {
                         confirmacion_comentario = '',
                         confirmacion_mayores = cantidad_mayores,
                         confirmacion_menores = cantidad_menores,
-                        alimento = 'No'
+                        alimento = 'No',
+                        necesita_transporte = 0
                     WHERE id = ?";
         $mensaje = "La confirmación ha sido registrada exitosamente.";
     }
@@ -130,6 +135,9 @@ if (isset($_POST['confirmar'])) {
         // Añadir el nuevo filtro de invitación
         if (isset($_GET['invitacion']) && $_GET['invitacion'] !== '') {
             $redirect_url .= "&invitacion=" . urlencode($_GET['invitacion']);
+        }
+        if (isset($_GET['transporte']) && $_GET['transporte'] !== '') {
+            $redirect_url .= "&transporte=" . urlencode($_GET['transporte']);
         }
         if (isset($_GET['discrepancia']) && $_GET['discrepancia'] !== '') {
             $redirect_url .= "&discrepancia=" . urlencode($_GET['discrepancia']);
@@ -219,6 +227,9 @@ if (isset($_POST['cambiar_estado'])) {
         if (isset($_GET['invitacion']) && $_GET['invitacion'] !== '') {
             $redirect_url .= "&invitacion=" . urlencode($_GET['invitacion']);
         }
+        if (isset($_GET['transporte']) && $_GET['transporte'] !== '') {
+            $redirect_url .= "&transporte=" . urlencode($_GET['transporte']);
+        }
         if (isset($_GET['discrepancia']) && $_GET['discrepancia'] !== '') {
             $redirect_url .= "&discrepancia=" . urlencode($_GET['discrepancia']);
         }
@@ -240,6 +251,7 @@ $statusFiltro = isset($_GET['status']) ? $_GET['status'] : '';
 $ingresoFiltro = isset($_GET['ingreso']) ? $_GET['ingreso'] : '';
 $prioridadFiltro = isset($_GET['prioridad']) ? $_GET['prioridad'] : '';
 $invitacionFiltro = isset($_GET['invitacion']) ? $_GET['invitacion'] : ''; // Nuevo filtro
+$transporteFiltro = isset($_GET['transporte']) ? $_GET['transporte'] : '';
 $discrepanciaFiltro = isset($_GET['discrepancia']) ? $_GET['discrepancia'] : ''; // Nuevo filtro
 
 
@@ -267,6 +279,7 @@ $sql = "SELECT
  a.confirmacion_comentario,
  a.confirmacion_mayores,
  a.confirmacion_menores,
+ a.necesita_transporte,
  a.codigo,
  CASE WHEN h.tel_enviar IS NULL THEN 'No enviada' ELSE 'Si enviada' END invitacion,
  a.activo
@@ -350,9 +363,21 @@ if ($invitacionFiltro !== '') {
         $sql .= " AND h.tel_enviar IS NULL";
     }
 }
+if ($transporteFiltro !== '') {
+    $sql .= " AND a.necesita_transporte = '" . (int)$transporteFiltro . "'";
+}
 
 
 $result = $conn->query($sql);
+$cantidadResultados = $result ? $result->num_rows : 0;
+$totalInvitadosConfirmados = 0;
+
+if ($result && $result->num_rows > 0) {
+    while ($rowTotal = $result->fetch_assoc()) {
+        $totalInvitadosConfirmados += (int)($rowTotal['confirmacion_mayores'] ?? 0) + (int)($rowTotal['confirmacion_menores'] ?? 0);
+    }
+    $result->data_seek(0);
+}
 
 // Verificar si hay un ID en la URL para editar
 $id = isset($_GET['id']) ? $_GET['id'] : null;
@@ -432,6 +457,14 @@ if ($id) {
     </select>
 </div>
  <div class="search-item">
+ <label for="transporteFilter">Filtrar por transporte:</label>
+ <select id="transporteFilter" class="search-input" onchange="applyFilter()">
+ <option value="">Todos</option>
+ <option value="1" <?php if ($transporteFiltro === '1') echo 'selected'; ?>>Necesitan transporte</option>
+ <option value="0" <?php if ($transporteFiltro === '0') echo 'selected'; ?>>No necesitan transporte</option>
+ </select>
+ </div>
+ <div class="search-item">
  <button type="button" class="navbar-link" onclick="resetFilters()">
  <i class="fas fa-redo navbar-icon"></i> Resetear
  </button>
@@ -439,7 +472,8 @@ if ($id) {
  </div>
 
 
-<p id="resultCount">Total de resultados: <?php echo $result->num_rows; ?></p>
+<p id="resultCount">Total de resultados: <?php echo $cantidadResultados; ?></p>
+<p id="confirmedGuestCount">Total invitados confirmados: <?php echo $totalInvitadosConfirmados; ?></p>
 <button onclick="window.location.href='?new=invitados&nuevo=0'" class="navbar-link">
    <i class="fas fa-user-plus navbar-icon"></i> Nuevo Invitado
 </button>
@@ -563,6 +597,7 @@ $tel_links = implode(' | ', $links);
  <p class='prioridad prioridad-{$row['id_prioridad']}'><i class='fas fa-exclamation-circle'></i> Prioridad: {$row['categoria_prioridad']}</p>
  <p><i class='fas fa-utensils'></i> Alimento: {$row['alimento']}</p>
  <p><i class='fas fa-utensils'></i> Comentario de alimento: {$row['confirmacion_comentario']}</p>
+ <p><i class='fas fa-bus'></i> Transporte: " . ($row['necesita_transporte'] ? 'Sí' : 'No') . "</p>
  <p><i class='fas fa-calendar-alt'></i> Fecha de Confirmación: {$row['confirmacion_fecha']}</p>
  <p>Estado: <span id='estado-{$row['id_clientes']}'>{$estado_actual}</span></p>
 
@@ -638,6 +673,7 @@ if (isset($_GET['nuevo']) && $_GET['nuevo'] == '0'): ?>
         var ingreso = document.getElementById('ingresoFilter').value;
         var prioridad = document.getElementById('prioridadFilter').value;
         var invitacion = document.getElementById('invitacionFilter').value; // Nuevo filtro
+        var transporte = document.getElementById('transporteFilter').value;
 
         var url = "?new=invitados&";
         
@@ -656,6 +692,7 @@ if (isset($_GET['nuevo']) && $_GET['nuevo'] == '0'): ?>
         if (ingreso) url += "ingreso=" + ingreso + "&";
         if (prioridad) url += "prioridad=" + prioridad + "&";
         if (invitacion) url += "invitacion=" + invitacion + "&";
+        if (transporte) url += "transporte=" + transporte + "&";
 
         // Eliminar el último '&' si existe
         if (url.endsWith("&")) {
@@ -699,6 +736,7 @@ if (isset($_GET['nuevo']) && $_GET['nuevo'] == '0'): ?>
         var ingreso = document.getElementById('ingresoFilter').value;
         var prioridad = document.getElementById('prioridadFilter').value;
         var invitacion = document.getElementById('invitacionFilter').value; // Nuevo filtro
+        var transporte = document.getElementById('transporteFilter').value;
 
         var url = "?new=invitados&id=" + id;
         
@@ -716,6 +754,7 @@ if (isset($_GET['nuevo']) && $_GET['nuevo'] == '0'): ?>
         if (ingreso) url += "&ingreso=" + ingreso;
         if (prioridad) url += "&prioridad=" + prioridad;
         if (invitacion) url += "&invitacion=" + invitacion;
+        if (transporte) url += "&transporte=" + transporte;
 
         window.location.href = url;
     }

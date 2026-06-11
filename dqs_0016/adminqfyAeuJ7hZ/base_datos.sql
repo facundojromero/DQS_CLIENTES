@@ -469,6 +469,7 @@ CREATE TABLE `invitados` (
   `confirmacion_menores` int(11) DEFAULT NULL,
   `alimento` varchar(15) DEFAULT NULL,
   `codigo` varchar(10) DEFAULT NULL,
+  `necesita_transporte` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=483 DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 

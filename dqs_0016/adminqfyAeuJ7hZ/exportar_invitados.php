@@ -32,6 +32,7 @@ $sql = "SELECT
  -- a.fecha_registro,
  a.confirmacion_mayores,
  a.confirmacion_menores,
+ CASE WHEN a.necesita_transporte = 1 THEN 'Sí' ELSE 'No' END transporte,
  a.activo
 FROM invitados a
 LEFT JOIN intivados_acompanante b ON a.acompanado = b.id
