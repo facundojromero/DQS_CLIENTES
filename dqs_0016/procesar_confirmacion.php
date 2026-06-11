@@ -14,6 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cantidad_menores = 0;
     $alimento = 'No';
     $contenido = ''; // Usaremos esta variable para guardar el detalle de dieta.
+    $necesita_transporte = 0;
     
     // Array para guardar acompañantes (si existen)
     $acompanantes_data = [];
@@ -24,8 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $cantidad_menores = isset($_POST['cantidad_menores']) ? (int)$_POST['cantidad_menores'] : 0;
         $alimento = isset($_POST['alimento']) ? $_POST['alimento'] : 'No';
         $contenido = isset($_POST['contenido']) ? trim($_POST['contenido']) : '';
-        
-
+        $necesita_transporte = isset($_POST['necesita_transporte']) ? 1 : 0;
 
         // Recogemos los acompañantes del array dinámico que generó el JS
         if (isset($_POST['acompanantes']) && is_array($_POST['acompanantes'])) {
@@ -54,17 +54,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Usamos $contenido (detalle de dieta) para confirmacion_comentario
             $stmt1 = $conn->prepare("INSERT INTO invitados 
                 (nombre, apellido, activo, acompanado, cantidad_mayores, id_prioridad, ingreso, cantidad_menores, fecha_registro, 
-                 confirmacion, confirmacion_fecha, confirmacion_comentario, confirmacion_mayores, confirmacion_menores, alimento, codigo) 
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?, ?, ?)");
+                 confirmacion, confirmacion_fecha, confirmacion_comentario, confirmacion_mayores, confirmacion_menores, alimento, codigo, necesita_transporte) 
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?)");
 
             if (!$stmt1) {
                 throw new Exception("Error preparando insert invitados: " . $conn->error);
             }
 
             // El $contenido (detalle de dieta) se enlaza con el 11º placeholder (la 's')
-            $stmt1->bind_param("ssiiississsiiss", 
+            $stmt1->bind_param("ssiiississsiissi", 
                 $nombre, $apellido, $activo, $acompanado, $cantidad_mayores, $id_prioridad, $ingreso, $cantidad_menores, $fecha_registro,
-                $confirmacion, $contenido, $cantidad_mayores, $cantidad_menores, $alimento, $codigo
+                $confirmacion, $contenido, $cantidad_mayores, $cantidad_menores, $alimento, $codigo, $necesita_transporte
             );
 
             if (!$stmt1->execute()) {

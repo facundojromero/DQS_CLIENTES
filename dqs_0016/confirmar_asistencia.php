@@ -23,6 +23,7 @@ if (!empty($_POST)) {
             $apellido = $_POST['apellido'];
             $contenido = $_POST['contenido'];
             $alimento = $_POST['alimento'];
+            $necesita_transporte = 0;
             $usuario_id = $_SESSION['idUser'];
             $result = 1;
 
@@ -33,7 +34,8 @@ if (!empty($_POST)) {
                                                     confirmacion_comentario='$contenido',
                                                     confirmacion_mayores='$mayores',
                                                     confirmacion_menores='$menores',
-                                                    alimento = '$alimento'
+                                                    alimento = '$alimento',
+                                                    necesita_transporte = '$necesita_transporte'
                                                 WHERE codigo='$idCliente';");
 
             if ($sql_update) {
@@ -66,6 +68,7 @@ if (!empty($_POST)) {
             $apellido = $_POST['apellido'];
             $contenido = $_POST['contenido'];
             $alimento = $_POST['alimento'];
+            $necesita_transporte = isset($_POST['necesita_transporte']) ? 1 : 0;
             $usuario_id = $_SESSION['idUser'];
             $result = 1;
 
@@ -76,7 +79,8 @@ if (!empty($_POST)) {
                                                     confirmacion_comentario='$contenido',
                                                     confirmacion_mayores='$mayores',
                                                     confirmacion_menores='$menores',
-                                                    alimento = '$alimento'
+                                                    alimento = '$alimento',
+                                                    necesita_transporte = '$necesita_transporte'
                                                 WHERE codigo='$idCliente';");
 
             if ($sql_update) {
@@ -271,6 +275,12 @@ if ($result_sql == 0) {
                                         <textarea class="form-control" id="contenido" name="contenido" placeholder="Aclaración" rows="8"></textarea>
                                         <div class="help-block with-errors"></div>
                                     </div>
+                                    <div class="form-group" id="transporte-group">
+                                        <label for="necesita_transporte" style="font-weight: normal; display: flex; align-items: center; gap: 8px;">
+                                            <input type="checkbox" id="necesita_transporte" name="necesita_transporte" value="1" style="width: auto; margin: 0;">
+                                            Voy a necesitar transporte
+                                        </label>
+                                    </div>
                                     <div class="submit-button text-center">
                                         <button class="btn btn-common" id="submit" type="submit">Confirmar</button>
                                         <div id="msgSubmit" class="h3 text-center hidden"></div>
@@ -291,11 +301,16 @@ if ($result_sql == 0) {
         document.addEventListener("DOMContentLoaded", function () {
             var entradaSelect = document.getElementById("entrada");
             var alimentoIdDiv = document.getElementById("alimento-id");
+            var transporteGroup = document.getElementById("transporte-group");
+            var transporteInput = document.getElementById("necesita_transporte");
             entradaSelect.addEventListener("change", function () {
                 if (entradaSelect.value === "No") {
                     alimentoIdDiv.style.display = "none";
+                    if (transporteGroup) { transporteGroup.style.display = "none"; }
+                    if (transporteInput) { transporteInput.checked = false; }
                 } else {
                     alimentoIdDiv.style.display = "block";
+                    if (transporteGroup) { transporteGroup.style.display = "block"; }
                 }
             });
             entradaSelect.dispatchEvent(new Event("change"));

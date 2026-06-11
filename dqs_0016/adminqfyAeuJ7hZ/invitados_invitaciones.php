@@ -47,7 +47,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     confirmacion_comentario = '',
                     confirmacion_mayores = ?,
                     confirmacion_menores = ?,
-                    alimento = 'No'
+                    alimento = 'No',
+                    necesita_transporte = 0
                 WHERE id = ?";
 
         $stmt = $conn->prepare($sql);
@@ -135,6 +136,7 @@ $consulta_no_enviados = "SELECT
     a.confirmacion_comentario alimento_comentario,
     a.confirmacion_mayores,
     a.confirmacion_menores,
+    a.necesita_transporte,
     a.activo
 FROM invitados a
 LEFT JOIN intivados_acompanante b ON a.acompanado = b.id

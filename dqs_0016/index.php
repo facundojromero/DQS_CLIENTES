@@ -627,6 +627,7 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
             } else {
                 $('#campos-asistencia').slideUp();
                 $('#cantidad_mayores').prop('required', false);
+                $('#necesita_transporte').prop('checked', false);
             }
         });
 

@@ -86,7 +86,8 @@ if (isset($_POST['confirmar'])) {
                         confirmacion_comentario = NULL,
                         confirmacion_mayores = NULL,
                         confirmacion_menores = NULL,
-                        alimento = NULL
+                        alimento = NULL,
+                        necesita_transporte = 0
                     WHERE id = ?";
         $mensaje = "La desconfirmación ha sido registrada exitosamente.";
     } else {
@@ -97,7 +98,8 @@ if (isset($_POST['confirmar'])) {
                         confirmacion_comentario = '',
                         confirmacion_mayores = cantidad_mayores,
                         confirmacion_menores = cantidad_menores,
-                        alimento = 'No'
+                        alimento = 'No',
+                        necesita_transporte = 0
                     WHERE id = ?";
         $mensaje = "La confirmación ha sido registrada exitosamente.";
     }
@@ -267,6 +269,7 @@ $sql = "SELECT
  a.confirmacion_comentario,
  a.confirmacion_mayores,
  a.confirmacion_menores,
+ a.necesita_transporte,
  a.codigo,
  CASE WHEN h.tel_enviar IS NULL THEN 'No enviada' ELSE 'Si enviada' END invitacion,
  a.activo
@@ -563,6 +566,7 @@ $tel_links = implode(' | ', $links);
  <p class='prioridad prioridad-{$row['id_prioridad']}'><i class='fas fa-exclamation-circle'></i> Prioridad: {$row['categoria_prioridad']}</p>
  <p><i class='fas fa-utensils'></i> Alimento: {$row['alimento']}</p>
  <p><i class='fas fa-utensils'></i> Comentario de alimento: {$row['confirmacion_comentario']}</p>
+ <p><i class='fas fa-bus'></i> Transporte: " . ($row['necesita_transporte'] ? 'Sí' : 'No') . "</p>
  <p><i class='fas fa-calendar-alt'></i> Fecha de Confirmación: {$row['confirmacion_fecha']}</p>
  <p>Estado: <span id='estado-{$row['id_clientes']}'>{$estado_actual}</span></p>
 
