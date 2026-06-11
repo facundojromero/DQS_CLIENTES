@@ -369,6 +369,15 @@ if ($transporteFiltro !== '') {
 
 
 $result = $conn->query($sql);
+$cantidadResultados = $result ? $result->num_rows : 0;
+$totalInvitadosConfirmados = 0;
+
+if ($result && $result->num_rows > 0) {
+    while ($rowTotal = $result->fetch_assoc()) {
+        $totalInvitadosConfirmados += (int)($rowTotal['confirmacion_mayores'] ?? 0) + (int)($rowTotal['confirmacion_menores'] ?? 0);
+    }
+    $result->data_seek(0);
+}
 
 // Verificar si hay un ID en la URL para editar
 $id = isset($_GET['id']) ? $_GET['id'] : null;
@@ -463,7 +472,8 @@ if ($id) {
  </div>
 
 
-<p id="resultCount">Total de resultados: <?php echo $result->num_rows; ?></p>
+<p id="resultCount">Total de resultados: <?php echo $cantidadResultados; ?></p>
+<p id="confirmedGuestCount">Total invitados confirmados: <?php echo $totalInvitadosConfirmados; ?></p>
 <button onclick="window.location.href='?new=invitados&nuevo=0'" class="navbar-link">
    <i class="fas fa-user-plus navbar-icon"></i> Nuevo Invitado
 </button>
