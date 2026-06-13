@@ -229,20 +229,8 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
             cursor: pointer;
             transform: scale(1.05);
         }
-        .gift-info-row {
-            margin-top: 30px;
+        #regalar {
             scroll-margin-top: 110px;
-        }
-        .gift-info-row .serviceBox {
-            height: auto;
-        }
-        .gift-info-card {
-            border: 1px solid rgba(229, 207, 207, 0.85);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
-            margin-bottom: 30px;
-        }
-        .gift-info-card .service-icon {
-            margin-bottom: 18px;
         }
         .bank-gift-row {
             border-top: 1px solid #f0e5e5;
@@ -553,24 +541,24 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
                     </div>
                 </div>
                 <?php endforeach; ?>
-            </div>
-            <div id="regalar" class="row gift-info-row">
                 <?php if ($regalos_modo_visualizacion === 'productos'): ?>
-                <div class="col-md-4 col-sm-6 mx-auto">
-                    <div class="serviceBox gift-info-card">
+                <div id="regalar" class="col-md-4 col-sm-6">
+                    <div class="serviceBox">
                         <div class="service-icon"><i class="fas fa-gift"></i></div>
                         <h3 class="title"><?php echo htmlspecialchars($regalos_titulo); ?></h3>
                         <p class="description">Si querés hacernos un regalo, podés ver la lista completa.</p>
-                        <a href="tienda/">Ver lista ></a>
+                        <a href="tienda/">Link &gt;</a>
                     </div>
                 </div>
                 <?php else: ?>
                     <?php if ($cuenta_pesos_visible): ?>
-                    <div class="col-md-6 col-sm-12">
-                        <div class="serviceBox gift-info-card">
+                    <div id="regalar" class="col-md-4 col-sm-6">
+                        <div class="serviceBox">
                             <div class="service-icon"><i class="fas fa-university"></i></div>
-                            <h3 class="title"><?php echo htmlspecialchars($regalos_titulo); ?></h3>
-                            <h4>Cuenta en pesos</h4>
+                            <h3 class="title">Cuenta en pesos</h3>
+                            <?php if (!empty($regalos_titulo)): ?>
+                                <p class="description"><?php echo htmlspecialchars($regalos_titulo); ?></p>
+                            <?php endif; ?>
                             <?php if (!empty($datos_bancarios['titular'])): ?>
                                 <div class="bank-gift-row"><span class="bank-gift-label">Titular</span><span class="bank-gift-value"><?php echo htmlspecialchars($datos_bancarios['titular']); ?></span></div>
                             <?php endif; ?>
@@ -584,11 +572,13 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
                     </div>
                     <?php endif; ?>
                     <?php if ($cuenta_dolares_visible): ?>
-                    <div class="col-md-6 col-sm-12">
-                        <div class="serviceBox gift-info-card">
+                    <div <?php echo !$cuenta_pesos_visible ? 'id="regalar"' : ''; ?> class="col-md-4 col-sm-6">
+                        <div class="serviceBox">
                             <div class="service-icon"><i class="fas fa-university"></i></div>
-                            <h3 class="title"><?php echo htmlspecialchars($regalos_titulo); ?></h3>
-                            <h4>Cuenta en dólares</h4>
+                            <h3 class="title">Cuenta en dólares</h3>
+                            <?php if (!empty($regalos_titulo)): ?>
+                                <p class="description"><?php echo htmlspecialchars($regalos_titulo); ?></p>
+                            <?php endif; ?>
                             <?php if (!empty($datos_bancarios['titular'])): ?>
                                 <div class="bank-gift-row"><span class="bank-gift-label">Titular</span><span class="bank-gift-value"><?php echo htmlspecialchars($datos_bancarios['titular']); ?></span></div>
                             <?php endif; ?>
@@ -602,7 +592,7 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
                     </div>
                     <?php endif; ?>
                     <?php if (!$cuenta_pesos_visible && !$cuenta_dolares_visible): ?>
-                    <div class="col-md-6 col-sm-12 mx-auto"><div class="serviceBox gift-info-card"><div class="service-icon"><i class="fas fa-university"></i></div><h3 class="title"><?php echo htmlspecialchars($regalos_titulo); ?></h3><p class="description">Los datos bancarios todavía no están cargados.</p></div></div>
+                    <div id="regalar" class="col-md-4 col-sm-6"><div class="serviceBox"><div class="service-icon"><i class="fas fa-university"></i></div><h3 class="title"><?php echo htmlspecialchars($regalos_titulo); ?></h3><p class="description">Los datos bancarios todavía no están cargados.</p></div></div>
                     <?php endif; ?>
                 <?php endif; ?>
             </div>
