@@ -64,7 +64,7 @@ $es_tienda =
 						<li><a class="nav-link" href="<?= $es_tienda ? '../#wedding' : '#wedding' ?>">Más Info</a></li>
 					<?php endif; ?>
 
-                    <li><a class="nav-link <?= $es_tienda ? 'active' : '' ?>" href="<?= $es_tienda ? '../tienda/' : 'tienda/' ?>">Regalar</a></li>
+                    <li><a class="nav-link" href="<?= $es_tienda ? '../#regalar' : '#regalar' ?>">Regalar</a></li>
 
 
 
