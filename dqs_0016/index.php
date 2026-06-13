@@ -144,6 +144,35 @@ if ($result && mysqli_num_rows($result) > 0) {
     }
 }
 
+$regalos_modo_visualizacion = 'productos';
+$regalos_titulo = '¿NOS QUERÉS HACER UN REGALO?';
+$datos_bancarios = [
+    'titular' => '',
+    'cbu' => '',
+    'alias' => '',
+    'cbu_dolar' => '',
+    'alias_dolar' => ''
+];
+$query = "SELECT cbu_titular, cbu, alias, cbu_dolar, alias_dolar, regalos_modo_visualizacion, regalos_titulo FROM cliente WHERE user_id = 1 LIMIT 1";
+$result = mysqli_query($conn, $query);
+if ($result && mysqli_num_rows($result) > 0) {
+    $row = mysqli_fetch_assoc($result);
+    $datos_bancarios['titular'] = trim($row['cbu_titular'] ?? '');
+    $datos_bancarios['cbu'] = trim($row['cbu'] ?? '');
+    $datos_bancarios['alias'] = trim($row['alias'] ?? '');
+    $datos_bancarios['cbu_dolar'] = trim($row['cbu_dolar'] ?? '');
+    $datos_bancarios['alias_dolar'] = trim($row['alias_dolar'] ?? '');
+
+    if (!empty($row['regalos_modo_visualizacion']) && in_array($row['regalos_modo_visualizacion'], ['productos', 'datos_bancarios'], true)) {
+        $regalos_modo_visualizacion = $row['regalos_modo_visualizacion'];
+    }
+    if (!empty($row['regalos_titulo'])) {
+        $regalos_titulo = $row['regalos_titulo'];
+    }
+}
+$cuenta_pesos_visible = !empty($datos_bancarios['titular']) || !empty($datos_bancarios['cbu']) || !empty($datos_bancarios['alias']);
+$cuenta_dolares_visible = !empty($datos_bancarios['cbu_dolar']) || !empty($datos_bancarios['alias_dolar']);
+
 // Simulamos secciones activas si no existen en la BD
 $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'contact']; 
 ?>
@@ -199,6 +228,63 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
             background-color: #bc8a5f;
             cursor: pointer;
             transform: scale(1.05);
+        }
+        #regalar {
+            scroll-margin-top: 110px;
+        }
+        .bank-gift-row {
+            border-top: 1px solid #f0e5e5;
+            padding: 13px 0;
+            text-align: left;
+        }
+        .bank-gift-row:first-of-type {
+            border-top: 0;
+        }
+        .bank-gift-label {
+            color: #d8bdbd;
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: .08em;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+        }
+        .bank-gift-value-line {
+            align-items: center;
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+        }
+        .bank-gift-value {
+            color: #222;
+            overflow-wrap: anywhere;
+        }
+        .bank-copy-btn {
+            background: transparent;
+            border: 1px solid #e5cfcf;
+            border-radius: 999px;
+            color: #222;
+            cursor: pointer;
+            flex: 0 0 auto;
+            font-size: 12px;
+            padding: 6px 10px;
+        }
+        .bank-copy-btn:hover,
+        .bank-copy-btn:focus {
+            background: #f7eeee;
+        }
+        .bank-copy-feedback {
+            color: #2e7d32;
+            display: none;
+            font-size: 12px;
+            font-weight: 700;
+            margin-top: 6px;
+        }
+        @media (max-width: 576px) {
+            .bank-gift-value-line {
+                align-items: flex-start;
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -258,7 +344,7 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
                         <div class="lbox-caption2">
                             <div class="lbox-details2">
                                 <a href="#" class="btn open-rsvp-modal">Confirmar asistencia</a>
-                                <a href="tienda/" class="btn">Regalar</a>
+                                <a href="#regalar" class="btn">Regalar</a>
                                 <?php if (in_array('cronometro', $secciones)): ?>
                                    <p><div class="simply-countdown simply-countdown-one"></div></p>
                                 <?php endif; ?>
@@ -455,10 +541,106 @@ $secciones = ['cronometro', 'about', 'story', 'gallery', 'events', 'wedding', 'c
                     </div>
                 </div>
                 <?php endforeach; ?>
+                <?php if ($regalos_modo_visualizacion === 'productos'): ?>
+                <div id="regalar" class="col-md-4 col-sm-6">
+                    <div class="serviceBox">
+                        <div class="service-icon"><i class="fas fa-gift"></i></div>
+                        <h3 class="title"><?php echo htmlspecialchars($regalos_titulo); ?></h3>
+                        <p class="description">Si querés hacernos un regalo, podés ver la lista completa.</p>
+                        <a href="tienda/">Link &gt;</a>
+                    </div>
+                </div>
+                <?php else: ?>
+                    <?php if ($cuenta_pesos_visible): ?>
+                    <div id="regalar" class="col-md-4 col-sm-6">
+                        <div class="serviceBox">
+                            <div class="service-icon"><i class="fas fa-university"></i></div>
+                            <h3 class="title">Cuenta en pesos</h3>
+                            <?php if (!empty($regalos_titulo)): ?>
+                                <p class="description"><?php echo htmlspecialchars($regalos_titulo); ?></p>
+                            <?php endif; ?>
+                            <?php if (!empty($datos_bancarios['titular'])): ?>
+                                <div class="bank-gift-row"><span class="bank-gift-label">Titular</span><span class="bank-gift-value"><?php echo htmlspecialchars($datos_bancarios['titular']); ?></span></div>
+                            <?php endif; ?>
+                            <?php if (!empty($datos_bancarios['cbu'])): ?>
+                                <div class="bank-gift-row"><span class="bank-gift-label">CBU</span><div class="bank-gift-value-line"><span class="bank-gift-value"><?php echo htmlspecialchars($datos_bancarios['cbu']); ?></span><button type="button" class="bank-copy-btn" data-copy-value="<?php echo htmlspecialchars($datos_bancarios['cbu']); ?>"><i class="fas fa-copy"></i> Copiar</button></div><span class="bank-copy-feedback">Copiado</span></div>
+                            <?php endif; ?>
+                            <?php if (!empty($datos_bancarios['alias'])): ?>
+                                <div class="bank-gift-row"><span class="bank-gift-label">Alias</span><div class="bank-gift-value-line"><span class="bank-gift-value"><?php echo htmlspecialchars($datos_bancarios['alias']); ?></span><button type="button" class="bank-copy-btn" data-copy-value="<?php echo htmlspecialchars($datos_bancarios['alias']); ?>"><i class="fas fa-copy"></i> Copiar</button></div><span class="bank-copy-feedback">Copiado</span></div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                    <?php if ($cuenta_dolares_visible): ?>
+                    <div <?php echo !$cuenta_pesos_visible ? 'id="regalar"' : ''; ?> class="col-md-4 col-sm-6">
+                        <div class="serviceBox">
+                            <div class="service-icon"><i class="fas fa-university"></i></div>
+                            <h3 class="title">Cuenta en dólares</h3>
+                            <?php if (!empty($regalos_titulo)): ?>
+                                <p class="description"><?php echo htmlspecialchars($regalos_titulo); ?></p>
+                            <?php endif; ?>
+                            <?php if (!empty($datos_bancarios['titular'])): ?>
+                                <div class="bank-gift-row"><span class="bank-gift-label">Titular</span><span class="bank-gift-value"><?php echo htmlspecialchars($datos_bancarios['titular']); ?></span></div>
+                            <?php endif; ?>
+                            <?php if (!empty($datos_bancarios['cbu_dolar'])): ?>
+                                <div class="bank-gift-row"><span class="bank-gift-label">CBU dólar</span><div class="bank-gift-value-line"><span class="bank-gift-value"><?php echo htmlspecialchars($datos_bancarios['cbu_dolar']); ?></span><button type="button" class="bank-copy-btn" data-copy-value="<?php echo htmlspecialchars($datos_bancarios['cbu_dolar']); ?>"><i class="fas fa-copy"></i> Copiar</button></div><span class="bank-copy-feedback">Copiado</span></div>
+                            <?php endif; ?>
+                            <?php if (!empty($datos_bancarios['alias_dolar'])): ?>
+                                <div class="bank-gift-row"><span class="bank-gift-label">Alias dólar</span><div class="bank-gift-value-line"><span class="bank-gift-value"><?php echo htmlspecialchars($datos_bancarios['alias_dolar']); ?></span><button type="button" class="bank-copy-btn" data-copy-value="<?php echo htmlspecialchars($datos_bancarios['alias_dolar']); ?>"><i class="fas fa-copy"></i> Copiar</button></div><span class="bank-copy-feedback">Copiado</span></div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+                    <?php if (!$cuenta_pesos_visible && !$cuenta_dolares_visible): ?>
+                    <div id="regalar" class="col-md-4 col-sm-6"><div class="serviceBox"><div class="service-icon"><i class="fas fa-university"></i></div><h3 class="title"><?php echo htmlspecialchars($regalos_titulo); ?></h3><p class="description">Los datos bancarios todavía no están cargados.</p></div></div>
+                    <?php endif; ?>
+                <?php endif; ?>
             </div>
         </div>
     </div>
     <?php endif; ?>
+
+    <script>
+        function copyBankGiftValue(value) {
+            if (navigator.clipboard && window.isSecureContext) {
+                return navigator.clipboard.writeText(value);
+            }
+
+            return new Promise(function(resolve, reject) {
+                const textArea = document.createElement('textarea');
+                textArea.value = value;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-9999px';
+                textArea.style.top = '-9999px';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+
+                try {
+                    document.execCommand('copy') ? resolve() : reject();
+                } catch (error) {
+                    reject(error);
+                } finally {
+                    document.body.removeChild(textArea);
+                }
+            });
+        }
+
+        document.querySelectorAll('.bank-copy-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const feedback = button.closest('.bank-gift-row').querySelector('.bank-copy-feedback');
+                copyBankGiftValue(button.dataset.copyValue).then(function() {
+                    feedback.textContent = 'Copiado';
+                    feedback.style.display = 'inline-block';
+                    setTimeout(function() { feedback.style.display = 'none'; }, 1800);
+                }).catch(function() {
+                    feedback.textContent = 'No se pudo copiar';
+                    feedback.style.display = 'inline-block';
+                    setTimeout(function() { feedback.style.display = 'none'; }, 2200);
+                });
+            });
+        });
+    </script>
 
     <?php if (in_array('contact', $secciones)): ?>
 	<div id="contact" class="contact-box">
