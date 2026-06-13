@@ -33,6 +33,34 @@ if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQU
     $action = $_POST['action'] ?? '';
     
     switch ($action) {
+        case 'update_settings':
+            $modo = $_POST['regalos_modo_visualizacion'] ?? 'productos';
+            $titulo = trim($_POST['regalos_titulo'] ?? '');
+
+            if (!in_array($modo, ['productos', 'datos_bancarios'], true)) {
+                $modo = 'productos';
+            }
+
+            if ($titulo === '') {
+                $titulo = '¿NOS QUERÉS HACER UN REGALO?';
+            }
+
+            $sql = "UPDATE cliente SET regalos_modo_visualizacion = ?, regalos_titulo = ? WHERE user_id = 1";
+            $stmt = $conn->prepare($sql);
+            if ($stmt) {
+                $stmt->bind_param("ss", $modo, $titulo);
+                if ($stmt->execute()) {
+                    $response['success'] = true;
+                    $response['message'] = 'Configuración de regalos guardada correctamente.';
+                } else {
+                    $response['message'] = 'Error al guardar la configuración: ' . $stmt->error;
+                }
+                $stmt->close();
+            } else {
+                $response['message'] = 'Error al preparar la configuración: ' . $conn->error;
+            }
+            break;
+
         case 'update':
             $id = intval($_POST['id'] ?? 0);
             $titulo = $_POST['titulo'] ?? '';
@@ -155,6 +183,20 @@ if ($result->num_rows > 0) {
         $productos[] = $row;
     }
 }
+
+$regalos_modo_visualizacion = 'productos';
+$regalos_titulo = '¿NOS QUERÉS HACER UN REGALO?';
+$sql_config_regalos = "SELECT regalos_modo_visualizacion, regalos_titulo FROM cliente WHERE user_id = 1 LIMIT 1";
+$result_config_regalos = $conn->query($sql_config_regalos);
+if ($result_config_regalos && $result_config_regalos->num_rows > 0) {
+    $config_regalos = $result_config_regalos->fetch_assoc();
+    if (!empty($config_regalos['regalos_modo_visualizacion'])) {
+        $regalos_modo_visualizacion = $config_regalos['regalos_modo_visualizacion'];
+    }
+    if (!empty($config_regalos['regalos_titulo'])) {
+        $regalos_titulo = $config_regalos['regalos_titulo'];
+    }
+}
 $conn->close();
 ?>
 
@@ -240,11 +282,80 @@ $conn->close();
         .image-upload-area img.hidden {
             display: none;
         }
+        .gift-display-settings {
+            background: #fff;
+            border: 1px solid #e7e2dc;
+            border-radius: 14px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+            margin: 18px 0 26px;
+            padding: 22px;
+        }
+        .gift-display-settings h3 {
+            margin: 0 0 8px;
+            color: #333;
+        }
+        .gift-display-settings p {
+            margin: 0 0 18px;
+            color: #666;
+        }
+        .gift-settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            align-items: end;
+        }
+        .gift-display-settings label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 7px;
+        }
+        .gift-display-settings select,
+        .gift-display-settings input[type="text"] {
+            border: 1px solid #d8d1c9;
+            border-radius: 9px;
+            box-sizing: border-box;
+            min-height: 42px;
+            padding: 9px 12px;
+            width: 100%;
+        }
+        .gift-settings-feedback {
+            color: #2e7d32;
+            display: none;
+            font-weight: 600;
+            margin-top: 12px;
+        }
+        .gift-settings-feedback.error {
+            color: #b00020;
+        }
     </style>
 </head>
 <body>
     
         <h2>Gestión de Regalos</h2>
+
+        <section class="gift-display-settings" aria-labelledby="gift-display-settings-title">
+            <h3 id="gift-display-settings-title">Visualización pública</h3>
+            <p>Elegí si la web muestra la lista de regalos o solamente los datos bancarios cargados en Datos.</p>
+            <form id="giftDisplaySettingsForm">
+                <div class="gift-settings-grid">
+                    <div>
+                        <label for="regalos_modo_visualizacion">Modo de visualización</label>
+                        <select id="regalos_modo_visualizacion" name="regalos_modo_visualizacion">
+                            <option value="productos" <?php echo $regalos_modo_visualizacion === 'productos' ? 'selected' : ''; ?>>Lista de regalos</option>
+                            <option value="datos_bancarios" <?php echo $regalos_modo_visualizacion === 'datos_bancarios' ? 'selected' : ''; ?>>Solo datos bancarios</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="regalos_titulo">Título de sección Regalos</label>
+                        <input type="text" id="regalos_titulo" name="regalos_titulo" value="<?php echo htmlspecialchars($regalos_titulo); ?>" maxlength="255" placeholder="¿NOS QUERÉS HACER UN REGALO?">
+                    </div>
+                    <div>
+                        <button type="submit" class="action-btn save-new-btn">Guardar configuración</button>
+                    </div>
+                </div>
+                <div id="giftSettingsFeedback" class="gift-settings-feedback" role="status"></div>
+            </form>
+        </section>
         
         <div class="product-list">
             <?php foreach ($productos as $producto): ?>
@@ -337,6 +448,35 @@ $conn->close();
     </template>
     
     <script>
+        document.getElementById('giftDisplaySettingsForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const form = event.currentTarget;
+            const feedback = document.getElementById('giftSettingsFeedback');
+            const formData = new FormData(form);
+            formData.append('action', 'update_settings');
+
+            fetch('lista_regalos.php', {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                feedback.textContent = data.message || (data.success ? 'Configuración guardada.' : 'No se pudo guardar la configuración.');
+                feedback.classList.toggle('error', !data.success);
+                feedback.style.display = 'block';
+                setTimeout(() => { feedback.style.display = 'none'; }, 3000);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                feedback.textContent = 'No se pudo guardar la configuración.';
+                feedback.classList.add('error');
+                feedback.style.display = 'block';
+            });
+        });
+
         function cambiarPrecio(btn, monto) {
             const priceControl = btn.closest('.price-control');
             const customInput = priceControl.querySelector('.price-input-custom');

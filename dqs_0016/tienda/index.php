@@ -202,17 +202,41 @@ if ($result && mysqli_num_rows($result) > 0) {
 
 
 
-// Consulta para verificar si cbu_dolar o alias_dolar tienen valor en la tabla cliente
-$query_cliente = "SELECT cbu_dolar, alias_dolar FROM cliente WHERE user_id = 1";
+// Consulta para verificar si cbu_dolar o alias_dolar tienen valor y obtener la configuración de Regalos
+$query_cliente = "SELECT cbu_titular, cbu, alias, cbu_dolar, alias_dolar, regalos_modo_visualizacion, regalos_titulo FROM cliente WHERE user_id = 1";
 $result_cliente = mysqli_query($conn, $query_cliente);
 $mostrar_moneda = false; // Variable para controlar la visibilidad
+$regalos_modo_visualizacion = 'productos';
+$regalos_titulo = '¿NOS QUERÉS HACER UN REGALO?';
+$datos_bancarios = [
+    'titular' => '',
+    'cbu' => '',
+    'alias' => '',
+    'cbu_dolar' => '',
+    'alias_dolar' => ''
+];
 
 if ($result_cliente && mysqli_num_rows($result_cliente) > 0) {
     $row_cliente = mysqli_fetch_assoc($result_cliente);
+    $datos_bancarios['titular'] = trim($row_cliente['cbu_titular'] ?? '');
+    $datos_bancarios['cbu'] = trim($row_cliente['cbu'] ?? '');
+    $datos_bancarios['alias'] = trim($row_cliente['alias'] ?? '');
+    $datos_bancarios['cbu_dolar'] = trim($row_cliente['cbu_dolar'] ?? '');
+    $datos_bancarios['alias_dolar'] = trim($row_cliente['alias_dolar'] ?? '');
+
     if (!empty($row_cliente['cbu_dolar']) || !empty($row_cliente['alias_dolar'])) {
         $mostrar_moneda = true;
     }
+    if (!empty($row_cliente['regalos_modo_visualizacion']) && in_array($row_cliente['regalos_modo_visualizacion'], ['productos', 'datos_bancarios'], true)) {
+        $regalos_modo_visualizacion = $row_cliente['regalos_modo_visualizacion'];
+    }
+    if (!empty($row_cliente['regalos_titulo'])) {
+        $regalos_titulo = $row_cliente['regalos_titulo'];
+    }
 }
+
+$cuenta_pesos_visible = !empty($datos_bancarios['titular']) || !empty($datos_bancarios['cbu']) || !empty($datos_bancarios['alias']);
+$cuenta_dolares_visible = !empty($datos_bancarios['cbu_dolar']) || !empty($datos_bancarios['alias_dolar']);
 
 ?>
 <!DOCTYPE html>
@@ -285,6 +309,110 @@ if ($result_cliente && mysqli_num_rows($result_cliente) > 0) {
         .currency-selector label:hover {
             background-color: #e9e9e9;
         }
+        .regalos-section-heading {
+            padding: 34px 15px 12px;
+            text-align: center;
+        }
+        .regalos-section-heading h1 {
+            color: #222;
+            font-size: clamp(28px, 5vw, 46px);
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin: 0;
+            text-transform: uppercase;
+        }
+        .bank-gifts-wrapper {
+            margin: 0 auto 60px;
+            max-width: 980px;
+            padding: 0 18px;
+        }
+        .bank-gifts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .bank-gift-card {
+            background: rgba(255, 255, 255, 0.96);
+            border: 1px solid rgba(80, 67, 58, 0.16);
+            border-radius: 18px;
+            box-shadow: 0 14px 38px rgba(0, 0, 0, 0.08);
+            padding: 28px;
+        }
+        .bank-gift-card h2 {
+            color: #333;
+            font-size: 23px;
+            margin: 0 0 20px;
+        }
+        .bank-gift-row {
+            border-top: 1px solid #eee9e2;
+            padding: 15px 0;
+        }
+        .bank-gift-row:first-of-type {
+            border-top: 0;
+            padding-top: 0;
+        }
+        .bank-gift-label {
+            color: #7b7068;
+            display: block;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: .08em;
+            margin-bottom: 7px;
+            text-transform: uppercase;
+        }
+        .bank-gift-value-line {
+            align-items: center;
+            display: flex;
+            gap: 10px;
+            justify-content: space-between;
+        }
+        .bank-gift-value {
+            color: #2f2f2f;
+            font-size: 17px;
+            overflow-wrap: anywhere;
+        }
+        .bank-copy-btn {
+            align-items: center;
+            background: #333;
+            border: 0;
+            border-radius: 999px;
+            color: #fff;
+            cursor: pointer;
+            display: inline-flex;
+            flex: 0 0 auto;
+            gap: 6px;
+            padding: 8px 12px;
+            transition: background .2s ease, transform .2s ease;
+        }
+        .bank-copy-btn:hover,
+        .bank-copy-btn:focus {
+            background: #111;
+            transform: translateY(-1px);
+        }
+        .bank-copy-feedback {
+            color: #2e7d32;
+            display: none;
+            font-size: 13px;
+            font-weight: 700;
+            margin-top: 7px;
+        }
+        .bank-empty-message {
+            background: #fff;
+            border: 1px solid #eee9e2;
+            border-radius: 14px;
+            color: #675f59;
+            padding: 24px;
+            text-align: center;
+        }
+        @media (max-width: 576px) {
+            .bank-gift-card {
+                padding: 22px;
+            }
+            .bank-gift-value-line {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+        }
     </style>
     </head>
 <body id="tienda" data-spy="scroll" data-target="#navbar-wd" data-offset="98">
@@ -313,6 +441,11 @@ if ($result_cliente && mysqli_num_rows($result_cliente) > 0) {
             </div>
         </div>
     </div>
+    <section class="regalos-section-heading">
+        <h1><?php echo htmlspecialchars($regalos_titulo); ?></h1>
+    </section>
+
+<?php if ($regalos_modo_visualizacion === 'productos'): ?>
 	<div class="pagination">
         <a href="#" id="cartLink" class="ver-carrito"><i class="fas fa-shopping-cart"></i></a>
     </div>
@@ -369,6 +502,120 @@ if ($mostrar_moneda):
     </div>
     
     <script src="script.js"></script>
+<?php else: ?>
+    <section class="bank-gifts-wrapper" aria-label="Datos bancarios para regalos">
+        <?php if ($cuenta_pesos_visible || $cuenta_dolares_visible): ?>
+            <div class="bank-gifts-grid">
+                <?php if ($cuenta_pesos_visible): ?>
+                    <article class="bank-gift-card">
+                        <h2>Cuenta en pesos</h2>
+                        <?php if (!empty($datos_bancarios['titular'])): ?>
+                            <div class="bank-gift-row">
+                                <span class="bank-gift-label">Titular</span>
+                                <span class="bank-gift-value"><?php echo htmlspecialchars($datos_bancarios['titular']); ?></span>
+                            </div>
+                        <?php endif; ?>
+                        <?php if (!empty($datos_bancarios['cbu'])): ?>
+                            <div class="bank-gift-row">
+                                <span class="bank-gift-label">CBU</span>
+                                <div class="bank-gift-value-line">
+                                    <span class="bank-gift-value"><?php echo htmlspecialchars($datos_bancarios['cbu']); ?></span>
+                                    <button type="button" class="bank-copy-btn" data-copy-value="<?php echo htmlspecialchars($datos_bancarios['cbu']); ?>"><i class="fas fa-copy"></i> Copiar</button>
+                                </div>
+                                <span class="bank-copy-feedback">Copiado</span>
+                            </div>
+                        <?php endif; ?>
+                        <?php if (!empty($datos_bancarios['alias'])): ?>
+                            <div class="bank-gift-row">
+                                <span class="bank-gift-label">Alias</span>
+                                <div class="bank-gift-value-line">
+                                    <span class="bank-gift-value"><?php echo htmlspecialchars($datos_bancarios['alias']); ?></span>
+                                    <button type="button" class="bank-copy-btn" data-copy-value="<?php echo htmlspecialchars($datos_bancarios['alias']); ?>"><i class="fas fa-copy"></i> Copiar</button>
+                                </div>
+                                <span class="bank-copy-feedback">Copiado</span>
+                            </div>
+                        <?php endif; ?>
+                    </article>
+                <?php endif; ?>
+
+                <?php if ($cuenta_dolares_visible): ?>
+                    <article class="bank-gift-card">
+                        <h2>Cuenta en dólares</h2>
+                        <?php if (!empty($datos_bancarios['titular'])): ?>
+                            <div class="bank-gift-row">
+                                <span class="bank-gift-label">Titular</span>
+                                <span class="bank-gift-value"><?php echo htmlspecialchars($datos_bancarios['titular']); ?></span>
+                            </div>
+                        <?php endif; ?>
+                        <?php if (!empty($datos_bancarios['cbu_dolar'])): ?>
+                            <div class="bank-gift-row">
+                                <span class="bank-gift-label">CBU dólar</span>
+                                <div class="bank-gift-value-line">
+                                    <span class="bank-gift-value"><?php echo htmlspecialchars($datos_bancarios['cbu_dolar']); ?></span>
+                                    <button type="button" class="bank-copy-btn" data-copy-value="<?php echo htmlspecialchars($datos_bancarios['cbu_dolar']); ?>"><i class="fas fa-copy"></i> Copiar</button>
+                                </div>
+                                <span class="bank-copy-feedback">Copiado</span>
+                            </div>
+                        <?php endif; ?>
+                        <?php if (!empty($datos_bancarios['alias_dolar'])): ?>
+                            <div class="bank-gift-row">
+                                <span class="bank-gift-label">Alias dólar</span>
+                                <div class="bank-gift-value-line">
+                                    <span class="bank-gift-value"><?php echo htmlspecialchars($datos_bancarios['alias_dolar']); ?></span>
+                                    <button type="button" class="bank-copy-btn" data-copy-value="<?php echo htmlspecialchars($datos_bancarios['alias_dolar']); ?>"><i class="fas fa-copy"></i> Copiar</button>
+                                </div>
+                                <span class="bank-copy-feedback">Copiado</span>
+                            </div>
+                        <?php endif; ?>
+                    </article>
+                <?php endif; ?>
+            </div>
+        <?php else: ?>
+            <div class="bank-empty-message">Los datos bancarios todavía no están cargados.</div>
+        <?php endif; ?>
+    </section>
+    <script>
+        function copyBankGiftValue(value) {
+            if (navigator.clipboard && window.isSecureContext) {
+                return navigator.clipboard.writeText(value);
+            }
+
+            return new Promise(function(resolve, reject) {
+                const textArea = document.createElement('textarea');
+                textArea.value = value;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-9999px';
+                textArea.style.top = '-9999px';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+
+                try {
+                    document.execCommand('copy') ? resolve() : reject();
+                } catch (error) {
+                    reject(error);
+                } finally {
+                    document.body.removeChild(textArea);
+                }
+            });
+        }
+
+        document.querySelectorAll('.bank-copy-btn').forEach(function(button) {
+            button.addEventListener('click', function() {
+                const feedback = button.closest('.bank-gift-row').querySelector('.bank-copy-feedback');
+                copyBankGiftValue(button.dataset.copyValue).then(function() {
+                    feedback.textContent = 'Copiado';
+                    feedback.style.display = 'inline-block';
+                    setTimeout(function() { feedback.style.display = 'none'; }, 1800);
+                }).catch(function() {
+                    feedback.textContent = 'No se pudo copiar';
+                    feedback.style.display = 'inline-block';
+                    setTimeout(function() { feedback.style.display = 'none'; }, 2200);
+                });
+            });
+        });
+    </script>
+<?php endif; ?>
     
     <div id="myModal" class="modal">
         <span class="close">×</span>
