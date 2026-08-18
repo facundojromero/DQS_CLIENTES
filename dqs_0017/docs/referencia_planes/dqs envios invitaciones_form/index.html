@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Control de Mensajes</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 90%;
+            margin: auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            flex: 0.7;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 10px;
+            }
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        p {
+            color: #666;
+            margin: 10px 0;
+        }
+
+        .navbar-link {
+            display: flex;
+            align-items: center;
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+            text-decoration: none;
+            background-color: #444;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            border: none;
+            font-size: 1em;
+            cursor: pointer;
+            justify-content: center;
+            width: 50%;
+            margin: 0 auto;
+        }
+
+        .navbar-link:hover {
+            background-color: #555;
+            color: white;
+        }
+
+        #estado {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .success {
+            color: #28a745;
+        }
+
+        .error {
+            color: #dc3545;
+        }
+        
+        #log-container {
+            margin-top: 20px;
+            border-top: 1px solid #ccc;
+            padding-top: 10px;
+            text-align: left;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        textarea {
+            width: 90%;
+            height: 150px;
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+        }
+        
+        .textarea-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        
+        .textarea-group label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .dynamic-buttons-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+
+        .dynamic-button {
+            padding: 5px 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #e9e9e9;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: background-color 0.2s;
+        }
+
+        .dynamic-button:hover {
+            background-color: #dcdcdc;
+        }
+
+        #url-display {
+            margin-top: 10px;
+            font-size: 1em;
+            color: #444;
+            word-wrap: break-word;
+        }
+        
+        /* Estilos del footer */
+        .footer {
+            margin-top: auto;
+            width: 100%;
+            text-align: center;
+            padding: 20px 0;
+            background-color: #333;
+            color: #fff;
+            font-size: 0.9em;
+        }
+
+        .footer-link {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #00bcd4;
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Enviar Mensajes a Invitados</h1>
+        <p>Haz clic en los botones para insertar variables y formato:</p>
+        
+        <div class="dynamic-buttons-container" id="variable-buttons">
+            <span class="dynamic-button" data-variable="invitados">Invitados</span>
+            <span class="dynamic-button" data-variable="codigo">Código de Invitación</span>
+            <span class="dynamic-button" data-variable="nombre">Nombre</span>
+            <span class="dynamic-button" data-variable="apellido">Apellido</span>
+            <span class="dynamic-button" data-variable="cantidad_mayores">Mayores</span>
+            <span class="dynamic-button" data-variable="cantidad_menores">Menores</span>
+            <span class="dynamic-button" data-variable="web_base_url">URL de la Web</span>
+        </div>
+        
+        <div class="dynamic-buttons-container" id="format-buttons">
+            <span class="dynamic-button" data-format="bold">Negrita (* *)</span>
+            <span class="dynamic-button" data-format="italic">Cursiva (_ _)</span>
+            <span class="dynamic-button" data-format="strikethrough">Tachado (~ ~)</span>
+        </div>
+        
+		<br>
+        <div class="textarea-group">
+            <label for="mensaje-plural">Mensaje en Plural</label>
+            <textarea id="mensaje-plural" placeholder="Cargando mensaje plural..."></textarea>
+        </div>
+        
+        <div class="textarea-group">
+            <label for="mensaje-singular">Mensaje en Singular</label>
+            <textarea id="mensaje-singular" placeholder="Cargando mensaje singular..."></textarea>
+        </div>
+        
+        <div style="margin-bottom: 20px; text-align: left; padding-left: 5%;">
+            <input type="checkbox" id="incluir-imagen" checked>
+            <label for="incluir-imagen">Incluir imagen de invitación</label>
+            <p style="font-size: 0.85em; color: #888; margin-top: 5px;">*Si está marcada, se enviará la invitación como imagen adjunta.</p>
+        </div>
+        <button id="btn-enviar" class="navbar-link">💌 Enviar Invitaciones</button>
+        
+        <p id="estado"></p>
+        
+        <div id="log-container"></div>
+    </div>
+    <script src="web-logic.js"></script>
+    
+    <footer class="footer">
+        &copy; <?= date('Y') ?> <a href="https://www.instagram.com/dijequesi.ar/" target="_blank" class="footer-link">Dije que Sí - Todos los derechos reservados.</a>
+    </footer>
+    
+</body>
+</html>

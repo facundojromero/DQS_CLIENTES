@@ -1,0 +1,76 @@
+{
+  "version": "0.1.1",
+  "created_from_snapshot": "2026-07-19T01:25:51Z",
+  "snapshot_file": "docs/DQS_SCHEMA_SNAPSHOT_HOSTINGER_20260719_012551.sql",
+  "tables": [
+    "user",
+    "admin_config",
+    "cliente",
+    "site_settings",
+    "productos",
+    "info_casamiento",
+    "info_mostrar",
+    "info_eventos",
+    "info_historia",
+    "info_nosotros",
+    "info_otra",
+    "imagenes",
+    "visitas",
+    "invitados",
+    "invitados_listado_mesa",
+    "invitados_prioridad",
+    "invitados_tel",
+    "intivados_acompanante",
+    "invitaciones_estado",
+    "pre_invitados",
+    "pre_invitados_listado_mesa",
+    "pre_invitados_tel",
+    "invitados_a_enviar",
+    "invitados_enviados",
+    "registro_mensajes_enviados",
+    "carrito",
+    "regalos",
+    "regalos_confirmacion",
+    "regalos_detalles"
+  ],
+  "triggers": [
+    "generar_codigo_invitado"
+  ],
+  "seeds": {
+    "required": {
+      "file": "database/install/seed.sql",
+      "tables": [
+        "info_mostrar",
+        "intivados_acompanante",
+        "invitados_prioridad",
+        "site_settings"
+      ],
+      "rows": 23,
+      "strategy": "technical_minimum"
+    },
+    "default_content": {
+      "file": "database/install/seed_default_content.sql",
+      "tables": [
+        "info_casamiento",
+        "info_nosotros",
+        "info_historia",
+        "info_eventos",
+        "info_otra"
+      ],
+      "rows": 21,
+      "strategy": "editable_starter_content",
+      "optional": true
+    }
+  },
+  "required_extensions": [
+    "pdo_mysql (suggested for installer preflight)",
+    "mysqli (suggested when required by the existing application connection layer)"
+  ],
+  "notes": [
+    "Schema-only baseline; seed files contain no customer records or credentials.",
+    "invitados_listado_mesa_bkp and invitados_pagos remain in the source snapshot but are excluded pending legacy/feature ownership review.",
+    "Historical AUTO_INCREMENT table options and the Hostinger-specific trigger DEFINER were removed.",
+    "utf8mb4_uca1400_ai_ci was minimally mapped to utf8mb4_unicode_ci and latin1_swedish_nopad_ci to latin1_swedish_ci for MySQL/MariaDB portability; other snapshot charset and collation choices are preserved.",
+    "The required technical seed uses only defaults confirmed by includes/plan_config.php; optional starter content contains editable demo content."
+  ]
+}
