@@ -2,8 +2,7 @@
     IMPORT FONTS
 -------------------------------------------------------------------*/
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&family=Roboto+Slab:wght@400;600&display=swap');
-@import url('https://fonts.googleapis.com/css?family=Marck+Script');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Lora:wght@400;500;600&display=swap');
 
 /*------------------------------------------------------------------
     IMPORT FILES
@@ -20,9 +19,17 @@
 body {
     color: #000000;
     font-size: 15px;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Lora', serif;
     line-height: 1.80857;
     background-color: #ffffff;
+}
+
+button,
+input,
+optgroup,
+select,
+textarea {
+    font-family: 'Lora', serif;
 }
 
 
@@ -399,7 +406,7 @@ button:focus{
 
 .lbox-details h1{
 	font-size: 68px;
-	font-family: 'Roboto Slab', cursive;
+	font-family: 'Cormorant Garamond', serif;
 	color: #ffffff;
 	position: relative;
 	z-index: 3;
@@ -419,7 +426,7 @@ button:focus{
 .lbox-details p strong{
 	color: #8ea7c2;
 	font-size: 40px;
-	font-family: 'Roboto Slab', cursive;
+	font-family: 'Cormorant Garamond', serif;
 }
 .lbox-details a.btn{
 	background: #8ea7c2;
@@ -468,7 +475,7 @@ button:focus{
 }
 .title-box h2{
 	font-size: 60px;
-	font-family: 'Roboto Slab', cursive;
+	font-family: 'Cormorant Garamond', serif;
 	color: #000000;
 }
 .title-box h2 span{
@@ -477,7 +484,7 @@ button:focus{
 }
 .about-main-info h2{
 	font-size: 40px;
-	font-family: 'Roboto Slab', cursive;
+	font-family: 'Cormorant Garamond', serif;
 }
 .about-main-info h2 span{
 	color: #8ea7c2;
@@ -559,7 +566,7 @@ button:focus{
 }
 
 .display-font{
-	font-family: 'Roboto Slab', cursive;
+	font-family: 'Cormorant Garamond', serif;
 	font-size: 30px;
 	color: #000000;
 }
@@ -620,7 +627,7 @@ button:focus{
 	background-color: #ffffff;
 }
 .family-info h4{
-	font-family: 'Roboto Slab', cursive;
+	font-family: 'Cormorant Garamond', serif;
 	font-size: 24px;
 }
 .family-info p{
@@ -1007,7 +1014,7 @@ select.form-control:not([size]):not([multiple]){
 
 .lbox-details2 h1{
 	font-size: 68px;
-	font-family: 'Roboto Slab', cursive;
+	font-family: 'Cormorant Garamond', serif;
 	color: #ffffff;
 	position: relative;
 	z-index: 3;
@@ -1027,7 +1034,7 @@ select.form-control:not([size]):not([multiple]){
 .lbox-details2 p strong{
 	color: #8ea7c2;
 	font-size: 40px;
-	font-family: 'Roboto Slab', cursive;
+	font-family: 'Cormorant Garamond', serif;
 }
 
 /*COLOR DE LOS VOTONES -DONDE RSV REGALAR- EN EL MENU DE ABAJO. SIN PASAR EL MOUSE*/
@@ -1451,7 +1458,7 @@ producto h2 {
     border-radius: 4px;
     resize: vertical; /* Permitir solo el redimensionamiento vertical */
     min-height: 100px; /* Altura mínima */
-    font-family: 'Arial', sans-serif;
+    font-family: 'Lora', serif;
     font-size: 1em;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     transition: border-color 0.3s, box-shadow 0.3s;
