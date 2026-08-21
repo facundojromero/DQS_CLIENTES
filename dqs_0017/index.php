@@ -341,37 +341,45 @@ $mostrarTransferenciaRegalos = $mostrarTransferenciaRegalos && ($mostrarCuentaPe
 <div class="ulockd-home-slider">
     <div class="container-fluid">
         <div class="row">
-            <div class="pogoSlider" id="js-main-slider">
+            <div class="pogoSlider" id="js-main-slider" role="region" aria-roledescription="carrusel" aria-label="Fotos de Mily y Gonza">
                 <?php
-                // 1. Buscamos todas las imágenes que empiecen con "slider-" en la carpeta images
-                // El GLOB_BRACE permite buscar jpg, png o jpeg
+                // Buscamos y ordenamos las imágenes de portada de forma determinista.
                 $imagenes = glob("images/slider-*.{jpg,jpeg,png,gif}", GLOB_BRACE);
+                $imagenes = $imagenes === false ? [] : $imagenes;
+                sort($imagenes, SORT_NATURAL);
+                $total_imagenes = count($imagenes);
 
-                // 2. Definimos las transiciones que quieres ir rotando
-                $transiciones = ['zipReveal', 'blocksReveal', 'shrinkReveal'];
-                
-                // 3. Recorremos las imágenes encontradas
                 foreach ($imagenes as $indice => $ruta_imagen) {
-                    // Seleccionamos una transición diferente para cada imagen basándonos en el índice
-                    $transicion_actual = $transiciones[$indice % count($transiciones)];
-                    $duracion = ($transicion_actual == 'shrinkReveal') ? 2000 : 1500;
+                    $version_imagen = is_file($ruta_imagen) ? filemtime($ruta_imagen) : null;
+                    $url_imagen = $ruta_imagen . ($version_imagen ? '?' . $version_imagen : '');
+                    $nombre_imagen = basename($ruta_imagen);
                 ?>
-                    <div class="pogoSlider-slide" 
-                         data-transition="<?php echo $transicion_actual; ?>" 
-                         data-duration="<?php echo $duracion; ?>" 
-                         style="background-image:url(<?php echo $ruta_imagen; ?>?<?php echo time(); ?>);">
-                        
-                        <div class="lbox-caption">
-                            <div class="lbox-details">
-                                <h1><?php echo $portada_titulo; ?></h1>
-                                <h2><?php echo $portada_frase; ?></h2>
-                                <p><strong><?php echo $portada_fecha; ?></strong></p>
-                            </div>
+                    <div class="pogoSlider-slide"
+                         data-transition="fade"
+                         data-duration="800"
+                         data-image="<?php echo htmlspecialchars($nombre_imagen, ENT_QUOTES, 'UTF-8'); ?>"
+                         role="img"
+                         aria-label="Foto <?php echo $indice + 1; ?> de <?php echo $total_imagenes; ?> de Mily y Gonza"
+                         style="background-image:url('<?php echo htmlspecialchars($url_imagen, ENT_QUOTES, 'UTF-8'); ?>');">
+                    </div>
+                <?php
+                }
+                ?>
+
+                <?php if ($total_imagenes > 0): ?>
+                    <div class="lbox-caption">
+                        <div class="lbox-details">
+                            <h1><?php echo $portada_titulo; ?></h1>
+                            <h2><?php echo $portada_frase; ?></h2>
+                            <p><strong><?php echo $portada_fecha; ?></strong></p>
                         </div>
                     </div>
-                <?php 
-                } // Fin del foreach 
-                ?>
+                    <div class="hero-slide-counter" aria-label="Foto 1 de <?php echo $total_imagenes; ?>">
+                        <span class="hero-slide-counter-current">01</span>
+                        <span aria-hidden="true">/</span>
+                        <span><?php echo str_pad((string) $total_imagenes, 2, '0', STR_PAD_LEFT); ?></span>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
     </div>
