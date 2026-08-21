@@ -2154,7 +2154,7 @@ body#home .mfp-arrow-right::before {
 /* Preloader */
 body#home #preloader,
 body#tienda #preloader {
-    background: var(--dqs-steel);
+    background: var(--dqs-cream);
 }
 
 body#home .pulse i,
