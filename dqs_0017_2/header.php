@@ -43,7 +43,8 @@ if (isset($conn) && function_exists('obtenerDestinoLinkRegalar')) {
 
 			<?php if (in_array('logo', $secciones)): ?>
 				<a class="navbar-brand" href="<?= $es_tienda ? '../#' : '#' ?>">
-					<img src="<?= $es_tienda ? '../images/logo/logo.jpg' : 'images/logo/logo.jpg' ?>" alt="image">
+					<img class="brand-image" src="<?= $es_tienda ? '../images/logo/logo.jpg' : 'images/logo/logo.jpg' ?>" alt="">
+					<span class="brand-title"><?php echo htmlspecialchars($portada_titulo ?? 'Dije que sí', ENT_QUOTES, 'UTF-8'); ?></span>
 				</a>
 			<?php endif; ?>
 
