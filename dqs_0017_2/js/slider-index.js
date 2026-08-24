@@ -8,6 +8,8 @@ $(document).ready(function () {
             autoplay: true,
             autoplayTimeout: 5000,
             displayProgess: true,
+            generateButtons: false,
+            generateNav: false,
             preserveTargetSize: true,
             targetWidth: 1000,
             targetHeight: 300,

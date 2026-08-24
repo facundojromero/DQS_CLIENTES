@@ -286,10 +286,6 @@ $mostrarTransferenciaRegalos = $mostrarTransferenciaRegalos && ($mostrarCuentaPe
     
     
     
-.lbox-details h1 {
-    font-family: 'the-seasons-regular', serif !important;
-    letter-spacing: 10px !important; /* Sin la coma */
-} 
     
     
 
@@ -384,10 +380,18 @@ $mostrarTransferenciaRegalos = $mostrarTransferenciaRegalos && ($mostrarCuentaPe
             	<div class="row">
                         <div class="lbox-caption2">
                             <div class="lbox-details2">
-                                <a href="#rsvp" class="btn">RSVP</a>
-                                <?php if ($mostrarLinkRegalar): ?>
-                                <a href="<?php echo htmlspecialchars($regalosLinkHref); ?>" class="btn">Regalar</a>
-                                <?php endif; ?>
+                                <div class="hero-actions" aria-label="Accesos principales">
+                                    <?php if ($mostrarLinkRegalar): ?>
+                                    <a href="<?php echo htmlspecialchars($regalosLinkHref); ?>" class="btn hero-action hero-action--gift">
+                                        <i class="fas fa-gift" aria-hidden="true"></i>
+                                        <span>Regalar</span>
+                                    </a>
+                                    <?php endif; ?>
+                                    <a href="#rsvp" class="btn hero-action hero-action--rsvp">
+                                        <i class="fas fa-calendar-check" aria-hidden="true"></i>
+                                        <span>Confirmar asistencia</span>
+                                    </a>
+                                </div>
                                 <?php if (in_array('cronometro', $secciones)): ?>
                                    <p><div class="simply-countdown simply-countdown-one"></div></p>
                                 <?php endif; ?>
