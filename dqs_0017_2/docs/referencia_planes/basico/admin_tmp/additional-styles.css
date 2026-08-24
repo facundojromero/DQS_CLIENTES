@@ -1,0 +1,547 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 90%;
+    margin: auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1, h2 {
+    text-align: center;
+    color: #333;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+tr:hover {
+    background-color: #ddd;
+}
+
+.cliente-info p {
+    margin: 10px 0;
+}
+
+.formulario {
+    display: flex;
+    flex-direction: column;
+}
+
+.formulario label {
+    margin-top: 10px;
+}
+
+.formulario input {
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+    align-self: center;
+}
+
+.button:hover {
+    background-color: #45a049;
+}
+
+/* Estilos responsivos para dispositivos móviles */
+@media (max-width: 600px) {
+    .container {
+        padding: 10px;
+    }
+
+    table, th, td {
+        font-size: 0.9em;
+        padding: 8px;
+    }
+
+    .formulario label {
+        margin-top: 8px;
+    }
+
+    .formulario input {
+        padding: 6px;
+        margin-top: 4px;
+    }
+
+    .button {
+        padding: 8px 16px;
+        font-size: 0.9em;
+    }
+}
+
+/* Estilos adicionales del archivo styles.css */
+.sort-options {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 16px;
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ddd;
+}
+
+.sort-options label {
+    margin-right: 8px;
+    font-weight: bold;
+}
+
+.sort-options select {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+}
+
+.producto {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.producto:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.producto img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    cursor: pointer;
+}
+
+.producto h2 {
+    font-size: 1.5em;
+    margin: 0 0 10px;
+    color: #333;
+}
+
+.producto p {
+    margin: 0 0 10px;
+    color: #666;
+}
+
+.producto .precio {
+    font-size: 1.2em;
+    color: #e91e63;
+    font-weight: bold;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+    position: relative;
+    margin: auto;
+    padding: 0;
+    width: 80%;
+    max-width: 700px;
+}
+
+.close {
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    color: #fff;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.carousel-buttons {
+    position: absolute;
+    top: 50%;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    transform: translateY(-50%);
+}
+
+.carousel-button {
+    background-color: rgba(0, 0, 0, 0.5);
+    border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.add-to-cart {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.add-to-cart:hover {
+    background-color: #45a049;
+}
+
+.header {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px;
+    background-color: #f4f4f4;
+    border-bottom: 1px solid #ddd;
+}
+
+.ver-carrito {
+    color: #333;
+    font-size: 1.5em;
+    text-decoration: none;
+    position: relative;
+}
+
+.ver-carrito:hover {
+    color: #4CAF50;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.button:hover {
+    background-color: #45a049;
+}
+
+.button i {
+    margin-right: 8px;
+}
+
+.button i.fa-trash-alt {
+    color: #e91e63;
+}
+
+#compartido-container .button {
+    width: auto;
+    padding: 5px 10px;
+    display: inline-block;
+}
+
+.cart-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+    padding: 16px;
+}
+
+.cart-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 16px;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.cart-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.cart-item-image {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.cart-item-details h2 {
+    font-size: 1.2em;
+    margin: 0 0 10px;
+    color: #333;
+}
+
+.cart-item-details p {
+    margin: 0 0 10px;
+    color: #666;
+}
+
+.cart-item-details .precio {
+    font-size: 1.2em;
+    color: #e91e63;
+    font-weight: bold;
+}
+
+.cart-actions {
+    display: flex;
+    justify-content: space-between;
+    padding: 16px;
+}
+
+.cart-total {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.cart-total h3 {
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .cart-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 8px;
+        padding: 8px;
+    }
+
+    .cart-item {
+        padding: 8px;
+    }
+
+    .cart-item-image {
+        height: 100px;
+        margin-bottom: 8px;
+    }
+
+    .cart-item-details h2 {
+        font-size: 1em;
+        margin: 0 0 5px;
+    }
+
+    .cart-item-details p {
+        margin: 0 0 5px;
+        font-size: 0.9em;
+    }
+
+    .cart-item-details .precio {
+        font-size: 1em;
+    }
+
+    .cart-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .cart-actions .button {
+        margin-bottom: 8px;
+        width: 100%;
+    }
+
+    .cart-total {
+        text-align: center;
+    }
+}
+
+/* Estilos específicos para el formulario de login */
+.login-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.login-container h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.login-container .error {
+    color: #e91e63;
+    margin-bottom: 20px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login-form label {
+    margin-top: 10px;
+    font-weight: bold;
+    color: #333;
+}
+
+.login-form input {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.login-form .button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.login-form .button:hover {
+    background-color: #45a049;
+}
+
+/* Estilos responsivos para el formulario de login */
+@media (max-width: 600px) {
+    .login-container {
+        width: 90%;
+        margin: 20px auto;
+        padding: 15px;
+    }
+    .login-form input {
+        padding: 8px;
+    }
+    .login-form .button {
+        padding: 8px;
+    }
+}
+
+
+
+/* FORMATO MENU */
+.navbar {
+    background-color: #333;
+    overflow: hidden;
+    padding: 10px 0;
+}
+
+.navbar-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+.navbar-item {
+    margin: 0 10px;
+}
+
+.navbar-link {
+    display: flex;
+    align-items: center;
+    color: white;
+    text-align: center;
+    padding: 10px 20px;
+    text-decoration: none;
+    background-color: #444;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.navbar-link:hover {
+    background-color: #555;
+    color: white;
+}
+
+.navbar-icon {
+    margin-right: 8px;
+    width: 20px;
+    height: 20px;
+}
+    
