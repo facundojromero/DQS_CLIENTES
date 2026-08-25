@@ -165,7 +165,7 @@ $query = "SELECT
             WHEN MONTH(fecha) = 10 THEN 'Octubre'
             WHEN MONTH(fecha) = 11 THEN 'Noviembre'
             WHEN MONTH(fecha) = 12 THEN 'Diciembre'
-        END, ' ', YEAR(fecha)), 'Fecha no disponible') AS fecha,
+        END, ' ', YEAR(fecha), ' ', DATE_FORMAT(fecha, '%H:%i'), ' hs'), 'Fecha no disponible') AS fecha,
     titulo,
     descripcion,
     direccion,
