@@ -1391,6 +1391,10 @@ body#tienda .increase-quantity {
         align-items: center;
     }
 
+    body#tienda .lbox-details2 {
+        display: block;
+    }
+
     .simply-countdown {
         order: 1;
     }
