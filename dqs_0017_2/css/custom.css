@@ -209,15 +209,25 @@ p:last-child {
     padding: 0;
 }
 
+.ulockd-home-slider .container-fluid {
+    max-width: 1536px;
+    margin-right: auto;
+    margin-left: auto;
+}
+
 .pogoSlider {
-    height: clamp(570px, 78vh, 780px) !important;
+    aspect-ratio: 48 / 25;
+    height: auto !important;
+    min-height: 570px;
+    max-height: 800px;
     padding-bottom: 0 !important;
     background: var(--dqs-olive-dark);
 }
 
 .pogoSlider-slide {
     background-position: center;
-    background-size: cover;
+    background-repeat: no-repeat;
+    background-size: contain;
 }
 
 .lbox-caption,
@@ -1320,7 +1330,13 @@ body#tienda .increase-quantity {
     }
 
     .pogoSlider {
+        aspect-ratio: auto;
         height: clamp(560px, 72vh, 700px) !important;
+        min-height: 0;
+    }
+
+    .pogoSlider-slide {
+        background-position: center top;
     }
 
     .gallery-box ul.popup-gallery {
@@ -1352,10 +1368,6 @@ body#tienda .increase-quantity {
 
     .pogoSlider {
         height: clamp(510px, 70svh, 640px) !important;
-    }
-
-    .pogoSlider-slide {
-        background-position: center;
     }
 
     .lbox-details {
