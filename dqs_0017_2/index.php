@@ -389,7 +389,7 @@ $mostrarTransferenciaRegalos = $mostrarTransferenciaRegalos && ($mostrarCuentaPe
                                     <?php endif; ?>
                                     <a href="#rsvp" class="btn hero-action hero-action--rsvp">
                                         <i class="fas fa-calendar-check" aria-hidden="true"></i>
-                                        <span>Confirmar asistencia</span>
+                                        <span>RSVP</span>
                                     </a>
                                 </div>
                                 <?php if (in_array('cronometro', $secciones)): ?>
@@ -532,7 +532,7 @@ $mostrarTransferenciaRegalos = $mostrarTransferenciaRegalos && ($mostrarCuentaPe
                 </div>
             </div>
             <?php endif; ?>
-            <div class="row">
+            <div class="row justify-content-center">
                 <?php foreach ($info_eventos as $evento): ?>
                 <div class="col-lg-4 col-md-6 col-sm-12">
                     <div class="event-inner">
@@ -596,7 +596,7 @@ $mostrarTransferenciaRegalos = $mostrarTransferenciaRegalos && ($mostrarCuentaPe
             </div>
             <?php endif; ?>
 
-            <div class="row">
+            <div class="row justify-content-center">
                 <?php foreach ($info_otra as $evento): ?>
                 <div class="col-md-4 col-sm-6">
                     <div class="serviceBox">
