@@ -408,7 +408,14 @@ button:focus{
 	font-size: 48px;
 	color: #ffffff;
 	position: relative;
+	top: -80px;
 	z-index: 3;
+}
+
+@media (max-width: 767px) {
+	.lbox-details h2{
+		top: -38px;
+	}
 }
 .lbox-details p{
 	color: #ffffff;
