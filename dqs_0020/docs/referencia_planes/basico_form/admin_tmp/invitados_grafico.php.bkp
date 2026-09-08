@@ -1,0 +1,223 @@
+<?php
+session_start();
+// Verificar si el usuario está logueado
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+// Incluir el archivo de conexión
+include_once '../conexion.php'; // Ajusta la ruta según la ubicación de tu archivo
+
+// Obtener los filtros si existen
+$confirmacionFiltro = isset($_GET['confirmacion']) ? $_GET['confirmacion'] : '';
+$busquedaFiltro = isset($_GET['busqueda']) ? $_GET['busqueda'] : '';
+$statusFiltro = isset($_GET['status']) ? $_GET['status'] : '';
+$ingresoFiltro = isset($_GET['ingreso']) ? $_GET['ingreso'] : '';
+$prioridadFiltro = isset($_GET['prioridad']) ? $_GET['prioridad'] : '';
+
+// Nueva consulta SQL para el gráfico con los mismos filtros aplicados y `GROUP BY`
+$sql_grafico = "SELECT ingreso agrupacion, SUM(cantidad_mayores + cantidad_menores) suma, COUNT(cantidad_mayores) cantidad
+                FROM invitados a
+                LEFT JOIN intivados_acompanante b ON a.acompanado = b.id
+                LEFT JOIN (
+                    SELECT a.id_invitados,
+                           CASE WHEN cantidad_mayores + cantidad_menores < 2 THEN nombre_invitado ELSE 
+                                CONCAT(
+                                    IF(COUNT(*) > 1,
+                                       SUBSTRING_INDEX(
+                                           GROUP_CONCAT(nombre_invitado ORDER BY a.id ASC SEPARATOR ', '),
+                                           ', ',
+                                           COUNT(*) - 1
+                                       ),
+                                       GROUP_CONCAT(nombre_invitado ORDER BY a.id ASC SEPARATOR ', ')
+                                    ),
+                                    ' y ',
+                                    SUBSTRING_INDEX(GROUP_CONCAT(nombre_invitado ORDER BY a.id ASC SEPARATOR ', '), ', ', -1)
+                                ) END AS invitados
+                    FROM invitados_listado_mesa a
+                    INNER JOIN invitados b ON a.id_invitados = b.id
+                    GROUP BY a.id_invitados
+                ) e ON a.id = e.id_invitados
+                LEFT JOIN invitados_prioridad f ON a.id_prioridad = f.id
+                LEFT JOIN (
+                    SELECT id_invitados, GROUP_CONCAT(tel_enviar SEPARATOR ', ') AS tel_enviar
+                    FROM invitados_tel a
+                    GROUP BY id_invitados
+                ) g ON a.id = g.id_invitados
+                WHERE 1=1 AND a.activo < 2";
+
+if ($statusFiltro !== '') {
+ $sql_grafico .= " AND activo = '$statusFiltro'";
+}
+if ($confirmacionFiltro !== '') {
+ if ($confirmacionFiltro == 'NULL') {
+ $sql_grafico .= " AND confirmacion IS NULL";
+ } else {
+ $sql_grafico .= " AND confirmacion = '$confirmacionFiltro'";
+ }
+}
+if ($busquedaFiltro !== '') {
+ $sql_grafico .= " AND (a.nombre LIKE '%$busquedaFiltro%' OR a.apellido LIKE '%$busquedaFiltro%')";
+}
+if ($ingresoFiltro !== '') {
+ $sql_grafico .= " AND a.ingreso = '$ingresoFiltro'";
+}
+if ($prioridadFiltro !== '') {
+ $sql_grafico .= " AND a.id_prioridad = '$prioridadFiltro'";
+}
+
+// Agregar el GROUP BY
+$sql_grafico .= " GROUP BY 1";
+
+$result_grafico = $conn->query($sql_grafico);
+
+// Verificar si la consulta se ejecutó correctamente
+if (!$result_grafico) {
+    die("Error en la consulta: " . $conn->error);
+}
+
+// Preparar los datos para el gráfico
+$labels_grafico = [];
+$data_suma_grafico = [];
+$data_cantidad_grafico = [];
+while ($row = $result_grafico->fetch_assoc()) {
+    $labels_grafico[] = $row['agrupacion'];
+    $data_suma_grafico[] = $row['suma'];
+    $data_cantidad_grafico[] = $row['cantidad'];
+}
+// Convertir los datos a formato JSON para usarlos en JavaScript
+$labels_json_grafico = json_encode($labels_grafico);
+$data_suma_json_grafico = json_encode($data_suma_grafico);
+$data_cantidad_json_grafico = json_encode($data_cantidad_grafico);
+
+
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gráfico de Invitados</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+  <style>
+    #myDoughnutChart {
+      width: 200px;
+      height: 200px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Gráfico de Invitados por Categoría</h1>
+  <canvas id="myDoughnutChart" width="200" height="200" style="display: block; box-sizing: border-box; width: 200px; height: 200px;"></canvas>
+  
+  
+  <div class="kpi-container">
+  <div class="kpi">
+    <h2>Suma</h2>
+    <p><?php echo array_sum($data_suma_grafico); ?></p>
+  </div>
+  <div class="kpi">
+    <h2>Cantidad</h2>
+    <p><?php echo array_sum($data_cantidad_grafico); ?></p>
+  </div>
+</div>
+<style>
+  .kpi-container {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+  }
+  .kpi {
+    background-color: #f0f0f0;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  .kpi h2 {
+    margin-bottom: 10px;
+  }
+</style>
+  
+  
+  <script>
+    Chart.register(ChartDataLabels);
+    var ctx = document.getElementById('myDoughnutChart').getContext('2d');
+    var myDoughnutChart = new Chart(ctx, {
+      type: 'doughnut',
+      data: {
+        labels: <?php echo $labels_json_grafico; ?>,
+        datasets: [
+          {
+            label: 'Suma',
+            data: <?php echo $data_suma_json_grafico; ?>,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+          },
+          {
+            label: 'Cantidad',
+            data: <?php echo $data_cantidad_json_grafico; ?>,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255, 99, 132, 1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        responsive: false,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+          title: {
+            display: true,
+            text: 'Gráfico de Invitados por Categoría'
+          },
+          datalabels: {
+            display: true,
+            color: 'black',
+            formatter: (value, ctx) => {
+              let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => Number(a) + Number(b), 0);
+              let percentage = ((value / sum) * 100).toFixed(2) + "%";
+              return value + ' (' + percentage + ')';
+            },
+            font: {
+              weight: 'bold'
+            }
+          }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

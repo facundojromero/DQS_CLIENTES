@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Redireccionando...</title>
+    <script>
+        // Detectar la profundidad del subdirectorio y redirigir
+        var path = window.location.pathname;
+        var depth = path.split('/').length - 1;
+        var redirectPath = '../'.repeat(depth);
+        window.location.href = redirectPath;
+    </script>
+</head>
+<body>
+    <p>Si no eres redirigido automáticamente, haz clic <a id="redirectLink" href="#">aquí</a>.</p>
+    <script>
+        // Actualizar el enlace de redirección
+        document.getElementById('redirectLink').href = redirectPath;
+    </script>
+</body>
+</html>

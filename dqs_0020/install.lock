@@ -1,0 +1,21 @@
+{
+    "format": "dqs_install_lock",
+    "version": "UNI-050",
+    "created_at_utc": "2026-09-04T21:35:57+00:00",
+    "admin_slug": "admin2298af3d16c5c85a",
+    "schema_tables": 29,
+    "trigger": "generar_codigo_invitado",
+    "counts": {
+        "user": 1,
+        "cliente": 1,
+        "admin_config": 1,
+        "invitados": 0,
+        "productos": 0,
+        "regalos": 0
+    },
+    "folder": {
+        "file_count": 71,
+        "dir_count": 3,
+        "fingerprint_sha256": "8b59b0d2cdb2038980d3c426b842b28d88d9b0502f8b1146538c8387914125e6"
+    }
+}
