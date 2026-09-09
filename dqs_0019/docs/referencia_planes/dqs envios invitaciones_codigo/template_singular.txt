@@ -1,0 +1,11 @@
+*{{invitados}}*
+Con gran alegría queremos invitarte a nuestro casamiento ❤️✉️
+
+Por favor confirma asistencia ingresando al link
+https://dijequesi.ar/demo/?busqueda={{codigo}}#rsvp
+
+Código de Invitación: {{codigo}}
+
+¡Te esperamos!
+
+Maria y Jose

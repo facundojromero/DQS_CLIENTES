@@ -1,0 +1,130 @@
+<?php
+// Conexión a la base de datos
+$host = 'localhost';
+$user = 'tu_usuario';
+$pass = 'tu_contraseña';
+$db = 'nombre_base_datos';
+
+$conn = new mysqli($host, $user, $pass, $db);
+if ($conn->connect_error) {
+    die("Conexión fallida: " . $conn->connect_error);
+}
+
+// Consultas para KPIs
+$total = $conn->query("SELECT SUM(cantidad_mayores + cantidad_menores) AS total FROM invitados WHERE activo < 2")->fetch_assoc()['total'];
+$confirmados = $conn->query("SELECT SUM(confirmacion_mayores + confirmacion_menores) AS confirmados FROM invitados WHERE confirmacion = 'Si' AND activo < 2")->fetch_assoc()['confirmados'];
+$no_confirmados = $total - $confirmados;
+
+$por_acompanante = $conn->query("
+    SELECT b.categoria_acompanante AS categoria, COUNT(*) AS cantidad
+    FROM invitados a
+    LEFT JOIN intivados_acompanante b ON a.acompanado = b.id
+    WHERE a.activo < 2
+    GROUP BY b.categoria_acompanante
+");
+
+$por_prioridad = $conn->query("
+    SELECT b.categoria_prioridad AS categoria, COUNT(*) AS cantidad
+    FROM invitados a
+    LEFT JOIN invitados_prioridad b ON a.id_prioridad = b.id
+    WHERE a.activo < 2
+    GROUP BY b.categoria_prioridad
+");
+
+$por_ingreso = $conn->query("
+    SELECT ingreso, COUNT(*) AS cantidad
+    FROM invitados
+    WHERE activo < 2
+    GROUP BY ingreso
+");
+
+$por_alimento = $conn->query("
+    SELECT alimento, COUNT(*) AS cantidad
+    FROM invitados
+    WHERE activo < 2
+    GROUP BY alimento
+");
+?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Casamiento</title>
+    <link href="httpsivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css
+    https://cdn.jsdelivr.net/npm/chart.js
+</head>
+<body class="bg-light">
+<div class="container py-4">
+    <h1 class="mb-4">Dashboard Casamiento</h1>
+
+    <div class="row text-center mb-4">
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5>Total Invitados</h5>
+                    <h2><?= $total ?></h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5>Confirmados</h5>
+                    <h2><?= $confirmados ?></h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5>No Confirmados</h5>
+                    <h2><?= $no_confirmados ?></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <?php
+        function renderChart($id, $title, $result) {
+            $labels = [];
+            $data = [];
+            while ($row = $result->fetch_assoc()) {
+                $labels[] = $row['categoria'] ?? $row['ingreso'] ?? $row['alimento'];
+                $data[] = $row['cantidad'];
+            }
+            echo "
+            <div class='col-md-6 mb-4'>
+                <div class='card shadow-sm'>
+                    <div class='card-body'>
+                        <h5 class='card-title'>$title</h5>
+                        <canvas id='$id'></canvas>
+                    </div>
+                </div>
+            </div>
+            <script>
+                new Chart(document.getElementById('$id'), {
+                    type: 'pie',
+                    data: {
+                        labels: " . json_encode($labels) . ",
+                        datasets: [{
+                            data: " . json_encode($data) . ",
+                            backgroundColor: [
+                                '#007bff', '#28a745', '#ffc107', '#dc3545', '#6f42c1', '#17a2b8'
+                            ]
+                        }]
+                    }
+                });
+            </script>";
+        }
+
+        renderChart('acompananteChart', 'Por Acompañante', $por_acompanante);
+        renderChart('prioridadChart', 'Por Prioridad', $por_prioridad);
+        renderChart('ingresoChart', 'Por Ingreso', $por_ingreso);
+        renderChart('alimentoChart', 'Por Alimento', $por_alimento);
+        ?>
+    </div>
+</div>
+</body>
+</html>
