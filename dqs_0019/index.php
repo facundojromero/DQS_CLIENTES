@@ -542,10 +542,10 @@ $mostrarTransferenciaRegalos = $mostrarTransferenciaRegalos && ($mostrarCuentaPe
                             <?php endif; ?>
                         </div>
                         <h2>
-                            <?php if ($evento['fecha'] != 'Fecha no disponible'): ?>
-                                <?php echo $evento['fecha']; ?>
-                            <?php endif; ?>
                             <?php echo $evento['titulo']; ?>
+                            <?php if ($evento['fecha'] != 'Fecha no disponible'): ?>
+                                <br><span class="event-date"><?php echo $evento['fecha']; ?></span>
+                            <?php endif; ?>
                         </h2>
                         <?php if (!empty($evento['descripcion'])): ?>
                             <p><?php echo $evento['descripcion']; ?></p>

@@ -213,6 +213,7 @@ $frase = ($total_personas > 1) ? 'están a punto de confirmar la asistencia.' : 
                         <option value="Vegetariano" <?php echo ($singleAlimento === 'Vegetariano') ? 'selected' : ''; ?>>Vegetariano</option>
                         <option value="Vegano" <?php echo ($singleAlimento === 'Vegano') ? 'selected' : ''; ?>>Vegano</option>
                         <option value="Celiaco" <?php echo ($singleAlimento === 'Celiaco') ? 'selected' : ''; ?>>Celiaco</option>
+                        <option value="Intolerancia a la lactosa" <?php echo ($singleAlimento === 'Intolerancia a la lactosa') ? 'selected' : ''; ?>>Intolerancia a la lactosa</option>
                         <option value="Otro" <?php echo ($singleAlimento === 'Otro') ? 'selected' : ''; ?>>Otro</option>
                     </select>
 
@@ -244,6 +245,7 @@ $frase = ($total_personas > 1) ? 'están a punto de confirmar la asistencia.' : 
                                 <option value="Vegetariano" <?php echo ($alimentoPersona === 'Vegetariano') ? 'selected' : ''; ?>>Vegetariano</option>
                                 <option value="Vegano" <?php echo ($alimentoPersona === 'Vegano') ? 'selected' : ''; ?>>Vegano</option>
                                 <option value="Celiaco" <?php echo ($alimentoPersona === 'Celiaco') ? 'selected' : ''; ?>>Celiaco</option>
+                                <option value="Intolerancia a la lactosa" <?php echo ($alimentoPersona === 'Intolerancia a la lactosa') ? 'selected' : ''; ?>>Intolerancia a la lactosa</option>
                                 <option value="Otro" <?php echo ($alimentoPersona === 'Otro') ? 'selected' : ''; ?>>Otro</option>
                             </select>
 
