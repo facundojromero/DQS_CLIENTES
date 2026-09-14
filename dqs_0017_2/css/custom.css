@@ -1693,3 +1693,312 @@ body#tienda .increase-quantity {
         transition-duration: 0.01ms !important;
     }
 }
+
+/*
+ * Unified stone-and-olive canvas
+ * The public pages share one continuous surface; hierarchy is expressed with
+ * spacing, typography and fine olive rules instead of alternating color blocks.
+ * Photographs retain their original color and are the only visual contrast.
+ */
+:root {
+    --dqs-olive: #817F56;
+    --dqs-olive-dark: #817F56;
+    --dqs-olive-soft: #817F56;
+    --dqs-cream: #D9D8D2;
+    --dqs-cream-soft: #D9D8D2;
+    --dqs-stone: #D9D8D2;
+    --dqs-stone-light: #D9D8D2;
+    --dqs-charcoal: #817F56;
+    --dqs-ink: #817F56;
+    --dqs-muted: #817F56;
+    --dqs-border: #817F56;
+}
+
+html,
+body,
+body#tienda {
+    color: #817F56;
+    background: #D9D8D2;
+}
+
+body::selection {
+    color: #D9D8D2;
+    background: #817F56;
+}
+
+a,
+a:hover,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.display-font {
+    color: #817F56;
+}
+
+*:focus-visible {
+    outline-color: #817F56 !important;
+}
+
+/* Navigation and the image frame */
+.top-header,
+.top-header.fixed-menu {
+    background: #D9D8D2;
+    border-bottom: 1px solid #817F56;
+    backdrop-filter: none;
+}
+
+.navbar-brand .brand-title,
+.top-header .navbar .navbar-collapse ul li a,
+.top-header.fixed-menu .navbar .navbar-collapse ul li a,
+.top-header .navbar .navbar-collapse ul li a:hover,
+.top-header .navbar .navbar-collapse ul li a.active {
+    color: #817F56;
+}
+
+.navbar-toggler,
+.navbar-toggler:hover {
+    border-color: #817F56;
+}
+
+.navbar-toggler span,
+.navbar-toggler:hover span {
+    background: #817F56;
+}
+
+.ulockd-home-slider,
+.pogoSlider {
+    background: #D9D8D2;
+}
+
+.lbox-details::before {
+    display: none;
+}
+
+.lbox-details h2,
+.lbox-details p strong {
+    color: #817F56;
+    background: #D9D8D2;
+    border-color: #817F56;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    box-shadow: none;
+}
+
+/* The countdown starts the uninterrupted editorial sequence after the image. */
+.cronometro-box,
+.cronometro-box.activo {
+    color: #817F56;
+    background: #D9D8D2;
+    border-top: 1px solid #817F56;
+    border-bottom: 1px solid #817F56;
+}
+
+.simply-countdown > .simply-section .simply-amount,
+.simply-countdown > .simply-section .simply-word {
+    color: #817F56;
+}
+
+.lbox-details2 a.btn,
+.lbox-details2 a.btn + a.btn,
+.submit-button .btn-common,
+.btn_search,
+.dqs-rsvp-form-public .btn-common,
+.modal-content .btn-common,
+.modal-content .btn-primary,
+body#tienda .add-to-cart,
+body#tienda .button,
+body#tienda .checkout-container .button,
+body#tienda .currency-selector label,
+body#tienda .pagination-link,
+body#tienda .decrease-quantity,
+body#tienda .increase-quantity {
+    color: #817F56 !important;
+    background: #D9D8D2;
+    border-color: #817F56;
+    box-shadow: none;
+}
+
+.lbox-details2 a.btn:hover,
+.lbox-details2 a.btn:focus,
+.submit-button .btn-common:hover,
+.btn_search:hover,
+.dqs-rsvp-form-public .btn-common:hover,
+.modal-content .btn-common:hover,
+.modal-content .btn-primary:hover,
+body#tienda .add-to-cart:hover,
+body#tienda .add-to-cart:focus,
+body#tienda .button:hover,
+body#tienda .button:focus,
+body#tienda .checkout-container .button:hover,
+body#tienda .checkout-container .button:focus,
+body#tienda .currency-selector label:hover,
+body#tienda .currency-selector input[type='radio']:checked + label,
+body#tienda .pagination-link:hover,
+body#tienda .pagination-link:focus,
+body#tienda .pagination-link.active {
+    color: #D9D8D2 !important;
+    background: #817F56;
+    border-color: #817F56;
+    box-shadow: none;
+}
+
+/* Public sections: one background, separated by a deliberately quiet rule. */
+.about-box,
+.story-box,
+.gallery-box,
+.events-box,
+.wedding-box,
+.contact-box,
+.rsvp-box,
+.footer-box {
+    color: #817F56;
+    background: #D9D8D2;
+    border-top: 1px solid #817F56;
+}
+
+.about-box,
+.events-box,
+.wedding-box,
+.contact-box,
+.rsvp-box,
+.footer-box,
+.events-box .title-box h2,
+.events-box .title-box p {
+    color: #817F56;
+}
+
+.about-main-info,
+.main-timeline-box .timeline-text-content,
+.main-timeline-box .time-line-date-content p,
+.main-timeline-box .reverse .time-line-date-content p,
+.event-inner,
+.serviceBox,
+#regalar .serviceBox,
+.bank-card,
+.contact-box .contact-block,
+.rsvp-box .form_search,
+.dqs-rsvp-form-public,
+.rsvp-box table,
+.rsvp-box .card,
+.dqs-rsvp-form-public .dqs-rsvp-soft-card,
+.modal-content .dqs-rsvp-soft-card,
+.modal-content,
+body#tienda .producto {
+    color: #817F56;
+    background: #D9D8D2 !important;
+    border-color: #817F56 !important;
+    border-radius: 0;
+    box-shadow: none !important;
+}
+
+.main-timeline-box .timeline-text-content,
+.main-timeline-box .time-line-date-content p,
+.main-timeline-box .reverse .time-line-date-content p,
+.event-inner,
+.serviceBox,
+#regalar .serviceBox,
+.contact-box .contact-block,
+.rsvp-box .form_search,
+.dqs-rsvp-form-public,
+body#tienda .producto {
+    border-top-width: 1px;
+}
+
+.about-main-info,
+.event-inner,
+.serviceBox,
+#regalar .serviceBox {
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+}
+
+.event-inner:hover {
+    color: #817F56;
+    background: #D9D8D2;
+    transform: translateY(-3px);
+}
+
+.event-inner h2,
+.event-inner p,
+.event-inner a,
+.event-inner a:hover,
+.serviceBox .title,
+.serviceBox .description,
+#regalar .serviceBox .service-icon,
+#regalar .serviceBox .title,
+#regalar .serviceBox .description,
+.about-main-info h2,
+.about-main-info p,
+.main-timeline-box .timeline-text-content h4,
+.main-timeline-box .timeline-text-content p,
+.rsvp-box > .container > p,
+.footer-box .footer-company-name,
+.footer-box .footer-company-name a,
+.footer-box .footer-company-name a:hover,
+body#tienda .pagination,
+body#tienda .ver-carrito,
+body#tienda .ver-carrito:hover,
+body#tienda .ver-carrito:focus,
+body#tienda #sortForm label,
+body#tienda .producto,
+body#tienda .producto h2 {
+    color: #817F56;
+}
+
+.main-timeline-box .separline::before,
+.data-row,
+.footer-box .footer-company-name a,
+.footer-box .footer-company-name a:hover {
+    border-color: #817F56;
+}
+
+.main-timeline-box .iconBackground,
+.main-timeline-box .time-line-date-content .mbr-timeline-date,
+.main-timeline-box .reverse .time-line-date-content .mbr-timeline-date,
+body#tienda .producto .precio {
+    color: #817F56;
+    background: #D9D8D2;
+    border: 1px solid #817F56;
+}
+
+.main-timeline-box .iconBackground {
+    color: #D9D8D2;
+    background: #817F56;
+    border-color: #817F56;
+}
+
+.gallery-box ul li a .overlay {
+    color: #817F56;
+    background: #D9D8D2;
+    border: 1px solid #817F56;
+}
+
+.contact-block .form-group .form-control,
+.dqs-rsvp-form-public .form-control,
+.modal-content .form-control,
+.form_search input[type='text'],
+body#tienda #sortSelect {
+    color: #817F56;
+    background: #D9D8D2;
+    border-color: #817F56;
+}
+
+.contact-block .form-group .form-control:focus,
+.dqs-rsvp-form-public .form-control:focus,
+.modal-content .form-control:focus,
+.form_search input[type='text']:focus {
+    color: #817F56;
+    background: #D9D8D2;
+    border-color: #817F56;
+}
+
+@media (max-width: 991px) {
+    .top-header .navbar-collapse {
+        background: #D9D8D2;
+        border-top-color: #817F56;
+    }
+}
