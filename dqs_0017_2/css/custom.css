@@ -1695,35 +1695,51 @@ body#tienda .increase-quantity {
 }
 
 /*
- * Unified stone-and-olive canvas
- * The public pages share one continuous surface; hierarchy is expressed with
- * spacing, typography and fine olive rules instead of alternating color blocks.
- * Photographs retain their original color and are the only visual contrast.
+ * Warm editorial wedding direction
+ * Reference: Stitch mobile invitation supplied by the client.
+ * This final presentation layer intentionally retains every existing PHP and
+ * JavaScript hook, while replacing the prior flat treatment with paper, cards
+ * and a mobile-first editorial rhythm.
  */
 :root {
-    --dqs-olive: #817F56;
-    --dqs-olive-dark: #817F56;
-    --dqs-olive-soft: #817F56;
-    --dqs-cream: #D9D8D2;
-    --dqs-cream-soft: #D9D8D2;
-    --dqs-stone: #D9D8D2;
-    --dqs-stone-light: #D9D8D2;
-    --dqs-charcoal: #817F56;
-    --dqs-ink: #817F56;
-    --dqs-muted: #817F56;
-    --dqs-border: #817F56;
+    --dqs-canvas: #FAF8F5;
+    --dqs-surface: #FFFFFF;
+    --dqs-surface-soft: #F8F3EB;
+    --dqs-surface-muted: #F2EDE5;
+    --dqs-ink: #333333;
+    --dqs-muted: #4B463D;
+    --dqs-stone: #8B7E67;
+    --dqs-olive: #7A826B;
+    --dqs-gold: #C4A777;
+    --dqs-line: #E2DDD5;
+    --dqs-shadow: 0 8px 24px -6px rgba(139, 126, 103, .08), 0 2px 6px -1px rgba(139, 126, 103, .04);
+    --dqs-shadow-hover: 0 16px 32px -8px rgba(139, 126, 103, .14), 0 4px 12px -2px rgba(139, 126, 103, .06);
+    --dqs-olive-dark: #59614C;
+    --dqs-olive-soft: #DBE3C8;
+    --dqs-cream: #FAF8F5;
+    --dqs-cream-soft: #F8F3EB;
+    --dqs-stone-light: #F2EDE5;
+    --dqs-charcoal: #665B45;
+    --dqs-border: #E2DDD5;
+    --dqs-section-space: clamp(58px, 7vw, 94px);
+    --dqs-container: 1080px;
 }
 
 html,
 body,
 body#tienda {
-    color: #817F56;
-    background: #D9D8D2;
+    color: var(--dqs-ink);
+    background: var(--dqs-canvas);
+}
+
+body {
+    font-size: 14px;
+    line-height: 1.65;
 }
 
 body::selection {
-    color: #D9D8D2;
-    background: #817F56;
+    color: #FFFFFF;
+    background: var(--dqs-stone);
 }
 
 a,
@@ -1735,117 +1751,255 @@ h4,
 h5,
 h6,
 .display-font {
-    color: #817F56;
+    color: var(--dqs-ink);
 }
 
 *:focus-visible {
-    outline-color: #817F56 !important;
+    outline: 2px solid var(--dqs-gold) !important;
+    outline-offset: 3px;
 }
 
-/* Navigation and the image frame */
+/* Header: light stationery edge, with the existing navigation retained. */
 .top-header,
 .top-header.fixed-menu {
-    background: #D9D8D2;
-    border-bottom: 1px solid #817F56;
-    backdrop-filter: none;
+    background: rgba(250, 248, 245, .92);
+    border-bottom: 1px solid var(--dqs-line);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
 }
 
-.navbar-brand .brand-title,
+.top-header .navbar,
+.top-header.fixed-menu .navbar {
+    min-height: 72px;
+}
+
+.navbar-brand .brand-title {
+    color: var(--dqs-ink);
+    font-family: var(--dqs-brand);
+    font-size: clamp(19px, 2vw, 23px);
+    font-weight: 600;
+}
+
 .top-header .navbar .navbar-collapse ul li a,
 .top-header.fixed-menu .navbar .navbar-collapse ul li a,
 .top-header .navbar .navbar-collapse ul li a:hover,
 .top-header .navbar .navbar-collapse ul li a.active {
-    color: #817F56;
+    color: var(--dqs-muted);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .13em;
+}
+
+.top-header .navbar .navbar-collapse ul li a.active,
+.top-header .navbar .navbar-collapse ul li a:hover {
+    color: var(--dqs-stone);
 }
 
 .navbar-toggler,
 .navbar-toggler:hover {
-    border-color: #817F56;
+    border-color: var(--dqs-stone);
+    border-radius: 8px;
 }
 
 .navbar-toggler span,
 .navbar-toggler:hover span {
-    background: #817F56;
+    background: var(--dqs-stone);
 }
 
-.ulockd-home-slider,
+/* Hero: a single photo frame with a restrained date treatment. */
+.ulockd-home-slider {
+    padding: 104px 24px 0;
+    background: var(--dqs-canvas);
+}
+
+.ulockd-home-slider .container-fluid {
+    max-width: 1080px;
+}
+
 .pogoSlider {
-    background: #D9D8D2;
+    min-height: 0;
+    max-height: none;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--dqs-surface-muted);
+    border: 1px solid var(--dqs-line);
+    border-radius: 14px;
+    box-shadow: var(--dqs-shadow);
+}
+
+.pogoSlider-slide {
+    background-color: var(--dqs-surface-muted);
+    background-position: center;
+    background-size: contain;
+}
+
+.lbox-details {
+    justify-content: flex-end;
+    padding: 54px 28px 34px;
+    transform: none !important;
 }
 
 .lbox-details::before {
+    display: block;
+    background: linear-gradient(180deg, transparent 54%, rgba(29, 27, 23, .56) 100%);
+}
+
+.lbox-details h2 {
+    margin-bottom: 8px;
+    padding: 0;
+    color: #FFFFFF;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .16em;
+    text-shadow: 0 1px 8px rgba(0, 0, 0, .28);
+}
+
+.lbox-details p {
+    margin-top: 0;
+}
+
+.lbox-details p strong {
+    padding: 0;
+    color: #FFFFFF;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+    font-family: var(--dqs-serif);
+    font-size: clamp(21px, 2.35vw, 32px);
+    font-weight: 500;
+    text-shadow: 0 2px 12px rgba(0, 0, 0, .38);
+}
+
+/* Countdown and primary actions form a compact paper card. */
+.cronometro-box,
+.cronometro-box.activo {
+    padding: 18px 24px 0;
+    color: var(--dqs-ink);
+    background: var(--dqs-canvas);
+    border: 0;
+}
+
+.cronometro-box .container {
+    max-width: 1080px;
+}
+
+.lbox-details2 {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(270px, .85fr);
+    gap: 18px;
+    align-items: center;
+}
+
+.lbox-details2 > p {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+    padding: 18px;
+    background: var(--dqs-surface);
+    border: 1px solid var(--dqs-line);
+    border-radius: 12px;
+    box-shadow: var(--dqs-shadow);
+}
+
+/* Browsers normalize the legacy <p><div class="simply-countdown">… markup
+ * into an empty paragraph followed by the real countdown. */
+.lbox-details2 > p:empty {
     display: none;
 }
 
-.lbox-details h2,
-.lbox-details p strong {
-    color: #817F56;
-    background: #D9D8D2;
-    border-color: #817F56;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    box-shadow: none;
+.lbox-details2 > .simply-countdown {
+    grid-column: 1;
+    grid-row: 1;
+    padding: 18px;
+    background: var(--dqs-surface);
+    border: 1px solid var(--dqs-line);
+    border-radius: 12px;
+    box-shadow: var(--dqs-shadow);
 }
 
-/* The countdown starts the uninterrupted editorial sequence after the image. */
-.cronometro-box,
-.cronometro-box.activo {
-    color: #817F56;
-    background: #D9D8D2;
-    border-top: 1px solid #817F56;
-    border-bottom: 1px solid #817F56;
-}
-
-.simply-countdown > .simply-section .simply-amount,
-.simply-countdown > .simply-section .simply-word {
-    color: #817F56;
+.hero-actions {
+    position: static;
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0;
+    transform: none;
+    pointer-events: auto;
+    animation: none;
 }
 
 .lbox-details2 a.btn,
-.lbox-details2 a.btn + a.btn,
-.submit-button .btn-common,
-.btn_search,
-.dqs-rsvp-form-public .btn-common,
-.modal-content .btn-common,
-.modal-content .btn-primary,
-body#tienda .add-to-cart,
-body#tienda .button,
-body#tienda .checkout-container .button,
-body#tienda .currency-selector label,
-body#tienda .pagination-link,
-body#tienda .decrease-quantity,
-body#tienda .increase-quantity {
-    color: #817F56 !important;
-    background: #D9D8D2;
-    border-color: #817F56;
-    box-shadow: none;
+.lbox-details2 a.btn + a.btn {
+    width: 100%;
+    min-width: 0;
+    min-height: 46px;
+    padding: 12px 18px;
+    color: var(--dqs-stone) !important;
+    background: var(--dqs-surface);
+    border: 1px solid var(--dqs-line);
+    border-radius: 8px;
+    box-shadow: var(--dqs-shadow);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .12em;
+}
+
+.lbox-details2 a.btn.hero-action--rsvp,
+body#tienda .lbox-details2 a.btn:first-child {
+    color: #FFFFFF !important;
+    background-color: #8B7E67 !important;
+    border-color: #8B7E67 !important;
+}
+
+.lbox-details2 a.btn.hero-action--rsvp span,
+.lbox-details2 a.btn.hero-action--rsvp i {
+    color: #FFFFFF !important;
 }
 
 .lbox-details2 a.btn:hover,
-.lbox-details2 a.btn:focus,
-.submit-button .btn-common:hover,
-.btn_search:hover,
-.dqs-rsvp-form-public .btn-common:hover,
-.modal-content .btn-common:hover,
-.modal-content .btn-primary:hover,
-body#tienda .add-to-cart:hover,
-body#tienda .add-to-cart:focus,
-body#tienda .button:hover,
-body#tienda .button:focus,
-body#tienda .checkout-container .button:hover,
-body#tienda .checkout-container .button:focus,
-body#tienda .currency-selector label:hover,
-body#tienda .currency-selector input[type='radio']:checked + label,
-body#tienda .pagination-link:hover,
-body#tienda .pagination-link:focus,
-body#tienda .pagination-link.active {
-    color: #D9D8D2 !important;
-    background: #817F56;
-    border-color: #817F56;
-    box-shadow: none;
+.lbox-details2 a.btn:focus {
+    color: #FFFFFF !important;
+    background: var(--dqs-stone);
+    border-color: var(--dqs-stone);
+    box-shadow: var(--dqs-shadow-hover);
+    transform: translateY(-2px);
 }
 
-/* Public sections: one background, separated by a deliberately quiet rule. */
+.simply-countdown {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.simply-countdown > .simply-section {
+    width: auto;
+    padding: 11px 6px;
+    background: var(--dqs-surface-soft);
+    border-radius: 8px;
+}
+
+.simply-countdown > .simply-section .simply-amount {
+    color: var(--dqs-stone);
+    font-size: clamp(24px, 2.8vw, 35px);
+    font-weight: 500;
+}
+
+.simply-countdown > .simply-section .simply-word {
+    margin-top: 4px;
+    color: var(--dqs-olive);
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: .12em;
+}
+
+/* Editorial sections live on the canvas; information gets the card surface. */
 .about-box,
 .story-box,
 .gallery-box,
@@ -1854,23 +2008,97 @@ body#tienda .pagination-link.active {
 .contact-box,
 .rsvp-box,
 .footer-box {
-    color: #817F56;
-    background: #D9D8D2;
-    border-top: 1px solid #817F56;
+    color: var(--dqs-ink);
+    background: var(--dqs-canvas);
+    border: 0;
 }
 
 .about-box,
+.story-box,
+.gallery-box,
 .events-box,
 .wedding-box,
 .contact-box,
-.rsvp-box,
-.footer-box,
-.events-box .title-box h2,
-.events-box .title-box p {
-    color: #817F56;
+.rsvp-box {
+    padding: var(--dqs-section-space) 24px 0;
 }
 
-.about-main-info,
+.about-box .container,
+.story-box .container,
+.events-box .container,
+.wedding-box .container,
+.contact-box .container,
+.rsvp-box .container {
+    max-width: var(--dqs-container);
+}
+
+.title-box {
+    max-width: 640px;
+    margin: 0 auto clamp(28px, 4vw, 42px);
+}
+
+.title-box h2,
+.events-box .title-box h2,
+.wedding-box .title-box h2 {
+    color: var(--dqs-ink);
+    font-size: clamp(29px, 3vw, 40px);
+    font-weight: 500;
+    letter-spacing: .01em;
+    line-height: 1.18 !important;
+}
+
+.title-box h2::after {
+    width: 38px;
+    margin-top: 13px;
+    background: var(--dqs-gold);
+    opacity: 1;
+}
+
+.title-box p,
+.events-box .title-box p,
+.wedding-box .title-box p {
+    color: var(--dqs-muted);
+    font-size: 13px;
+    opacity: 1;
+}
+
+.about-main-info {
+    min-height: 0;
+    padding: 0;
+    border: 0;
+}
+
+.about-img {
+    border-radius: 12px;
+    box-shadow: var(--dqs-shadow);
+}
+
+.about-img img {
+    filter: none;
+}
+
+.about-main-info h2,
+.main-timeline-box .timeline-text-content h4 {
+    color: var(--dqs-ink);
+    font-size: clamp(26px, 3vw, 34px);
+}
+
+.about-main-info p,
+.main-timeline-box .timeline-text-content p {
+    color: var(--dqs-muted);
+}
+
+/* Timeline and card families. */
+.main-timeline-box .separline::before {
+    background: var(--dqs-line);
+}
+
+.main-timeline-box .iconBackground {
+    background: var(--dqs-olive);
+    border-color: var(--dqs-canvas);
+    box-shadow: 0 0 0 1px var(--dqs-olive);
+}
+
 .main-timeline-box .timeline-text-content,
 .main-timeline-box .time-line-date-content p,
 .main-timeline-box .reverse .time-line-date-content p,
@@ -1884,97 +2112,186 @@ body#tienda .pagination-link.active {
 .rsvp-box table,
 .rsvp-box .card,
 .dqs-rsvp-form-public .dqs-rsvp-soft-card,
-.modal-content .dqs-rsvp-soft-card,
 .modal-content,
+.modal-content .dqs-rsvp-soft-card,
 body#tienda .producto {
-    color: #817F56;
-    background: #D9D8D2 !important;
-    border-color: #817F56 !important;
-    border-radius: 0;
-    box-shadow: none !important;
+    color: var(--dqs-ink);
+    background: var(--dqs-surface) !important;
+    border: 1px solid var(--dqs-line) !important;
+    border-radius: 12px;
+    box-shadow: var(--dqs-shadow) !important;
 }
 
 .main-timeline-box .timeline-text-content,
 .main-timeline-box .time-line-date-content p,
-.main-timeline-box .reverse .time-line-date-content p,
-.event-inner,
-.serviceBox,
-#regalar .serviceBox,
-.contact-box .contact-block,
-.rsvp-box .form_search,
-.dqs-rsvp-form-public,
-body#tienda .producto {
-    border-top-width: 1px;
+.main-timeline-box .reverse .time-line-date-content p {
+    padding: 22px;
 }
 
-.about-main-info,
+.main-timeline-box .time-line-date-content .mbr-timeline-date,
+.main-timeline-box .reverse .time-line-date-content .mbr-timeline-date {
+    color: var(--dqs-olive);
+    background: var(--dqs-olive-soft);
+    border-radius: 6px;
+}
+
+.events-box .row:not(:first-child) > [class*='col-'],
+.wedding-box .row > [class*='col-'] {
+    margin-bottom: 22px;
+}
+
 .event-inner,
 .serviceBox,
 #regalar .serviceBox {
-    border-right: 0;
-    border-bottom: 0;
-    border-left: 0;
+    align-items: flex-start;
+    justify-content: flex-start;
+    min-height: 100%;
+    padding: 20px;
+    text-align: left;
+    transition: transform 220ms ease, box-shadow 220ms ease;
 }
 
-.event-inner:hover {
-    color: #817F56;
-    background: #D9D8D2;
-    transform: translateY(-3px);
+.event-inner:hover,
+.serviceBox:hover {
+    background: var(--dqs-surface) !important;
+    box-shadow: var(--dqs-shadow-hover) !important;
+    transform: translateY(-2px);
+}
+
+.event-img {
+    width: 100%;
+    min-height: 76px;
+    margin: 0 0 16px;
+    overflow: hidden;
+    background: var(--dqs-surface-muted);
+    border-radius: 8px;
+}
+
+.event-img > img {
+    height: 184px;
+    border-radius: 0;
+}
+
+.icon-container {
+    min-height: 76px;
+    padding: 18px;
+    color: var(--dqs-stone);
+    background: var(--dqs-surface-soft);
+    border-radius: 8px;
+}
+
+.evento-icono,
+.serviceBox .service-icon {
+    color: var(--dqs-stone);
 }
 
 .event-inner h2,
-.event-inner p,
-.event-inner a,
-.event-inner a:hover,
 .serviceBox .title,
+#regalar .serviceBox .title {
+    color: var(--dqs-ink);
+    font-family: var(--dqs-serif);
+    font-size: 22px;
+    font-weight: 500;
+}
+
+.event-inner p,
 .serviceBox .description,
-#regalar .serviceBox .service-icon,
-#regalar .serviceBox .title,
-#regalar .serviceBox .description,
-.about-main-info h2,
-.about-main-info p,
-.main-timeline-box .timeline-text-content h4,
-.main-timeline-box .timeline-text-content p,
-.rsvp-box > .container > p,
-.footer-box .footer-company-name,
-.footer-box .footer-company-name a,
-.footer-box .footer-company-name a:hover,
-body#tienda .pagination,
-body#tienda .ver-carrito,
-body#tienda .ver-carrito:hover,
-body#tienda .ver-carrito:focus,
-body#tienda #sortForm label,
-body#tienda .producto,
-body#tienda .producto h2 {
-    color: #817F56;
+#regalar .serviceBox .description {
+    color: var(--dqs-muted);
+    font-size: 13px;
+    line-height: 1.65;
 }
 
-.main-timeline-box .separline::before,
-.data-row,
-.footer-box .footer-company-name a,
-.footer-box .footer-company-name a:hover {
-    border-color: #817F56;
+.event-inner a,
+.serviceBox > a {
+    margin-top: auto;
+    padding: 10px 13px;
+    color: var(--dqs-stone);
+    background: var(--dqs-surface-soft);
+    border: 1px solid var(--dqs-line);
+    border-radius: 7px;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: .1em;
 }
 
-.main-timeline-box .iconBackground,
-.main-timeline-box .time-line-date-content .mbr-timeline-date,
-.main-timeline-box .reverse .time-line-date-content .mbr-timeline-date,
-body#tienda .producto .precio {
-    color: #817F56;
-    background: #D9D8D2;
-    border: 1px solid #817F56;
+.event-inner a:hover,
+.serviceBox > a:hover {
+    color: var(--dqs-stone);
+    background: #F2EDE5;
+    border-color: var(--dqs-line);
 }
 
-.main-timeline-box .iconBackground {
-    color: #D9D8D2;
-    background: #817F56;
-    border-color: #817F56;
+.serviceBox .service-icon {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 14px;
+    background: var(--dqs-olive-soft);
+    border-radius: 50%;
+    font-size: 20px;
+    line-height: 44px;
+    text-align: center;
+}
+
+.bank-card {
+    width: 100%;
+    margin-top: 12px;
+    padding: 14px;
+    background: var(--dqs-surface-soft) !important;
+    box-shadow: none !important;
+}
+
+.bank-title {
+    color: var(--dqs-ink);
+    font-size: 15px;
+}
+
+.data-row {
+    color: var(--dqs-muted);
+    border-color: var(--dqs-line);
+}
+
+.copy-icon {
+    color: var(--dqs-olive-dark);
+    background: var(--dqs-olive-soft);
+    border-radius: 6px;
+}
+
+/* Gallery gets the reference's soft, rounded mosaic rhythm. */
+.gallery-box .container-fluid {
+    max-width: 1080px;
+    padding: 0;
+}
+
+.gallery-box ul.popup-gallery {
+    grid-auto-rows: 188px;
+    gap: 10px;
+}
+
+.gallery-box ul li a {
+    border-radius: 10px;
+    box-shadow: var(--dqs-shadow);
+}
+
+.gallery-box ul li a::before {
+    background: rgba(102, 91, 69, .18);
 }
 
 .gallery-box ul li a .overlay {
-    color: #817F56;
-    background: #D9D8D2;
-    border: 1px solid #817F56;
+    color: var(--dqs-stone);
+    background: rgba(255, 255, 255, .92);
+    border: 1px solid var(--dqs-line);
+}
+
+/* RSVP, contact and modal controls use the same gentle paper components. */
+.contact-box .contact-block,
+.rsvp-box .form_search,
+.dqs-rsvp-form-public {
+    padding: clamp(24px, 4vw, 38px);
+}
+
+.rsvp-box .form_search > div {
+    gap: 10px;
 }
 
 .contact-block .form-group .form-control,
@@ -1982,23 +2299,381 @@ body#tienda .producto .precio {
 .modal-content .form-control,
 .form_search input[type='text'],
 body#tienda #sortSelect {
-    color: #817F56;
-    background: #D9D8D2;
-    border-color: #817F56;
+    min-height: 46px;
+    color: var(--dqs-ink);
+    background: var(--dqs-surface-soft);
+    border: 1px solid var(--dqs-line);
+    border-radius: 8px;
+    font-size: 13px;
 }
 
 .contact-block .form-group .form-control:focus,
 .dqs-rsvp-form-public .form-control:focus,
 .modal-content .form-control:focus,
 .form_search input[type='text']:focus {
-    color: #817F56;
-    background: #D9D8D2;
-    border-color: #817F56;
+    color: var(--dqs-ink);
+    background: #FFFFFF;
+    border-color: var(--dqs-stone);
+    box-shadow: 0 0 0 3px rgba(196, 167, 119, .20);
+}
+
+.submit-button .btn-common,
+.btn_search,
+.dqs-rsvp-form-public .btn-common,
+.modal-content .btn-common,
+.modal-content .btn-primary,
+body#tienda .add-to-cart,
+body#tienda .button,
+body#tienda .checkout-container .button {
+    color: #FFFFFF !important;
+    background: var(--dqs-stone);
+    border-color: var(--dqs-stone);
+    border-radius: 8px;
+    box-shadow: var(--dqs-shadow);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: .12em;
+}
+
+.submit-button .btn-common:hover,
+.btn_search:hover,
+.dqs-rsvp-form-public .btn-common:hover,
+.modal-content .btn-common:hover,
+.modal-content .btn-primary:hover,
+body#tienda .add-to-cart:hover,
+body#tienda .button:hover,
+body#tienda .checkout-container .button:hover {
+    color: #FFFFFF !important;
+    background: #7A6E59;
+    border-color: #7A6E59;
+    box-shadow: var(--dqs-shadow-hover);
+}
+
+.dqs-rsvp-form-public .dqs-rsvp-soft-card,
+.modal-content .dqs-rsvp-soft-card {
+    padding: 0;
+    background: var(--dqs-surface-soft) !important;
+    box-shadow: none !important;
+}
+
+.dqs-rsvp-form-public .dqs-rsvp-section-title,
+#rsvpFormPublicModal .dqs-rsvp-section-title {
+    color: var(--dqs-olive-dark);
+    font-size: 10px;
+    letter-spacing: .12em;
+}
+
+.modal-content {
+    border-radius: 14px;
+}
+
+.modal-header,
+.modal-footer {
+    border-color: var(--dqs-line);
+}
+
+.modal-title,
+.modal-content h4,
+.modal-content h5,
+.modal-content h6 {
+    color: var(--dqs-ink) !important;
+}
+
+.modal-content .btn-secondary,
+.modal-content .btn-outline-secondary {
+    color: var(--dqs-stone);
+    background: var(--dqs-surface);
+    border-color: var(--dqs-line);
+    border-radius: 8px;
+}
+
+/* Storefront shares the invitation's cards and controls. */
+body#tienda .cronometro-box,
+body#tienda .cronometro-box.activo {
+    padding-top: 94px;
+}
+
+body#tienda .pagination,
+body#tienda #sortForm label,
+body#tienda .ver-carrito,
+body#tienda .ver-carrito:hover,
+body#tienda .ver-carrito:focus,
+body#tienda .producto,
+body#tienda .producto h2 {
+    color: var(--dqs-ink);
+}
+
+body#tienda .currency-selector label,
+body#tienda .pagination-link,
+body#tienda .decrease-quantity,
+body#tienda .increase-quantity {
+    color: var(--dqs-stone) !important;
+    background: var(--dqs-surface);
+    border-color: var(--dqs-line);
+    border-radius: 7px;
+}
+
+body#tienda .currency-selector input[type='radio']:checked + label,
+body#tienda .pagination-link.active {
+    color: #FFFFFF !important;
+    background: var(--dqs-stone);
+    border-color: var(--dqs-stone);
+}
+
+body#tienda .producto {
+    overflow: hidden;
+    border-radius: 12px;
+}
+
+body#tienda .producto .precio {
+    color: #FFFFFF;
+    background: var(--dqs-stone);
+    border: 0;
+    border-radius: 6px;
+}
+
+/* Footer stays light and quiet rather than becoming a separate dark band. */
+.footer-box {
+    margin-top: var(--dqs-section-space);
+    padding: 46px 24px;
+    text-align: center;
+}
+
+.footer-box::before {
+    display: block;
+    width: min(1080px, 100%);
+    height: 1px;
+    margin: 0 auto 34px;
+    content: '';
+    background: var(--dqs-line);
+}
+
+.footer-box,
+.footer-box .footer-company-name,
+.footer-box .footer-company-name a,
+.footer-box .footer-company-name a:hover {
+    color: var(--dqs-muted);
+}
+
+.footer-box .footer-company-name a,
+.footer-box .footer-company-name a:hover {
+    border-color: var(--dqs-line);
 }
 
 @media (max-width: 991px) {
     .top-header .navbar-collapse {
-        background: #D9D8D2;
-        border-top-color: #817F56;
+        padding: 10px 14px 16px;
+        background: var(--dqs-canvas);
+        border-top-color: var(--dqs-line);
+    }
+
+    .ulockd-home-slider {
+        padding-top: 88px;
+    }
+
+    .pogoSlider {
+        min-height: 0;
+        aspect-ratio: 16 / 9;
+    }
+
+    .lbox-details2 {
+        grid-template-columns: 1fr;
+    }
+
+    .lbox-details2 > p,
+    .lbox-details2 > .simply-countdown,
+    .hero-actions {
+        grid-column: 1;
+    }
+
+    .lbox-details2 > p {
+        grid-row: 1;
+    }
+
+    .lbox-details2 > .simply-countdown {
+        grid-row: 1;
+    }
+
+    .hero-actions {
+        grid-row: 2;
+        flex-direction: row;
+    }
+
+    .lbox-details2 a.btn {
+        flex: 1;
+    }
+}
+
+@media (max-width: 767px) {
+    .top-header .navbar,
+    .top-header.fixed-menu .navbar {
+        min-height: 64px;
+    }
+
+    .ulockd-home-slider,
+    .cronometro-box,
+    .cronometro-box.activo,
+    .about-box,
+    .story-box,
+    .gallery-box,
+    .events-box,
+    .wedding-box,
+    .contact-box,
+    .rsvp-box {
+        padding-right: 20px;
+        padding-left: 20px;
+    }
+
+    .ulockd-home-slider {
+        padding-top: 80px;
+    }
+
+    .pogoSlider {
+        min-height: 0;
+        border-radius: 12px;
+    }
+
+    .pogoSlider-slide {
+        background-position: center;
+    }
+
+    .lbox-details {
+        padding: 28px 16px 20px;
+    }
+
+    .lbox-details h2 {
+        margin-bottom: 5px;
+        font-size: 8px;
+    }
+
+    .lbox-details p strong {
+        font-size: clamp(16px, 5vw, 20px);
+    }
+
+    .cronometro-box,
+    .cronometro-box.activo {
+        padding-top: 14px;
+    }
+
+    .lbox-details2 > p {
+        padding: 12px;
+    }
+
+    .lbox-details2 > .simply-countdown {
+        padding: 12px;
+    }
+
+    .simply-countdown {
+        gap: 6px;
+    }
+
+    .simply-countdown > .simply-section {
+        padding: 9px 3px;
+    }
+
+    .simply-countdown > .simply-section .simply-amount {
+        font-size: 25px;
+    }
+
+    .simply-countdown > .simply-section .simply-word {
+        font-size: 7px;
+    }
+
+    .hero-actions {
+        gap: 8px;
+    }
+
+    .lbox-details2 a.btn,
+    .lbox-details2 a.btn + a.btn {
+        min-height: 44px;
+        padding: 10px 9px;
+        font-size: 8px;
+        letter-spacing: .09em;
+    }
+
+    .about-box,
+    .story-box,
+    .gallery-box,
+    .events-box,
+    .wedding-box,
+    .contact-box,
+    .rsvp-box {
+        padding-top: 56px;
+    }
+
+    .title-box {
+        margin-bottom: 28px;
+    }
+
+    .title-box h2,
+    .events-box .title-box h2,
+    .wedding-box .title-box h2 {
+        font-size: 29px;
+    }
+
+    .events-box .row:not(:first-child) > [class*='col-'],
+    .wedding-box .row > [class*='col-'] {
+        display: block;
+        margin-bottom: 16px;
+    }
+
+    .event-inner,
+    .serviceBox,
+    #regalar .serviceBox {
+        min-height: 0;
+        padding: 17px;
+    }
+
+    .event-img > img {
+        height: 158px;
+    }
+
+    .gallery-box .container-fluid {
+        padding: 0;
+    }
+
+    .gallery-box ul.popup-gallery {
+        grid-auto-rows: 128px;
+        gap: 8px;
+    }
+
+    .gallery-box ul li:first-child {
+        grid-column: span 12;
+        grid-row: span 2;
+    }
+
+    .gallery-box ul li,
+    .gallery-box ul li:nth-child(4n + 4) {
+        grid-column: span 6;
+    }
+
+    .contact-box .contact-block,
+    .rsvp-box .form_search,
+    .dqs-rsvp-form-public {
+        padding: 22px 18px;
+    }
+
+    .rsvp-box .form_search > div {
+        grid-template-columns: 1fr;
+    }
+
+    .rsvp-box .form_search .btn_search {
+        width: 100%;
+    }
+
+    .footer-box {
+        margin-top: 56px;
+        padding: 34px 20px;
+    }
+}
+
+@media (max-width: 350px) {
+    .lbox-details2 a.btn,
+    .lbox-details2 a.btn + a.btn {
+        font-size: 7px;
+    }
+
+    .simply-countdown > .simply-section .simply-amount {
+        font-size: 22px;
     }
 }
