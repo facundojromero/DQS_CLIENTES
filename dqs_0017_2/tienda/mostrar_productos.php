@@ -32,6 +32,8 @@ if ($sort == 'price') {
     $sql .= " ORDER BY precio ASC";
 } elseif ($sort == 'alphabetical') {
     $sql .= " ORDER BY titulo ASC";
+} else {
+    $sql .= " ORDER BY RAND()";
 }
 $sql .= " LIMIT $productosPorPagina OFFSET $offset";
 
