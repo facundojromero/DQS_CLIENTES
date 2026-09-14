@@ -210,6 +210,17 @@ $configVisualRegalos = obtenerConfiguracionVisualRegalos($conn);
 $mostrarListaRegalos = $configVisualRegalos['mostrar_lista_regalos'];
 $mostrarTransferenciaRegalos = $configVisualRegalos['mostrar_transferencia_regalos'];
 
+$tiendaSort = isset($_GET['sort']) ? $_GET['sort'] : 'default';
+$tiendaShuffleSeed = null;
+if ($tiendaSort !== 'price' && $tiendaSort !== 'alphabetical') {
+    $tiendaShuffleSeedRecibido = isset($_GET['shuffle'])
+        ? filter_var($_GET['shuffle'], FILTER_VALIDATE_INT, ['options' => ['min_range' => 1, 'max_range' => 2147483647]])
+        : false;
+    $tiendaShuffleSeed = $tiendaShuffleSeedRecibido !== false
+        ? (int)$tiendaShuffleSeedRecibido
+        : random_int(1, 2147483647);
+}
+
 // Consulta para verificar si cbu_dolar o alias_dolar tienen valor en la tabla cliente
 $query_cliente = "SELECT cbu_dolar, alias_dolar FROM cliente WHERE user_id = 1";
 $result_cliente = mysqli_query($conn, $query_cliente);
@@ -341,6 +352,9 @@ if ($mostrarListaRegalos && $mostrar_moneda):
                 <label for="dolares">Dólares</label>
             </div>
             <input type="hidden" name="sort" value="<?php echo htmlspecialchars(isset($_GET['sort']) ? $_GET['sort'] : 'default'); ?>">
+            <?php if ($tiendaShuffleSeed !== null): ?>
+            <input type="hidden" name="shuffle" value="<?php echo (int)$tiendaShuffleSeed; ?>">
+            <?php endif; ?>
         </form>
     </div>
 <?php endif; ?>
