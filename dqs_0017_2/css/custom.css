@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Nunito:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap');
 
 /*
  * Organic editorial redesign for the public site.
@@ -19,6 +19,7 @@
     --dqs-border: rgba(75, 73, 69, 0.18);
     --dqs-serif: 'Playfair Display', Georgia, serif;
     --dqs-sans: 'Montserrat', Arial, sans-serif;
+    --dqs-brand: 'Nunito', Arial, sans-serif;
     --dqs-section-space: clamp(72px, 8vw, 112px);
     --dqs-container: 1140px;
     --dqs-transition: 220ms ease;
@@ -139,10 +140,11 @@ p:last-child {
 .navbar-brand .brand-title {
     overflow: hidden;
     color: var(--dqs-cream);
-    font-family: var(--dqs-serif);
+    font-family: var(--dqs-brand);
     font-size: clamp(19px, 2vw, 24px);
-    font-style: italic;
-    font-weight: 500;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: 0.01em;
     line-height: 1.2;
     text-overflow: ellipsis;
     white-space: nowrap;
