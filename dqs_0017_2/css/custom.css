@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Nunito:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&family=Nunito:wght@400;500;600;700&family=Quattrocento:wght@400;700&display=swap');
 
 /*
  * Organic editorial redesign for the public site.
@@ -17,9 +17,9 @@
     --dqs-ink: #3f3c38;
     --dqs-muted: #68655f;
     --dqs-border: rgba(75, 73, 69, 0.18);
-    --dqs-serif: 'Playfair Display', Georgia, serif;
+    --dqs-serif: 'Quattrocento', Georgia, serif;
     --dqs-sans: 'Montserrat', Arial, sans-serif;
-    --dqs-brand: 'Nunito', Arial, sans-serif;
+    --dqs-brand: 'Quattrocento', Georgia, serif;
     --dqs-section-space: clamp(72px, 8vw, 112px);
     --dqs-container: 1140px;
     --dqs-transition: 220ms ease;
@@ -1695,32 +1695,32 @@ body#tienda .increase-quantity {
 }
 
 /*
- * Warm editorial wedding direction
- * Reference: Stitch mobile invitation supplied by the client.
+ * Botanical invitation direction
+ * Reference: Canva invitation supplied by the client.
  * This final presentation layer intentionally retains every existing PHP and
  * JavaScript hook, while replacing the prior flat treatment with paper, cards
  * and a mobile-first editorial rhythm.
  */
 :root {
-    --dqs-canvas: #FAF8F5;
+    --dqs-canvas: #FFFFFF;
     --dqs-surface: #FFFFFF;
-    --dqs-surface-soft: #F8F3EB;
-    --dqs-surface-muted: #F2EDE5;
-    --dqs-ink: #333333;
-    --dqs-muted: #4B463D;
-    --dqs-stone: #8B7E67;
-    --dqs-olive: #7A826B;
-    --dqs-gold: #C4A777;
-    --dqs-line: #E2DDD5;
-    --dqs-shadow: 0 8px 24px -6px rgba(139, 126, 103, .08), 0 2px 6px -1px rgba(139, 126, 103, .04);
-    --dqs-shadow-hover: 0 16px 32px -8px rgba(139, 126, 103, .14), 0 4px 12px -2px rgba(139, 126, 103, .06);
-    --dqs-olive-dark: #59614C;
-    --dqs-olive-soft: #DBE3C8;
-    --dqs-cream: #FAF8F5;
-    --dqs-cream-soft: #F8F3EB;
-    --dqs-stone-light: #F2EDE5;
-    --dqs-charcoal: #665B45;
-    --dqs-border: #E2DDD5;
+    --dqs-surface-soft: #F2F5F0;
+    --dqs-surface-muted: #E8EEE5;
+    --dqs-ink: #555950;
+    --dqs-muted: #747A70;
+    --dqs-stone: #5F655C;
+    --dqs-olive: #899586;
+    --dqs-gold: #A9B7A4;
+    --dqs-line: #D9E1D5;
+    --dqs-shadow: 0 8px 24px -8px rgba(66, 77, 67, .07), 0 2px 5px -2px rgba(66, 77, 67, .035);
+    --dqs-shadow-hover: 0 16px 30px -10px rgba(66, 77, 67, .12), 0 4px 10px -3px rgba(66, 77, 67, .055);
+    --dqs-olive-dark: #5C675C;
+    --dqs-olive-soft: #DCE5D8;
+    --dqs-cream: #FFFFFF;
+    --dqs-cream-soft: #F2F5F0;
+    --dqs-stone-light: #E8EEE5;
+    --dqs-charcoal: #555950;
+    --dqs-border: #D9E1D5;
     --dqs-section-space: clamp(58px, 7vw, 94px);
     --dqs-container: 1080px;
 }
@@ -1951,11 +1951,11 @@ h6,
     letter-spacing: .12em;
 }
 
-.lbox-details2 a.btn.hero-action--rsvp,
-body#tienda .lbox-details2 a.btn:first-child {
+.lbox-details2 .hero-actions a.btn.hero-action--rsvp,
+body#tienda .lbox-details2 .hero-actions a.btn:first-child {
     color: #FFFFFF !important;
-    background-color: #8B7E67 !important;
-    border-color: #8B7E67 !important;
+    background-color: var(--dqs-stone) !important;
+    border-color: var(--dqs-stone) !important;
 }
 
 .lbox-details2 a.btn.hero-action--rsvp span,
@@ -2218,7 +2218,7 @@ body#tienda .producto {
 .event-inner a:hover,
 .serviceBox > a:hover {
     color: var(--dqs-stone);
-    background: #F2EDE5;
+    background: var(--dqs-surface-muted);
     border-color: var(--dqs-line);
 }
 
@@ -2344,8 +2344,8 @@ body#tienda .add-to-cart:hover,
 body#tienda .button:hover,
 body#tienda .checkout-container .button:hover {
     color: #FFFFFF !important;
-    background: #7A6E59;
-    border-color: #7A6E59;
+    background: #4E544C;
+    border-color: #4E544C;
     box-shadow: var(--dqs-shadow-hover);
 }
 
