@@ -33,7 +33,10 @@ if ($sort == 'price') {
 } elseif ($sort == 'alphabetical') {
     $sql .= " ORDER BY titulo ASC";
 } else {
-    $sql .= " ORDER BY RAND()";
+    if (!isset($tiendaShuffleSeed) || $tiendaShuffleSeed === null) {
+        $tiendaShuffleSeed = random_int(1, 2147483647);
+    }
+    $sql .= " ORDER BY RAND(" . (int)$tiendaShuffleSeed . ")";
 }
 $sql .= " LIMIT $productosPorPagina OFFSET $offset";
 

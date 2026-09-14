@@ -23,6 +23,9 @@ $sort = isset($_GET['sort']) ? $_GET['sort'] : 'default';
 
 // Obtener la moneda desde la URL, si no está, por defecto es 1 (Pesos)
 $currency = isset($_GET['currency']) ? (int)$_GET['currency'] : 1;
+$shuffleQuery = ($sort === 'default' && isset($tiendaShuffleSeed) && $tiendaShuffleSeed !== null)
+    ? '&shuffle=' . (int)$tiendaShuffleSeed
+    : '';
 
 // Generar los botones de paginación
 echo '<div class="pagination">';
@@ -30,34 +33,34 @@ echo '<div class="pagination">';
 // Botón "Primera"
 if ($paginaActual > 1) {
     // Agregamos el parámetro 'currency' al enlace
-    echo '<a href="?pagina=1&sort=' . htmlspecialchars($sort) . '&currency=' . htmlspecialchars($currency) . '" class="pagination-link"><<</a> ';
+    echo '<a href="?pagina=1&sort=' . htmlspecialchars($sort) . '&currency=' . htmlspecialchars($currency) . $shuffleQuery . '" class="pagination-link"><<</a> ';
 }
 
 // Botón "Anterior"
 if ($paginaActual > 1) {
     $prevPage = $paginaActual - 1;
     // Agregamos el parámetro 'currency' al enlace
-    echo '<a href="?pagina=' . htmlspecialchars($prevPage) . '&sort=' . htmlspecialchars($sort) . '&currency=' . htmlspecialchars($currency) . '" class="pagination-link"><</a> ';
+    echo '<a href="?pagina=' . htmlspecialchars($prevPage) . '&sort=' . htmlspecialchars($sort) . '&currency=' . htmlspecialchars($currency) . $shuffleQuery . '" class="pagination-link"><</a> ';
 }
 
 // Botones de páginas
 for ($i = 1; $i <= $totalPaginas; $i++) {
     $activeClass = ($i == $paginaActual) ? 'active' : '';
     // Agregamos el parámetro 'currency' al enlace de cada página
-    echo '<a href="?pagina=' . htmlspecialchars($i) . '&sort=' . htmlspecialchars($sort) . '&currency=' . htmlspecialchars($currency) . '" class="pagination-link ' . $activeClass . '">' . htmlspecialchars($i) . '</a> ';
+    echo '<a href="?pagina=' . htmlspecialchars($i) . '&sort=' . htmlspecialchars($sort) . '&currency=' . htmlspecialchars($currency) . $shuffleQuery . '" class="pagination-link ' . $activeClass . '">' . htmlspecialchars($i) . '</a> ';
 }
 
 // Botón "Siguiente"
 if ($paginaActual < $totalPaginas) {
     $nextPage = $paginaActual + 1;
     // Agregamos el parámetro 'currency' al enlace
-    echo '<a href="?pagina=' . htmlspecialchars($nextPage) . '&sort=' . htmlspecialchars($sort) . '&currency=' . htmlspecialchars($currency) . '" class="pagination-link">></a> ';
+    echo '<a href="?pagina=' . htmlspecialchars($nextPage) . '&sort=' . htmlspecialchars($sort) . '&currency=' . htmlspecialchars($currency) . $shuffleQuery . '" class="pagination-link">></a> ';
 }
 
 // Botón "Última"
 if ($paginaActual < $totalPaginas) {
     // Agregamos el parámetro 'currency' al enlace
-    echo '<a href="?pagina=' . htmlspecialchars($totalPaginas) . '&sort=' . htmlspecialchars($sort) . '&currency=' . htmlspecialchars($currency) . '" class="pagination-link">>></a>';
+    echo '<a href="?pagina=' . htmlspecialchars($totalPaginas) . '&sort=' . htmlspecialchars($sort) . '&currency=' . htmlspecialchars($currency) . $shuffleQuery . '" class="pagination-link">>></a>';
 }
 
 echo '</div>';
