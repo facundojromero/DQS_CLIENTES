@@ -319,8 +319,16 @@ if ($result_cliente && mysqli_num_rows($result_cliente) > 0) {
             	<div class="row">
                         <div class="lbox-caption2">
                             <div class="lbox-details2">
-                                <a href="<?= $es_tienda ? '../#rsvp' : 'rsvp.php' ?>" class="btn">RSVP</a>
-                                <a href="<?= $es_tienda ? '../' : '' ?>" class="btn">Inicio</a>
+                                <div class="hero-actions" aria-label="Accesos principales">
+                                    <a href="<?= $es_tienda ? '../#rsvp' : 'rsvp.php' ?>" class="btn hero-action hero-action--rsvp">
+                                        <i class="fas fa-calendar-check" aria-hidden="true"></i>
+                                        <span>RSVP</span>
+                                    </a>
+                                    <a href="<?= $es_tienda ? '../' : '' ?>" class="btn hero-action hero-action--home">
+                                        <i class="fas fa-home" aria-hidden="true"></i>
+                                        <span>Inicio</span>
+                                    </a>
+                                </div>
 
                                 <?php if (in_array('cronometro', $secciones)): ?>                                
                                    <p><div class="simply-countdown simply-countdown-one"></div></p>

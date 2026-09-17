@@ -1398,10 +1398,6 @@ body#tienda .increase-quantity {
         align-items: center;
     }
 
-    body#tienda .lbox-details2 {
-        display: block;
-    }
-
     .simply-countdown {
         order: 1;
     }
@@ -1951,18 +1947,6 @@ h6,
     letter-spacing: .12em;
 }
 
-.lbox-details2 .hero-actions a.btn.hero-action--rsvp,
-body#tienda .lbox-details2 .hero-actions a.btn:first-child {
-    color: #FFFFFF !important;
-    background-color: var(--dqs-stone) !important;
-    border-color: var(--dqs-stone) !important;
-}
-
-.lbox-details2 a.btn.hero-action--rsvp span,
-.lbox-details2 a.btn.hero-action--rsvp i {
-    color: #FFFFFF !important;
-}
-
 .lbox-details2 a.btn:hover,
 .lbox-details2 a.btn:focus {
     color: #FFFFFF !important;
@@ -2393,6 +2377,10 @@ body#tienda .cronometro-box.activo {
     padding-top: 94px;
 }
 
+body#tienda .hero-actions {
+    flex-direction: row;
+}
+
 body#tienda .pagination,
 body#tienda #sortForm label,
 body#tienda .ver-carrito,
@@ -2501,6 +2489,18 @@ body#tienda .producto .precio {
 
     .lbox-details2 a.btn {
         flex: 1;
+    }
+
+    .cronometro-box .container {
+        width: 100%;
+        max-width: none;
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+    .cronometro-box .row {
+        margin-right: 0;
+        margin-left: 0;
     }
 }
 
