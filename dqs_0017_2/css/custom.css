@@ -411,12 +411,6 @@ p:last-child {
     min-width: 154px;
 }
 
-.lbox-details2 a.btn + a.btn {
-    color: var(--dqs-olive-dark);
-    background: var(--dqs-cream);
-    border-color: var(--dqs-cream);
-}
-
 .lbox-details2 a.btn:hover,
 .lbox-details2 a.btn:focus {
     color: var(--dqs-charcoal);
@@ -1398,10 +1392,6 @@ body#tienda .increase-quantity {
         align-items: center;
     }
 
-    body#tienda .lbox-details2 {
-        display: block;
-    }
-
     .simply-countdown {
         order: 1;
     }
@@ -1885,7 +1875,15 @@ h6,
 }
 
 .cronometro-box .container {
+    width: 100%;
     max-width: 1080px;
+    padding-right: 0;
+    padding-left: 0;
+}
+
+.cronometro-box .row {
+    margin-right: 0;
+    margin-left: 0;
 }
 
 .lbox-details2 {
@@ -1935,8 +1933,7 @@ h6,
     animation: none;
 }
 
-.lbox-details2 a.btn,
-.lbox-details2 a.btn + a.btn {
+.lbox-details2 a.btn {
     width: 100%;
     min-width: 0;
     min-height: 46px;
@@ -1949,18 +1946,6 @@ h6,
     font-size: 10px;
     font-weight: 600;
     letter-spacing: .12em;
-}
-
-.lbox-details2 .hero-actions a.btn.hero-action--rsvp,
-body#tienda .lbox-details2 .hero-actions a.btn:first-child {
-    color: #FFFFFF !important;
-    background-color: var(--dqs-stone) !important;
-    border-color: var(--dqs-stone) !important;
-}
-
-.lbox-details2 a.btn.hero-action--rsvp span,
-.lbox-details2 a.btn.hero-action--rsvp i {
-    color: #FFFFFF !important;
 }
 
 .lbox-details2 a.btn:hover,
@@ -2583,8 +2568,7 @@ body#tienda .producto .precio {
         gap: 8px;
     }
 
-    .lbox-details2 a.btn,
-    .lbox-details2 a.btn + a.btn {
+    .lbox-details2 a.btn {
         min-height: 44px;
         padding: 10px 9px;
         font-size: 8px;
@@ -2668,8 +2652,7 @@ body#tienda .producto .precio {
 }
 
 @media (max-width: 350px) {
-    .lbox-details2 a.btn,
-    .lbox-details2 a.btn + a.btn {
+    .lbox-details2 a.btn {
         font-size: 7px;
     }
 
