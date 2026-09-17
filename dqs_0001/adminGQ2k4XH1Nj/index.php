@@ -289,7 +289,7 @@ $telefono_soporte = trim(file_get_contents($archivo_telefono));
 <?php endif; ?>
 
 <footer>
-    &copy; <?= date('Y') ?><a href="https://instagram.com/dijequesi.ar" target="_blank" class="footer-link"> Dije que Sí - Todos los derechos reservados.</a>
+    &copy; <?= date('Y') ?><a href="https://instagram.com/dijequesi.ar" target="_blank" class="footer-link"> Dije que Sí &mdash; Todos los derechos reservados.</a>
 </footer>
 
 </body>
