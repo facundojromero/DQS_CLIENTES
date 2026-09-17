@@ -1,0 +1,284 @@
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+}
+
+.product-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fafafa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 15px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.product-item.selected {
+
+    /*box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);*/
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+}
+
+.product-item img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.product-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+}
+
+.product-details h3 {
+    margin: 0;
+    font-size: 1.2em;
+    color: #444;
+}
+
+.product-details p {
+    font-size: 0.9em;
+    color: #666;
+    height: 40px;
+    overflow: hidden;
+}
+
+.actions {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.action-btn {
+    padding: 10px 15px;
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0 5px;
+    transition: background-color 0.3s ease;
+}
+
+.action-btn:hover {
+    background-color: #5a6268;
+}
+
+.item-checkbox {
+    display: none;
+}
+
+.price-control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.price-quick-adjust {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 5px;
+}
+
+.price-manual-input {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    gap: 5px;
+}
+
+.price-btn {
+   /* background-color: #007BFF;*/
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 1;
+}
+
+.price-btn:hover {
+   /* background-color: #0056b3;*/
+}
+
+.price-display {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+    padding: 0 5px;
+    min-width: 100px;
+    text-align: center;
+}
+
+.price-input-custom {
+    width: 80px;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+}
+
+/* --- Nuevos estilos para "Agregar producto" --- */
+.add-product-container {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.add-new-btn {
+    /*background-color: #28a745;*/
+    padding: 12px 25px;
+    font-size: 1.1em;
+    font-weight: bold;
+    border-radius: 5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.add-new-btn:hover {
+    background-color: #218838;
+}
+
+.new-item .product-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.new-item.product-item {
+    border: 2px dashed #999;
+    background-color: #f9f9f9;
+}
+
+.image-upload-area {
+    width: 100%;
+    position: relative;
+    padding-bottom: 75%; /* 4:3 Aspect Ratio */
+    background-color: #e9e9e9;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-upload-label {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: #666;
+}
+
+.image-upload-label input[type="file"] {
+    display: none;
+}
+
+.image-upload-label img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+}
+
+.upload-icon {
+    font-size: 3em;
+}
+
+.upload-text {
+    margin-top: 5px;
+    font-size: 0.9em;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.input-group label {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 3px;
+}
+
+.input-text,
+.input-textarea {
+    width: calc(100% - 10px);
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1em;
+}
+
+.input-textarea {
+    resize: vertical;
+}
+
+.remove-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 5px 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.9em;
+    z-index: 10;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.remove-btn:hover {
+    background-color: #c82333;
+}
+
+/* --- Estilos para el botón de envío --- */
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
+
+.submit-btn:hover {
+    background-color: #0056b3;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 123, 255, 0.4);
+}
